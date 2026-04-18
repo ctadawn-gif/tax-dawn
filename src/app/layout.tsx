@@ -8,17 +8,17 @@ export const metadata: Metadata = {
   description:
     "종합소득세, 부가세, 상속·증여세, 취득세, 4대보험료까지 — 로그인 없이 3분이면 내 세금을 확인할 수 있습니다. 세무사가 직접 만든 무료 계산기.",
   openGraph: {
-    title: "세무회계 새벽 | 내 세금, 3분이면 확인됩니다",
-    description: "종합소득세 · 부가세 · 상속증여세 · 취득세 · 4대보험료 — 로그인 없이 바로 계산해보세요. 세무사가 만든 무료 계산기 6종.",
-    images: [{ url: "/logo.png", width: 1200, height: 630 }],
+    title: "세무회계 새벽 | 무료 세금 계산기",
+    description: "종소세·부가세·상속증여세·취득세·4대보험 계산기",
+    images: [{ url: "/logo.png", width: 400, height: 400 }],
     type: "website",
     locale: "ko_KR",
     siteName: "세무회계 새벽",
   },
   twitter: {
-    card: "summary_large_image",
-    title: "세무회계 새벽 | 내 세금, 3분이면 확인됩니다",
-    description: "종합소득세 · 부가세 · 상속증여세 · 취득세 · 4대보험료 — 로그인 없이 바로 계산해보세요.",
+    card: "summary",
+    title: "세무회계 새벽 | 무료 세금 계산기",
+    description: "종소세·부가세·상속증여세·취득세·4대보험 계산기",
     images: ["/logo.png"],
   },
 };
