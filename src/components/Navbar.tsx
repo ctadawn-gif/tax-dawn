@@ -6,8 +6,8 @@ import Link from "next/link";
 const navLinks = [
   { label: "계산기", href: "#calculators" },
   { label: "상담 안내", href: "#contact" },
+  { label: "오시는 길", href: "#location" },
   { label: "블로그", href: "https://blog.naver.com/tax_dawn", external: true },
-  { label: "오시는 길", href: "https://naver.me/5yP5BKUk", external: true },
 ];
 
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
@@ -18,8 +18,8 @@ export default function Navbar() {
 
   return (
     <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto w-full bg-white relative z-20">
-      <Link href="/" className="font-extrabold text-xl tracking-tight text-text-primary no-underline">
-        세무회계 새벽
+      <Link href="/" className="no-underline">
+        <img src="/logo.png" alt="세무회계 새벽" className="h-12 md:h-14 w-auto" />
       </Link>
 
       <ul className="hidden lg:flex gap-8 list-none m-0 p-0">

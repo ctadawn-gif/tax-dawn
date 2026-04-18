@@ -398,10 +398,12 @@ export default function VehicleCalculator() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
             <a
-              href="tel:010-3262-3295"
-              className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center"
+              href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 px-6 py-3.5 bg-[#03C75A] text-white rounded-xl text-[14px] font-bold hover:bg-[#02b351] transition-colors text-center"
             >
-              전화 상담: 010-3262-3295
+              톡톡 문의하기
             </a>
             <a
               href="https://blog.naver.com/tax_dawn"

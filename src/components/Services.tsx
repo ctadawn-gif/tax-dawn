@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FadeInOnScroll from "./FadeInOnScroll";
 
 const services = [
   {
@@ -68,10 +69,10 @@ export default function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {services.map((s, i) => (
+            <FadeInOnScroll key={i} delay={i * 100}>
             <Link
-              key={i}
               href={s.href}
-              className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,82,255,0.15)] transition-all duration-300 hover:-translate-y-1 flex flex-col group no-underline"
+              className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,82,255,0.15)] transition-all duration-300 hover:-translate-y-1 flex flex-col group no-underline h-full"
             >
               <span className="text-brand-blue font-bold text-sm tracking-wide mb-2 block">
                 {s.label}
@@ -89,6 +90,7 @@ export default function Services() {
                 </p>
               </div>
             </Link>
+            </FadeInOnScroll>
           ))}
         </div>
       </div>

@@ -189,6 +189,7 @@ export default function AcquisitionTaxCalculator() {
           {/* 결과 */}
           <div className="bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden relative">
             <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue" />
+                <div className="mx-6 md:mx-8 mt-5 mb-0 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-[12px] text-amber-700 leading-relaxed"><svg className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>본 계산 결과는 참고용이며, 실제 세액과 다를 수 있습니다. 세무회계 새벽은 본 계산기의 결과에 대해 법적 책임을 지지 않습니다.</span></div>
 
             <div className="p-6 md:p-8">
               {/* 세율 요약 바 */}
@@ -294,7 +295,7 @@ export default function AcquisitionTaxCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">취득세 관련 궁금한 점이 있으시면 편하게 연락주세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <a href="tel:010-9374-4916" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center">전화 상담: 010-9374-4916</a>
+              <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-[#03C75A] text-white rounded-xl text-[14px] font-bold hover:bg-[#02b351] transition-colors text-center">톡톡 문의하기</a>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 사례 보기</a>
             </div>
           </div>

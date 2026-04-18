@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import FloatingTalk from "@/components/FloatingTalk";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "세무회계 새벽 | 상속세·증여세·종합소득세 무료 계산기",
@@ -22,7 +24,11 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <FloatingTalk />
+        <ScrollToTop />
+      </body>
     </html>
   );
 }

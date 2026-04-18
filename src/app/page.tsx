@@ -5,8 +5,8 @@ import Problem from "@/components/Problem";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
-import ScrollToTop from "@/components/ScrollToTop";
-import FloatingTalk from "@/components/FloatingTalk";
+import Location from "@/components/Location";
+import Footer from "@/components/Footer";
 import FadeInOnScroll from "@/components/FadeInOnScroll";
 
 export default function Home() {
@@ -30,9 +30,11 @@ export default function Home() {
         <FadeInOnScroll delay={100}>
           <CTA />
         </FadeInOnScroll>
+        <FadeInOnScroll delay={100}>
+          <Location />
+        </FadeInOnScroll>
       </main>
-      <ScrollToTop />
-      <FloatingTalk />
+      <Footer />
     </>
   );
 }

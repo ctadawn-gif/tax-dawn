@@ -99,12 +99,10 @@ export default function CTA() {
             </svg>
           </a>
           <a
-            href="https://naver.me/5yP5BKUk"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#location"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-ui-border rounded-xl font-semibold text-[15px] text-text-primary hover:border-brand-blue hover:text-brand-blue transition-all group"
           >
-            네이버 플레이스에서 후기 보기
+            오시는 길
             <svg
               className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
               fill="none"
@@ -121,58 +119,6 @@ export default function CTA() {
           </a>
         </div>
 
-        <div className="w-full border-t border-slate-100 mb-8" />
-
-        <div className="flex flex-col items-center gap-6 w-full">
-          <div className="flex items-center justify-center gap-2 text-text-secondary text-[14px] font-medium bg-slate-50 px-5 py-2.5 rounded-lg border border-slate-100 flex-wrap text-center">
-            <svg
-              className="w-4 h-4 text-brand-blue shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            서울 송파구 위례서로 252, 유원플러스송파 610호
-            <span className="text-slate-300 mx-1">|</span>
-            방문 상담은 예약 후 가능합니다
-          </div>
-
-          <div className="flex items-start gap-3 bg-ui-surface rounded-xl p-5 text-[13px] text-text-secondary leading-relaxed max-w-[800px] w-full text-left">
-            <svg
-              className="w-5 h-5 shrink-0 text-slate-400 mt-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <p>
-              <strong className="font-bold text-text-primary mr-1">
-                면책 고지:
-              </strong>
-              본 계산기의 결과는 참고용이며, 실제 세액과 다를 수 있습니다.
-              정확한 세금 산출은 개별 상황에 따라 달라지므로 반드시 세무사와
-              상담하시기 바랍니다.
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );
