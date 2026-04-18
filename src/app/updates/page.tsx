@@ -98,7 +98,7 @@ export default function UpdatesPage() {
       <div className="bg-grid" />
 
       <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
-        <Link href="/" className="font-extrabold text-xl tracking-tight text-text-primary no-underline">세무회계 새벽</Link>
+        <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
         <Link href="/" className="text-text-secondary text-sm font-medium hover:text-brand-blue transition-colors no-underline">← 홈으로</Link>
       </nav>
 

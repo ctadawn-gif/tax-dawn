@@ -14,7 +14,7 @@ export default function Hero() {
       </h1>
 
       <p className="relative z-10 text-lg md:text-xl text-brand-blue font-bold mb-5 opacity-90">
-        상속세 · 증여세 · 종합소득세, 3분이면 대략적인 범위가 나옵니다.
+        종합소득세 · 부가세 · 상속증여세 · 취득세 · 4대보험까지, 3분이면 대략적인 범위가 나옵니다.
       </p>
 
       <p className="relative z-10 text-base md:text-lg leading-relaxed text-text-secondary mb-10 max-w-[600px] mx-auto">

@@ -219,8 +219,8 @@ export default function IncomeTaxCalculator() {
       <div className="bg-grid" />
 
       <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
-        <Link href="/" className="font-extrabold text-xl tracking-tight text-text-primary">세무회계 새벽</Link>
-        <a href="https://m.expert.naver.com/expert/profile/home?storeId=100058445&u=%2FPXSLGf999lYdP5IwsGyCb6FWam%2FygHjBfMrSAjEZzI%3D" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-md text-sm font-semibold bg-brand-navy text-white hover:bg-black transition-colors shadow-sm">상담 예약하기</a>
+        <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
+        <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
       </nav>
 
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
