@@ -10,16 +10,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: "세무회계 새벽 | 무료 세금 계산기",
     description: "종소세·부가세·상속증여세·취득세·4대보험 계산기",
-    images: [{ url: "/logo.png", width: 400, height: 400 }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
     type: "website",
     locale: "ko_KR",
     siteName: "세무회계 새벽",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "세무회계 새벽 | 무료 세금 계산기",
     description: "종소세·부가세·상속증여세·취득세·4대보험 계산기",
-    images: ["/logo.png"],
+    images: ["/og-image.jpg"],
   },
 };
 
