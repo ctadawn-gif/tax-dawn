@@ -75,6 +75,26 @@ export default function CTA() {
           </a>
         </div>
 
+        {/* 상담 신청 CTA */}
+        <a
+          href="/contact"
+          className="inline-flex items-center gap-2 px-8 py-4 bg-brand-blue text-white rounded-xl font-bold text-[16px] hover:bg-blue-700 hover:-translate-y-0.5 transition-all shadow-md hover:shadow-lg no-underline mb-3"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+            />
+          </svg>
+          무료 상담 신청하기
+        </a>
+        <p className="text-[12.5px] text-text-secondary mb-10 leading-relaxed max-w-[480px]">
+          간단한 안내는 무료이며, 복잡한 사안은 유료 상담으로 안내될 수 있습니다. <br />
+          (신청 후 먼저 연락드려 확인해드립니다)
+        </p>
+
         {/* 블로그 & 플레이스 */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
           <a

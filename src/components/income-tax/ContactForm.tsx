@@ -10,6 +10,7 @@ type FormState = {
 };
 
 type Status = "idle" | "submitting" | "success" | "error";
+type Variant = "income-tax" | "general";
 
 const INITIAL: FormState = {
   name: "",
@@ -18,13 +19,40 @@ const INITIAL: FormState = {
   memo: "",
 };
 
-const TAX_TYPES = [
+/** /income-tax 페이지용 — 종소세 전용 신고 유형 */
+const INCOME_TAX_TYPES = [
   "프리랜서 (3.3% 원천징수)",
   "개인사업자",
   "근로 + 사업 복수소득",
   "기한후신고 (작년 미신고)",
-  "기타 / 모르겠음",
+  "기타 / 잘 모르겠음",
 ];
+
+/** /contact 페이지용 — 전체 업무 주제 */
+const GENERAL_TOPICS = [
+  "종합소득세",
+  "부가가치세",
+  "상속세",
+  "증여세",
+  "양도소득세",
+  "기타 (자금조달계획서 등)",
+];
+
+const VARIANT_CONFIG: Record<
+  Variant,
+  { topics: string[]; topicLabel: string; topicPlaceholder: string }
+> = {
+  "income-tax": {
+    topics: INCOME_TAX_TYPES,
+    topicLabel: "신고 유형",
+    topicPlaceholder: "선택해주세요",
+  },
+  general: {
+    topics: GENERAL_TOPICS,
+    topicLabel: "상담 주제",
+    topicPlaceholder: "선택해주세요",
+  },
+};
 
 function formatPhone(raw: string) {
   const digits = raw.replace(/\D/g, "").slice(0, 11);
@@ -33,10 +61,16 @@ function formatPhone(raw: string) {
   return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
 }
 
-export default function ContactForm() {
+export default function ContactForm({
+  variant = "income-tax",
+}: {
+  variant?: Variant;
+}) {
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  const config = VARIANT_CONFIG[variant];
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -88,10 +122,7 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <section
-        id="inquiry-form"
-        className="py-24 px-5 scroll-mt-20"
-      >
+      <section id="inquiry-form" className="py-24 px-5 scroll-mt-20">
         <div className="max-w-[640px] mx-auto bg-white rounded-[24px] border border-ui-border shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] p-10 md:p-14 text-center">
           <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-blue-50 flex items-center justify-center">
             <svg className="w-8 h-8 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,10 +149,7 @@ export default function ContactForm() {
   }
 
   return (
-    <section
-      id="inquiry-form"
-      className="py-24 px-5 scroll-mt-20"
-    >
+    <section id="inquiry-form" className="py-24 px-5 scroll-mt-20">
       <div className="max-w-[640px] mx-auto">
         <div className="text-center mb-10">
           <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">
@@ -172,10 +200,10 @@ export default function ContactForm() {
             />
           </div>
 
-          {/* 신고유형 */}
+          {/* 상담 주제 / 신고 유형 (variant에 따라 다름) */}
           <div>
             <label htmlFor="taxType" className="block text-[14px] font-bold text-text-primary mb-2">
-              신고 유형 <span className="text-slate-400 font-medium">(선택)</span>
+              {config.topicLabel} <span className="text-slate-400 font-medium">(선택)</span>
             </label>
             <select
               id="taxType"
@@ -183,8 +211,8 @@ export default function ContactForm() {
               onChange={(e) => update("taxType", e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-ui-border bg-white text-[15px] text-text-primary focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-blue-100 transition-all appearance-none bg-no-repeat bg-[right_1rem_center] bg-[length:1rem] bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke=%22%2364748b%22><path stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%222%22 d=%22M19 9l-7 7-7-7%22/></svg>')] pr-10"
             >
-              <option value="">선택해주세요</option>
-              {TAX_TYPES.map((type) => (
+              <option value="">{config.topicPlaceholder}</option>
+              {config.topics.map((type) => (
                 <option key={type} value={type}>
                   {type}
                 </option>

@@ -398,14 +398,12 @@ export default function VehicleCalculator() {
             계산기로 간단하게 확인해보셨다면, 정확한 비용 처리는 세무사와 상담하세요.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-            <a
-              href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 px-6 py-3.5 bg-[#03C75A] text-white rounded-xl text-[14px] font-bold hover:bg-[#02b351] transition-colors text-center"
+            <Link
+              href="/contact"
+              className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline"
             >
-              톡톡 문의하기
-            </a>
+              무료 상담 신청하기
+            </Link>
             <a
               href="https://blog.naver.com/tax_dawn"
               target="_blank"
