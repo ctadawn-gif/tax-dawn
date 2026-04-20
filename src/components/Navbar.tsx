@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const navLinks = [
-  { label: "계산기", href: "#calculators" },
-  { label: "상담 안내", href: "#contact" },
-  { label: "오시는 길", href: "#location" },
+  { label: "계산기", href: "/#calculators" },
+  { label: "상담 안내", href: "/#contact" },
+  { label: "오시는 길", href: "/#location" },
   { label: "블로그", href: "https://blog.naver.com/tax_dawn", external: true },
 ];
 
@@ -37,7 +37,16 @@ export default function Navbar() {
         ))}
       </ul>
 
-      <div className="hidden lg:flex">
+      <div className="hidden lg:flex items-center gap-2">
+        <Link
+          href="/income-tax"
+          className="px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-1.5 no-underline"
+        >
+          <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
+            5월
+          </span>
+          종합소득세 신고대행
+        </Link>
         <a
           href={TALK_URL}
           target="_blank"
@@ -77,6 +86,16 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href="/income-tax"
+            onClick={() => setMenuOpen(false)}
+            className="px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-1.5 no-underline"
+          >
+            <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
+              5월
+            </span>
+            종합소득세 신고대행
+          </Link>
           <a
             href={TALK_URL}
             target="_blank"

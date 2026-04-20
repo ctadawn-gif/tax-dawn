@@ -557,6 +557,42 @@ export default function IncomeTaxCalculator() {
             </div>
           </div>
 
+          {/* 신고대행 랜딩 CTA (시즌 한정) */}
+          <a
+            href="/income-tax"
+            className="group block mb-8 bg-gradient-to-r from-brand-blue to-blue-600 rounded-2xl p-6 md:p-8 shadow-[0_10px_40px_-10px_rgba(0,82,255,0.35)] hover:shadow-[0_15px_50px_-10px_rgba(0,82,255,0.5)] hover:-translate-y-0.5 transition-all no-underline"
+          >
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-6">
+              <div className="shrink-0 inline-flex items-center gap-2 bg-white/20 backdrop-blur px-3 py-1.5 rounded-full text-white text-[12px] font-bold tracking-wide">
+                🔥 신고기간 한정
+              </div>
+              <div className="flex-1">
+                <h3 className="text-[20px] md:text-[24px] font-extrabold text-white leading-tight mb-1.5">
+                  결과가 복잡하신가요?
+                </h3>
+                <p className="text-[14px] md:text-[15px] text-blue-100 leading-relaxed">
+                  세무사 2명이 직접 검토하고 신고해드립니다. 매년 500건 이상, 대표세무사 2인 크로스체크.
+                </p>
+              </div>
+              <div className="shrink-0 flex items-center gap-1.5 text-white font-bold text-[14px] md:text-[15px] md:border-l md:border-white/20 md:pl-6">
+                신고대행 안내 보기
+                <svg
+                  className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </a>
+
           {/* 참고사항 */}
           <div className="bg-slate-50 rounded-xl p-6 border border-ui-border mb-8">
             <h5 className="text-sm font-bold text-text-primary mb-3 flex items-center gap-2">
