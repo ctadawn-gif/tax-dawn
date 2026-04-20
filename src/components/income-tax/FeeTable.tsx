@@ -30,13 +30,11 @@ export default function FeeTable() {
           수수료를 투명하게 공개합니다
         </h2>
         <p className="text-[18px] text-text-secondary font-medium">
-          프리랜서(3.3% 원천징수) 기준 수수료입니다.
-          <br />
-          사업자 등록이 있으신 경우 별도 상담드립니다.
+          아래는 <strong className="text-text-primary">프리랜서(3.3% 원천징수)</strong> 기준 수수료입니다.
         </p>
       </div>
 
-      <div className="bg-white rounded-[24px] border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.04)] overflow-hidden mb-8 relative">
+      <div className="bg-white rounded-[24px] border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.04)] overflow-hidden mb-6 relative">
         <div className="bg-blue-50 border-b border-blue-100 p-4 text-center">
           <p className="text-brand-blue font-bold text-[15px]">
             💰 4월 30일 이내 접수 + 입금 완료 시 2만 원 할인
@@ -84,6 +82,28 @@ export default function FeeTable() {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* 사업자 등록자 안내 (수수료 다름 강조) */}
+      <div className="mb-8 bg-amber-50 border border-amber-200 rounded-[20px] p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="w-11 h-11 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+          <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+            />
+          </svg>
+        </div>
+        <div className="flex-1">
+          <p className="text-[15px] font-bold text-amber-900 mb-1">
+            사업자 등록이 있으신가요?
+          </p>
+          <p className="text-[14px] text-amber-800 leading-relaxed">
+            업종·매출·기장 여부에 따라 수수료가 <strong>위 표와 다르게</strong> 책정됩니다. 톡톡이나 아래 상담 폼으로 문의 주시면 맞춤 안내드립니다.
+          </p>
         </div>
       </div>
 
