@@ -79,6 +79,16 @@ async function sendEmail(subject: string, html: string) {
     return { skipped: true };
   }
 
+  // 콤마(,) 또는 세미콜론(;)으로 구분된 여러 이메일 지원
+  const recipients = CONTACT_EMAIL_TO.split(/[,;]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  if (recipients.length === 0) {
+    console.warn("[contact] No valid recipient in CONTACT_EMAIL_TO");
+    return { skipped: true };
+  }
+
   const from = CONTACT_EMAIL_FROM || "세무회계 새벽 <onboarding@resend.dev>";
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -89,7 +99,7 @@ async function sendEmail(subject: string, html: string) {
     },
     body: JSON.stringify({
       from,
-      to: [CONTACT_EMAIL_TO],
+      to: recipients,
       subject,
       html,
     }),
