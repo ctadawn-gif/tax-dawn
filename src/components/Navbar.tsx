@@ -40,8 +40,13 @@ export default function Navbar() {
       <div className="hidden lg:flex items-center gap-2">
         <Link
           href="/income-tax"
-          className="px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-1.5 no-underline"
+          className="relative px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 hover:-translate-y-0.5 transition-transform flex items-center gap-1.5 no-underline animate-glow-pulse"
         >
+          {/* 알림 핑 닷 */}
+          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5" aria-hidden="true">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+          </span>
           <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
             5월
           </span>
@@ -89,8 +94,12 @@ export default function Navbar() {
           <Link
             href="/income-tax"
             onClick={() => setMenuOpen(false)}
-            className="px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-1.5 no-underline"
+            className="relative px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-1.5 no-underline"
           >
+            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5" aria-hidden="true">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+            </span>
             <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
               5월
             </span>

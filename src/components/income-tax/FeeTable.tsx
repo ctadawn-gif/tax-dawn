@@ -1,5 +1,3 @@
-const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
-
 type Row = {
   label: string;
   sub?: string;
@@ -117,9 +115,7 @@ export default function FeeTable() {
 
       <div className="text-center">
         <a
-          href={TALK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#inquiry-form"
           className="inline-flex px-8 py-4 rounded-xl text-[16px] font-bold bg-brand-navy text-white hover:bg-slate-800 transition-all shadow-sm no-underline"
         >
           수수료 상담하기
