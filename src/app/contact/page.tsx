@@ -49,9 +49,8 @@ export default function ContactPage() {
                   상담 진행 방식 안내
                 </p>
                 <p className="text-[13.5px] text-amber-800 leading-relaxed">
-                  신청해주시면 세무사가 먼저 연락드려 내용을 확인해드립니다.
-                  간단한 안내는 무료이며, 복잡한 사안(예: 심층 세무 설계, 세무조사 대응 등)은
-                  별도 유료 상담으로 안내될 수 있습니다.
+                  번호를 남겨주시면 구체적인 사안 파악을 위해 세무사가 먼저 문자를 보내드립니다.
+                  단, <strong>상속·증여·양도세 및 기타 세무 컨설팅 상담은 유료로 진행</strong>됩니다.
                 </p>
               </div>
             </div>

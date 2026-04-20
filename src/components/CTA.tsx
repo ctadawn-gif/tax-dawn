@@ -90,9 +90,9 @@ export default function CTA() {
           </svg>
           무료 상담 신청하기
         </a>
-        <p className="text-[12.5px] text-text-secondary mb-10 leading-relaxed max-w-[480px]">
-          간단한 안내는 무료이며, 복잡한 사안은 유료 상담으로 안내될 수 있습니다. <br />
-          (신청 후 먼저 연락드려 확인해드립니다)
+        <p className="text-[12.5px] text-text-secondary mb-10 leading-relaxed max-w-[520px]">
+          번호를 남겨주시면 구체적인 사안 파악을 위해 세무사가 먼저 문자를 보내드립니다.<br />
+          상속·증여·양도세 및 기타 세무 컨설팅 상담은 유료로 진행됩니다.
         </p>
 
         {/* 블로그 & 플레이스 */}
