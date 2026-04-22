@@ -223,26 +223,12 @@ export default function IncomeTaxCalculator() {
         <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">
           세무회계 새벽
         </Link>
-        <a
-          href="tel:01032623295"
-          aria-label="전화상담 연결"
-          className="text-slate-600 p-1 -mr-1"
+        <Link
+          href="/income-tax#inquiry-form"
+          className="no-underline px-3 py-1.5 rounded-lg bg-brand-blue text-white text-[12px] font-bold tracking-tight"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.48-3.903-7.181-6.961l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-            />
-          </svg>
-        </a>
+          종소세 신고대행 →
+        </Link>
       </header>
 
       {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
@@ -671,7 +657,7 @@ export default function IncomeTaxCalculator() {
           </div>
 
           {/* CTA */}
-          <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center mb-20 md:mb-0">
+          <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">계산기로 간단하게 확인해보셨다면, 정확한 절세 방법은 세무사와 상담하세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
               <Link href="/income-tax#inquiry-form" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">무료 상담 신청하기</Link>
@@ -680,43 +666,6 @@ export default function IncomeTaxCalculator() {
           </div>
         </div>
       </section>
-
-      {/* ── Mobile Sticky Result Summary ─────────────────── */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-5 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <a
-          href="#result-section"
-          className="no-underline flex items-center justify-between active:scale-[0.99] transition-transform"
-        >
-          <div className="flex flex-col leading-tight">
-            <span className="text-[11px] font-semibold text-slate-500 tracking-tight">
-              {result.totalTax > 0 ? "예상 납부 세액" : "예상 세액"}
-            </span>
-            {result.totalTax > 0 ? (
-              <div className="flex items-baseline gap-1">
-                <span className="text-[20px] font-extrabold text-slate-900 tracking-tight">
-                  {fmt(result.totalTax)}
-                </span>
-                <span className="text-[13px] font-semibold text-slate-600">만원</span>
-                {(hasWithholding || n(prepaidTax) > 0) && result.finalTax !== result.totalTax && (
-                  <span className={`ml-2 text-[12px] font-bold ${result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}`}>
-                    ({result.finalTax < 0 ? "환급" : "추납"} {fmt(Math.abs(result.finalTax))}만원)
-                  </span>
-                )}
-              </div>
-            ) : (
-              <span className="text-[15px] font-bold text-slate-400 tracking-tight">
-                입력하면 자동 계산
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-1 bg-brand-blue text-white px-3 py-2 rounded-lg text-[13px] font-bold shrink-0">
-            상세 보기
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-        </a>
-      </div>
     </div>
   );
 }
