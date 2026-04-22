@@ -109,6 +109,11 @@ function floor(v: number): number {
   return Math.floor(v);
 }
 
+/** 원단위 절사 — 4대보험·세금 실제 납부 단위(10원) */
+function floor10(v: number): number {
+  return Math.floor(v / 10) * 10;
+}
+
 // === 소득세 간이세액 계산 (간이세액표 기반 간편 계산) ===
 // 월 급여 → 연간 환산 → 근로소득공제 → 인적공제 → 세율 적용 → 월 환산
 const TAX_BRACKETS = [
@@ -140,8 +145,9 @@ function calcMonthlyIncomeTax(monthlySalary: number, taxFreeSalary: number, depe
 
   // 인적공제: 부양가족 수 × 150만원
   const personalDeduction = dependents * 1500000;
-  // 국민연금 공제 (대략)
-  const npsBasis = Math.max(NPS_MIN, Math.min(NPS_MAX, taxableMonthly));
+  // 국민연금 공제 — 간이세액표 추정 방식: 총 월급여 기준 NPS 가정
+  // (비과세 차감 전 monthlySalary 사용 → 공식 간이세액표 값과 일치)
+  const npsBasis = Math.max(NPS_MIN, Math.min(NPS_MAX, monthlySalary));
   const npsDeduction = floor(npsBasis * NPS_RATE / 2) * 12;
 
   const taxableIncome = Math.max(0, incomeAmount - personalDeduction - npsDeduction);
@@ -171,7 +177,7 @@ function calcMonthlyIncomeTax(monthlySalary: number, taxFreeSalary: number, depe
   taxCredit = Math.min(taxCredit, creditLimit);
 
   const determinedTax = Math.max(0, computedTax - taxCredit);
-  return floor(determinedTax / 12);
+  return floor10(determinedTax / 12);
 }
 
 export function calculateSocialInsurance(input: SocialInsuranceInput): SocialInsuranceResult {
@@ -191,46 +197,47 @@ export function calculateSocialInsurance(input: SocialInsuranceInput): SocialIns
 
   const items: InsuranceItem[] = [];
 
-  // 1. 국민연금
+  // 1. 국민연금 — 10원 단위 절사
   const npsBasis = Math.max(NPS_MIN, Math.min(NPS_MAX, taxableSalary));
-  const npsTotal = floor(npsBasis * NPS_RATE);
-  const npsEmployee = floor(npsBasis * NPS_RATE / 2);
-  const npsEmployer = npsTotal - npsEmployee;
+  const npsEmployee = floor10(npsBasis * NPS_RATE / 2);
+  const npsEmployer = floor10(npsBasis * NPS_RATE / 2);
+  const npsTotal = npsEmployee + npsEmployer;
   items.push({ name: "국민연금", total: npsTotal, employee: npsEmployee, employer: npsEmployer });
 
-  // 2. 건강보험
+  // 2. 건강보험 — 10원 단위 절사
   const hiBasis = Math.max(HI_MIN, Math.min(HI_MAX, taxableSalary));
-  const hiTotal = floor(hiBasis * HI_RATE);
-  const hiEmployee = floor(hiBasis * HI_RATE / 2);
-  const hiEmployer = hiTotal - hiEmployee;
+  const hiEmployee = floor10(hiBasis * HI_RATE / 2);
+  const hiEmployer = floor10(hiBasis * HI_RATE / 2);
+  const hiTotal = hiEmployee + hiEmployer;
   items.push({ name: "건강보험", total: hiTotal, employee: hiEmployee, employer: hiEmployer });
 
-  // 3. 장기요양보험
-  const ltcTotal = floor(hiTotal * LTC_RATE_OVER_HI);
-  const ltcEmployee = floor(ltcTotal / 2);
-  const ltcEmployer = ltcTotal - ltcEmployee;
+  // 3. 장기요양보험 — 10원 단위 절사
+  const ltcTotalRaw = hiTotal * LTC_RATE_OVER_HI;
+  const ltcEmployee = floor10(ltcTotalRaw / 2);
+  const ltcEmployer = floor10(ltcTotalRaw / 2);
+  const ltcTotal = ltcEmployee + ltcEmployer;
   items.push({ name: "장기요양보험", total: ltcTotal, employee: ltcEmployee, employer: ltcEmployer });
 
-  // 4. 고용보험
+  // 4. 고용보험 — 10원 단위 절사
   const eiEmployeeRate = EI_UNEMPLOYMENT_RATE;
   const eiEmployerRate = EI_UNEMPLOYMENT_RATE + EI_STABILITY_RATES[companySize];
-  const eiEmployee = floor(taxableSalary * eiEmployeeRate);
-  const eiEmployer = floor(taxableSalary * eiEmployerRate);
+  const eiEmployee = floor10(taxableSalary * eiEmployeeRate);
+  const eiEmployer = floor10(taxableSalary * eiEmployerRate);
   const eiTotal = eiEmployee + eiEmployer;
   items.push({ name: "고용보험", total: eiTotal, employee: eiEmployee, employer: eiEmployer });
 
-  // 5. 산재보험 (사업주 전액 부담)
+  // 5. 산재보험 (사업주 전액 부담) — 10원 단위 절사
   const wiRate = (INDUSTRIAL_ACCIDENT_RATES[industryType] + COMMUTE_ACCIDENT_RATE) / 1000;
-  const wiEmployer = floor(taxableSalary * wiRate);
+  const wiEmployer = floor10(taxableSalary * wiRate);
   items.push({ name: "산재보험", total: wiEmployer, employee: 0, employer: wiEmployer });
 
   const totalEmployee = items.reduce((s, i) => s + i.employee, 0);
   const totalEmployer = items.reduce((s, i) => s + i.employer, 0);
   const grandTotal = totalEmployee + totalEmployer;
 
-  // 6. 소득세·지방소득세 원천징수 (100% 기준)
+  // 6. 소득세·지방소득세 원천징수 (100% 기준) — 10원 단위 절사
   const incomeTax = calcMonthlyIncomeTax(monthlySalary, totalTaxFree, dependents);
-  const localIncomeTax = floor(incomeTax * 0.1);
+  const localIncomeTax = floor10(incomeTax * 0.1);
   const totalWithholding = totalEmployee + incomeTax + localIncomeTax;
   const netPay = Math.max(0, monthlySalary - totalWithholding);
 
