@@ -4,13 +4,6 @@ export const alt = "AI 아닌 세무사가 직접. 종합소득세 신고대행 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// 빌드 시점 기준 D-day 계산 (재배포 시 갱신)
-function daysUntilDeadline() {
-  const deadline = new Date("2026-06-01T23:59:59+09:00");
-  const now = new Date();
-  const diff = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.max(diff, 0);
-}
 
 async function loadFont(url: string): Promise<ArrayBuffer> {
   const res = await fetch(url);
@@ -18,8 +11,6 @@ async function loadFont(url: string): Promise<ArrayBuffer> {
 }
 
 export default async function Image() {
-  const days = daysUntilDeadline();
-
   const [pretendardBold, pretendardExtraBold, pretendardRegular] = await Promise.all([
     loadFont(
       "https://fastly.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/public/static/Pretendard-Bold.otf",
@@ -42,7 +33,7 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "90px",
+          padding: "64px 80px",
           position: "relative",
           fontFamily: "Pretendard",
           letterSpacing: "-0.03em",
@@ -91,7 +82,7 @@ export default async function Image() {
             }}
           >
             <span style={{ fontSize: 32 }}>🔥</span>
-            <span>{`D-${days}`}</span>
+            <span>2026.06.01 마감</span>
           </div>
         </div>
 
@@ -100,17 +91,17 @@ export default async function Image() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 32,
+            gap: 24,
             position: "relative",
             zIndex: 10,
-            marginTop: 64,
+            marginTop: 32,
             marginBottom: "auto",
           }}
         >
           <div
             style={{
-              fontSize: 92,
-              lineHeight: 1.25,
+              fontSize: 82,
+              lineHeight: 1.2,
               fontWeight: 800,
               color: "#0f172a",
               display: "flex",
@@ -125,7 +116,7 @@ export default async function Image() {
           </div>
           <div
             style={{
-              fontSize: 40,
+              fontSize: 36,
               fontWeight: 500,
               color: "#475569",
               display: "flex",
