@@ -49,6 +49,7 @@ export default function InsuranceCalculator() {
   const [companySize, setCompanySize] = useState<CompanySize>("under150");
   const [industryType, setIndustryType] = useState<IndustryType>("office");
   const [dependents, setDependents] = useState(1);
+  const [childrenCount, setChildrenCount] = useState(0); // 8~20세 자녀 수
 
   const n = (v: number | string) => (v === "" ? 0 : Number(v));
 
@@ -62,8 +63,9 @@ export default function InsuranceCalculator() {
       companySize,
       industryType,
       dependents,
+      childrenCount,
     }),
-    [salary, taxFreeMeal, taxFreeCar, taxFreeChildcare, taxFreeOther, companySize, industryType, dependents]
+    [salary, taxFreeMeal, taxFreeCar, taxFreeChildcare, taxFreeOther, companySize, industryType, dependents, childrenCount]
   );
 
   return (
@@ -130,15 +132,30 @@ export default function InsuranceCalculator() {
                   </div>
                 </div>
 
-                {/* 부양가족 수 (소득세 원천징수용) */}
+                {/* 공제대상가족 수 (소득세 원천징수용) */}
                 <div className="pt-3 border-t border-ui-border">
-                  <label className="block text-[14px] font-bold text-text-secondary mb-2">부양가족 수 <span className="text-xs font-normal text-slate-400">(본인 포함, 소득세 원천징수 계산용)</span></label>
+                  <label className="block text-[14px] font-bold text-text-secondary mb-2">공제대상가족 수 <span className="text-xs font-normal text-slate-400">(본인+배우자+부양가족, 본인 포함)</span></label>
                   <div className="flex items-center gap-3">
                     <button onClick={() => setDependents(Math.max(1, dependents - 1))} className="w-8 h-8 rounded-lg bg-white border border-ui-border flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue transition-colors shadow-sm">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
                     </button>
                     <span className="font-bold text-text-primary w-6 text-center text-lg">{dependents}</span>
                     <button onClick={() => setDependents(dependents + 1)} className="w-8 h-8 rounded-lg bg-white border border-ui-border flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue transition-colors shadow-sm">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                    </button>
+                    <span className="text-[12px] text-text-secondary">명</span>
+                  </div>
+                </div>
+
+                {/* 8~20세 자녀 수 (자녀세액공제용) */}
+                <div className="pt-3 border-t border-ui-border">
+                  <label className="block text-[14px] font-bold text-text-secondary mb-2">8세~20세 자녀 수 <span className="text-xs font-normal text-slate-400">(자녀세액공제, 위 가족 중 해당 인원)</span></label>
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))} className="w-8 h-8 rounded-lg bg-white border border-ui-border flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue transition-colors shadow-sm">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                    </button>
+                    <span className="font-bold text-text-primary w-6 text-center text-lg">{childrenCount}</span>
+                    <button onClick={() => setChildrenCount(Math.min(dependents - 1, childrenCount + 1))} className="w-8 h-8 rounded-lg bg-white border border-ui-border flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue transition-colors shadow-sm">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                     </button>
                     <span className="text-[12px] text-text-secondary">명</span>
@@ -285,7 +302,7 @@ export default function InsuranceCalculator() {
                     <tr className="hover:bg-slate-50/50 transition-colors">
                       <td className="py-4 px-6 border-b border-ui-border">
                         <div className="font-bold text-text-primary text-[15px]">소득세</div>
-                        <div className="text-[12px] text-text-secondary mt-0.5">간이세액표 기준 (원천징수 100%)</div>
+                        <div className="text-[12px] text-text-secondary mt-0.5">간이세액표 (2026 개정, 100% 기준)</div>
                       </td>
                       <td className="py-4 px-6 border-b border-ui-border text-right font-bold text-text-primary text-[16px]">{fmt(result.incomeTax)}원</td>
                       <td className="py-4 px-6 border-b border-ui-border text-right font-bold text-brand-blue text-[16px]">{fmt(result.incomeTax)}원</td>
@@ -364,7 +381,7 @@ export default function InsuranceCalculator() {
               <li><strong className="text-text-primary font-bold">국민연금 상하한액</strong>: 기준소득월액 상한액(637만원)과 하한액(40만원)이 적용됩니다. (2025.7.1~2026.6.30 기준)</li>
               <li><strong className="text-text-primary font-bold">산재보험</strong>: 업종별 요율이 상이하며 사업주가 전액 부담합니다. 본 계산기의 업종 분류는 간략화된 것이므로, 정확한 요율은 근로복지공단에서 확인하시기 바랍니다.</li>
               <li><strong className="text-text-primary font-bold">국민연금 요율 변경</strong>: 2026년부터 국민연금 요율이 기존 9%에서 9.5%로 인상되었습니다.</li>
-              <li><strong className="text-text-primary font-bold">소득세 원천징수</strong>: 간이세액표 기준 100%로 계산됩니다. 실제 원천징수는 80%·100%·120% 중 선택 가능하며, 연말정산 시 최종 정산됩니다. 부양가족 수에 따라 세액이 달라집니다.</li>
+              <li><strong className="text-text-primary font-bold">소득세 원천징수</strong>: 국세청 <strong>근로소득 간이세액표 (2026.2.27. 개정, 소득세법 시행령 별표 2)</strong> 기준 100%로 계산됩니다. 실제 원천징수는 80%·100%·120% 중 선택 가능하며, 연말정산 시 최종 정산됩니다. 8세~20세 자녀가 있는 경우 자녀세액공제(1명 20,830원/2명 45,830원/3명+ 추가 33,330원)가 추가 차감됩니다.</li>
               <li>정확한 4대보험료 산출 및 세무/노무 관련 상담은 반드시 전문가와 상담하시기 바랍니다.</li>
             </ul>
           </div>

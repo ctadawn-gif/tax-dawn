@@ -1,5 +1,6 @@
 // 4대보험료 계산 로직
 // 2026년 기준 요율 (4대사회보험 정보연계센터)
+import { calcMonthlyIncomeTaxFromTable } from "./incomeTaxTable";
 
 // === 국민연금 ===
 const NPS_RATE = 0.095;
@@ -81,7 +82,8 @@ export interface SocialInsuranceInput {
   taxFreeOther: number;      // 기타 비과세 (원)
   companySize: CompanySize;
   industryType: IndustryType;
-  dependents: number;        // 부양가족 수 (본인 포함)
+  dependents: number;        // 공제대상가족 수 (본인 + 배우자 + 부양가족, 본인 포함)
+  childrenCount?: number;    // 8세~20세 자녀 수 (자녀세액공제용, 기본 0)
 }
 
 export interface InsuranceItem {
@@ -109,9 +111,10 @@ function floor(v: number): number {
   return Math.floor(v);
 }
 
-/** 원단위 절사 — 4대보험·세금 실제 납부 단위(10원) */
+/** 원단위 절사 — 4대보험·세금 실제 납부 단위(10원), 부동소수점 보정 */
 function floor10(v: number): number {
-  return Math.floor(v / 10) * 10;
+  // 27000 × 0.009 = 26999.999... 같은 부동소수점 오차 보정
+  return Math.floor((v + 1e-6) / 10) * 10;
 }
 
 // === 소득세 간이세액 계산 (간이세액표 기반 간편 계산) ===
@@ -190,6 +193,7 @@ export function calculateSocialInsurance(input: SocialInsuranceInput): SocialIns
     companySize,
     industryType,
     dependents,
+    childrenCount = 0,
   } = input;
 
   const totalTaxFree = taxFreeMeal + taxFreeCarAllowance + taxFreeChildcare + taxFreeOther;
@@ -235,8 +239,10 @@ export function calculateSocialInsurance(input: SocialInsuranceInput): SocialIns
   const totalEmployer = items.reduce((s, i) => s + i.employer, 0);
   const grandTotal = totalEmployee + totalEmployer;
 
-  // 6. 소득세·지방소득세 원천징수 (100% 기준) — 10원 단위 절사
-  const incomeTax = calcMonthlyIncomeTax(monthlySalary, totalTaxFree, dependents);
+  // 6. 소득세·지방소득세 — 공식 근로소득 간이세액표 (2026 개정) lookup
+  // 비과세 제외한 월급여 기준
+  const taxableMonthlyForTax = Math.max(0, monthlySalary - totalTaxFree);
+  const incomeTax = calcMonthlyIncomeTaxFromTable(taxableMonthlyForTax, dependents, childrenCount);
   const localIncomeTax = floor10(incomeTax * 0.1);
   const totalWithholding = totalEmployee + incomeTax + localIncomeTax;
   const netPay = Math.max(0, monthlySalary - totalWithholding);
