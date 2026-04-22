@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     title: "세무회계 새벽 | 무료 세금 계산기",
     description: "종소세·부가세·상속증여세·취득세·4대보험 계산기",
   },
+  verification: {
+    google: "sSGI8YNGJUTOdLmL7jIc8WkB-654YhwQnRoEI06CqaM",
+  },
 };
 
 const organizationJsonLd = {
