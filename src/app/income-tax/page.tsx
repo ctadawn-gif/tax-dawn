@@ -15,14 +15,13 @@ import ContactForm from "@/components/income-tax/ContactForm";
 import FinalCTA from "@/components/income-tax/FinalCTA";
 
 export const metadata: Metadata = {
-  title: "2026년 종합소득세 신고대행 | 세무사 2인 크로스체크 | 세무회계 새벽",
+  title: "2026년 종합소득세 신고대행 · 세무사 2인 크로스체크",
   description:
     "AI 자동신고 말고, 대표세무사 2인이 직접 검토합니다. 매년 500건 이상 정확한 신고. 6월 1일 마감.",
   openGraph: {
     title: "2026년 종합소득세 신고대행 | 세무회계 새벽",
     description:
       "AI 자동신고 말고, 대표세무사 2인이 직접 검토합니다. 매년 500건 이상 정확한 신고.",
-    // images는 opengraph-image.tsx에서 자동 생성
     type: "website",
     locale: "ko_KR",
     siteName: "세무회계 새벽",

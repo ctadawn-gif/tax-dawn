@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "계산기 업데이트 내역",
+  description:
+    "2026년 개정 세법·경비율·세율표 반영 내역. 6종 계산기의 최신 업데이트와 법령 근거를 한눈에 확인하세요.",
+};
 
 const updates = [
   {

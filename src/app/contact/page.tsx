@@ -7,7 +7,7 @@ import ContactForm from "@/components/income-tax/ContactForm";
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
 
 export const metadata: Metadata = {
-  title: "무료 상담 신청 | 세무회계 새벽",
+  title: "무료 상담 신청",
   description:
     "종합소득세, 부가세, 상속·증여세, 양도세, 자금조달 등 세무 업무 전반에 대해 무료 상담을 신청하세요. 대표세무사 2인이 직접 답변드립니다.",
 };
