@@ -25,6 +25,48 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": ["ProfessionalService", "AccountingService"],
+  name: "세무회계 새벽",
+  alternateName: "Tax Dawn",
+  url: "https://www.dawntax.com",
+  logo: "https://www.dawntax.com/logo.png",
+  image: "https://www.dawntax.com/logo.png",
+  description:
+    "종합소득세·부가세·상속증여세·취득세·4대보험까지, 세무사가 직접 만든 무료 세금 계산기 6종과 대표세무사 2인 크로스체크 신고대행.",
+  priceRange: "₩₩",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "위례서로 252",
+    addressLocality: "송파구",
+    addressRegion: "서울특별시",
+    addressCountry: "KR",
+  },
+  areaServed: { "@type": "Country", name: "KR" },
+  telephone: ["+82-10-3262-3295", "+82-10-9374-4916"],
+  sameAs: [
+    "https://blog.naver.com/tax_dawn",
+    "https://naver.me/5yP5BKUk",
+  ],
+  employee: [
+    {
+      "@type": "Person",
+      name: "김근량",
+      jobTitle: "대표세무사",
+      telephone: "+82-10-3262-3295",
+      knowsAbout: ["종합소득세", "부가가치세", "사업자 기장대행"],
+    },
+    {
+      "@type": "Person",
+      name: "고유빈",
+      jobTitle: "대표세무사",
+      telephone: "+82-10-9374-4916",
+      knowsAbout: ["상속세", "증여세", "자금조달계획서", "자금출처 소명", "양도세"],
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +80,10 @@ export default function RootLayout({
           as="style"
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col">
