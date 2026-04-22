@@ -2,6 +2,23 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// 모바일용 큐레이션 리뷰 (짧고 임팩트 있는 6개)
+type MobileReview = { quote: string; reviewer: string; source: "숨고" | "네이버 엑스퍼트" | "택슬리" };
+const MOBILE_REVIEWS: MobileReview[] = [
+  { quote: "종소세 기한후신고 때문에 급했는데, 당일날 해결해주셨어요. 꼼꼼하고 전문적이고 친절하시기까지.", reviewer: "명**", source: "숨고" },
+  { quote: "자금조달계획서 상담받았는데, 복잡한 상황임에도 현실적인 분석과 대책 방안을 잘 설명해주셨습니다.", reviewer: "손**", source: "숨고" },
+  { quote: "오프라인에서 세무사에 알아볼 때 잘 안 알려주려 하는 게 많아 답답했는데, 하나하나 꼼꼼히 봐주셨어요.", reviewer: "이**", source: "네이버 엑스퍼트" },
+  { quote: "양도소득세 때문에 이곳저곳 알아보고 연락드렸는데 일처리도 깔끔하고, 알기쉽게 설명도 자세히 해주셨어요.", reviewer: "이**", source: "숨고" },
+  { quote: "상속세 상담 드렸는데 너무 전문적이고 친절하시네요. 의뢰인 입장에서 여쭤보기 불편한 내역도 먼저 자세히 설명해주셨습니다.", reviewer: "유**", source: "택슬리" },
+  { quote: "다른 세무사님과 확실히 다름을 느꼈어요. 짧은 상담에도 답이 빠르고 꼼꼼히 봐주십니다.", reviewer: "sal**", source: "네이버 엑스퍼트" },
+];
+
+function mobileSourceClasses(s: MobileReview["source"]) {
+  if (s === "숨고") return "bg-[#00C7AE]/10 text-[#00C7AE]";
+  if (s === "네이버 엑스퍼트") return "bg-[#03C75A]/10 text-[#03C75A]";
+  return "bg-[#3B82F6]/10 text-[#3B82F6]";
+}
+
 const testimonials = [
   { name: "명**", info: "", quote: "종소세 기한후신고 때문에 급했는데, 다른 곳들은 당일은 힘들다했지만 세무사님이 당일날 성심 다하셔서 해결해주셨습니다. 정말 꼼꼼하시고 전문적이시고 친절하시기까지.. 앞으로 세금 관련해서는 여기만 찾으려구요.", source: "숨고" },
   { name: "홍**", info: "", quote: "아파트 매수 관련해서 자금조달계획서 준비가 막막했는데, 매우 현실적으로 세세히 상담해주셨습니다. 전화 몇마디인데도 제 상황을 굉장히 빠르게 캐치하셔서 자금출처 소명 준비 방향까지 잡을 수 있었어요.", source: "숨고" },
@@ -40,6 +57,12 @@ export default function Testimonials() {
   const containerRef = useRef<HTMLDivElement>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
+  // 모바일 캐러셀 상태
+  const [mobileIdx, setMobileIdx] = useState(0);
+  const [mobilePaused, setMobilePaused] = useState(false);
+  const mobileTouchStartX = useRef(0);
+  const mobileTouchCurrentX = useRef(0);
+
   const cardWidth = 380;
   const gap = 24;
 
@@ -54,6 +77,15 @@ export default function Testimonials() {
     startAutoPlay();
     return () => { if (autoPlayRef.current) clearInterval(autoPlayRef.current); };
   }, [startAutoPlay]);
+
+  // 모바일 자동 전환 3.5초
+  useEffect(() => {
+    if (mobilePaused) return;
+    const timer = setInterval(() => {
+      setMobileIdx((i) => (i + 1) % MOBILE_REVIEWS.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [mobilePaused]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -109,8 +141,113 @@ export default function Testimonials() {
     startAutoPlay();
   };
 
+  const mobileNext = () => setMobileIdx((i) => (i + 1) % MOBILE_REVIEWS.length);
+  const mobilePrev = () => setMobileIdx((i) => (i - 1 + MOBILE_REVIEWS.length) % MOBILE_REVIEWS.length);
+
   return (
-    <section className="relative pt-14 md:pt-24 pb-14 md:pb-32 px-5 md:px-6 overflow-hidden">
+    <>
+      {/* ── Mobile + Tablet (xl 미만) ─────────────────────────── */}
+      <section className="xl:hidden py-16 bg-white w-full relative overflow-hidden">
+        <div className="flex flex-col items-center justify-center px-5 mb-10 w-full text-center">
+          <h2 className="text-[24px] font-extrabold text-slate-900 leading-[1.35] tracking-tight">
+            실제 상담을 받으신
+            <br />
+            분들의 이야기
+          </h2>
+
+          <div className="flex flex-col items-center justify-center mt-5">
+            <div className="flex items-center gap-1.5 mb-1">
+              <div className="flex items-center text-amber-400 gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]">
+                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                  </svg>
+                ))}
+              </div>
+              <span className="text-[15px] font-bold text-slate-700 tracking-tight ml-0.5">5.0</span>
+            </div>
+            <p className="text-[15px] font-medium text-slate-600 tracking-tight">
+              숨고·택슬리·엑스퍼트 리뷰 500+
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="w-full relative"
+          onTouchStart={(e) => {
+            setMobilePaused(true);
+            mobileTouchStartX.current = e.touches[0].clientX;
+            mobileTouchCurrentX.current = e.touches[0].clientX;
+          }}
+          onTouchMove={(e) => {
+            mobileTouchCurrentX.current = e.touches[0].clientX;
+          }}
+          onTouchEnd={() => {
+            const diff = mobileTouchStartX.current - mobileTouchCurrentX.current;
+            if (Math.abs(diff) > 50) {
+              if (diff > 0) mobileNext();
+              else mobilePrev();
+            }
+            setMobilePaused(false);
+          }}
+        >
+          <div
+            className="flex w-full transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${mobileIdx * 100}%)` }}
+          >
+            {MOBILE_REVIEWS.map((r, idx) => (
+              <div key={idx} className="w-full shrink-0 px-5">
+                <article className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100/80 p-6 min-h-[260px] flex flex-col w-full">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <div className="flex text-amber-400">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg key={i} viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                          <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="text-[14px] font-bold text-amber-500">5.0</span>
+                  </div>
+
+                  <div className="flex-1 flex items-center py-2">
+                    <p className="text-[16px] text-slate-800 leading-[1.65] tracking-tight font-medium">
+                      <span className="text-slate-300 font-serif text-[18px] mr-0.5">&ldquo;</span>
+                      {r.quote}
+                      <span className="text-slate-300 font-serif text-[18px] ml-0.5">&rdquo;</span>
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-slate-100 flex items-center gap-2">
+                    <span className="text-[14px] font-bold text-slate-700">{r.reviewer}</span>
+                    <span className="text-slate-300 text-[12px]">·</span>
+                    <span className={`px-2.5 py-1 rounded-md text-[12px] font-bold tracking-tight ${mobileSourceClasses(r.source)}`}>
+                      {r.source}
+                    </span>
+                  </div>
+                </article>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dot 인디케이터 */}
+        <div className="flex justify-center items-center gap-2 mt-8">
+          {MOBILE_REVIEWS.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setMobileIdx(idx)}
+              aria-label={`${idx + 1}번 리뷰 보기`}
+              className={`rounded-full transition-all duration-300 ${
+                idx === mobileIdx ? "w-6 h-2 bg-brand-blue" : "w-2 h-2 bg-slate-300"
+              }`}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Desktop (xl 이상) ─────────────────────────── */}
+      <section className="hidden xl:block relative pt-24 pb-32 px-6 overflow-hidden">
       <div className="bg-grid" />
 
       <div className="max-w-[1200px] w-full mx-auto relative z-10">
@@ -213,5 +350,6 @@ export default function Testimonials() {
         </div>
       </div>
     </section>
+    </>
   );
 }

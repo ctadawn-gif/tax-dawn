@@ -61,9 +61,158 @@ const problems = [
   },
 ];
 
+// 모바일 카드 데이터 (간결한 본문 + 압축 하이라이트)
+type MobileCard = {
+  num: string;
+  iconBg: string;
+  iconColor: string;
+  icon: React.ReactNode;
+  title: React.ReactNode;
+  body: React.ReactNode;
+  highlight: React.ReactNode;
+  highlightBig?: string;
+  footer?: string;
+  flow?: string[];
+};
+
+const MOBILE_CARDS: MobileCard[] = [
+  {
+    num: "01",
+    iconBg: "bg-red-50",
+    iconColor: "text-red-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-[18px] h-[18px]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    ),
+    title: <>신고 기한, 놓치면<br />가산세가 붙습니다.</>,
+    body: <>상속세 신고를 6개월 미루면<br />산출세액 1.8억에 무신고 가산세 20%.</>,
+    highlightBig: "+3,600만원",
+    highlight: <>추가 납부</>,
+    footer: "신고 기한 안에 상담만 받았어도\n막을 수 있는 돈입니다.",
+  },
+  {
+    num: "02",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-[18px] h-[18px]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+      </svg>
+    ),
+    title: <>장부 없이 신고하면<br />세금을 더 내게 됩니다.</>,
+    body: <>연 매출 2억 음식점, 실제 경비 1.6억.<br />장부 작성 시 종소세 약 400만원,<br />추계신고 시 약 4,800만원.</>,
+    highlightBig: "12배 차이",
+    highlight: <>+ 무기장 가산세</>,
+  },
+  {
+    num: "03",
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-[18px] h-[18px]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>
+    ),
+    title: <>소명 요청, 방치하면<br />세금이 추징됩니다.</>,
+    body: <>9억 아파트 매수, 부모 증여 2억 미신고 상태.<br />자금출처 소명 요청 → 단계가 올라갈수록 추징 ↑</>,
+    flow: ["자금조달계획서", "부동산원 소명", "국세청 조사"],
+    highlightBig: "증여세",
+    highlight: <>+ 무신고 가산세 20%</>,
+  },
+];
+
 export default function Problem() {
   return (
-    <section className="relative pt-14 md:pt-24 pb-14 md:pb-32 px-5 md:px-6 overflow-hidden">
+    <>
+      {/* ── Mobile ─────────────────────────── */}
+      <section className="md:hidden bg-slate-50 py-16 px-5 w-full">
+        <div className="flex flex-col mb-8 w-full">
+          <div className="inline-flex items-center justify-center px-3 py-1.5 bg-red-50 text-red-600 rounded-full text-[13px] font-semibold tracking-tight mb-4 w-fit">
+            놓치면 손해입니다
+          </div>
+          <h2 className="text-[26px] font-extrabold text-slate-900 leading-[1.35] tracking-tight">
+            세금, 이렇게
+            <br />
+            손해 보고 계십니다.
+          </h2>
+        </div>
+
+        <div className="flex flex-col gap-4 w-full">
+          {MOBILE_CARDS.map((card, idx) => (
+            <article
+              key={idx}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col w-full"
+            >
+              <div className="flex items-center justify-between mb-4 w-full">
+                <div
+                  className={`w-[32px] h-[32px] rounded-full ${card.iconBg} flex items-center justify-center ${card.iconColor} shrink-0`}
+                >
+                  {card.icon}
+                </div>
+                <span className="text-[12px] font-medium text-slate-400 tracking-wider">
+                  {card.num}
+                </span>
+              </div>
+
+              <h3 className="text-[18px] font-extrabold text-slate-900 mb-2 leading-[1.4] tracking-tight">
+                {card.title}
+              </h3>
+
+              <p className="text-[14px] text-slate-600 leading-[1.55] tracking-tight mb-4 break-keep">
+                {card.body}
+              </p>
+
+              {card.flow && (
+                <div className="flex items-center gap-1.5 w-full mb-4 shrink-0 overflow-hidden">
+                  {card.flow.map((step, i) => (
+                    <span key={i} className="contents">
+                      <span className="bg-slate-100 text-slate-600 rounded-full px-2.5 py-1 text-[12px] font-medium tracking-tight whitespace-nowrap">
+                        {step}
+                      </span>
+                      {i < card.flow!.length - 1 && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="currentColor"
+                          className="w-3 h-3 text-slate-300 shrink-0"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div
+                className={`bg-red-50 rounded-lg px-3 py-2.5 flex items-center justify-center w-full ${
+                  card.footer ? "mb-2.5" : ""
+                }`}
+              >
+                <span className="text-[15px] font-semibold text-red-600 tracking-tight">
+                  {card.highlightBig && (
+                    <span className="text-[17px] font-extrabold">{card.highlightBig}</span>
+                  )}
+                  {card.highlightBig && " "}
+                  {card.highlight}
+                </span>
+              </div>
+
+              {card.footer && (
+                <p className="text-[13px] text-slate-500 leading-[1.4] tracking-tight mt-1 text-center whitespace-pre-line">
+                  {card.footer}
+                </p>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Desktop (기존 유지) ─────────────────────────── */}
+      <section className="hidden md:block relative pt-14 md:pt-24 pb-14 md:pb-32 px-5 md:px-6 overflow-hidden">
       <div className="bg-grid" />
 
       <div className="max-w-[1200px] mx-auto relative z-10">
@@ -121,5 +270,6 @@ export default function Problem() {
         </div>
       </div>
     </section>
+    </>
   );
 }
