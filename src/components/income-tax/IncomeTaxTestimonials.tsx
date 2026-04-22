@@ -266,9 +266,9 @@ export default function IncomeTaxTestimonials() {
 
   return (
     <>
+      <div id="testimonials" className="scroll-mt-16" />
       {/* ── Mobile ─────────────────────────── */}
       <section
-        id="testimonials"
         className="md:hidden py-16 w-full flex flex-col overflow-hidden bg-white"
       >
         <div className="px-5 mb-8">
@@ -358,7 +358,6 @@ export default function IncomeTaxTestimonials() {
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
       <section
-        id="testimonials"
         className="hidden md:block py-24 px-5 bg-ui-surface border-y border-ui-border"
       >
         <div className="max-w-[1200px] mx-auto">

@@ -75,8 +75,9 @@ function KakaoMap({ className = "" }: { className?: string }) {
 export default function Location() {
   return (
     <>
+      <div id="location" className="scroll-mt-16" />
       {/* ── Mobile ─────────────────────────── */}
-      <section id="location" className="md:hidden bg-white py-16 px-5 w-full flex flex-col">
+      <section className="md:hidden bg-white py-16 px-5 w-full flex flex-col">
         <div className="mb-6 flex flex-col items-start">
           <div className="inline-flex items-center justify-center bg-slate-100 text-slate-600 rounded-full px-3 py-1.5 text-[13px] font-semibold mb-3 tracking-tight">
             오시는 길
@@ -158,7 +159,6 @@ export default function Location() {
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
       <section
-        id="location"
         className="hidden md:block relative pt-14 md:pt-24 pb-14 md:pb-20 px-5 md:px-6"
       >
         <div className="max-w-[1000px] mx-auto">

@@ -62,7 +62,7 @@ export default function AcquisitionTaxCalculator() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      <div className="bg-grid" />
+      <div className="bg-grid hidden md:block" />
 
       {/* ── Mobile Nav ─────────────────────────── */}
       <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">

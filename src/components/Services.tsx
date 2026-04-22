@@ -61,9 +61,9 @@ const services = [
 export default function Services() {
   return (
     <>
+      <div id="calculators" className="scroll-mt-16" />
       {/* ── Mobile ─────────────────────────── */}
       <section
-        id="calculators"
         className="md:hidden bg-white px-5 py-14 w-full"
       >
         <div className="mb-8">
@@ -111,7 +111,6 @@ export default function Services() {
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
       <section
-        id="calculators"
         className="hidden md:block relative pt-24 pb-32 px-6 overflow-hidden"
       >
         <div className="bg-grid" />

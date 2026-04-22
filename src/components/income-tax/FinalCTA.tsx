@@ -3,9 +3,9 @@ const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafu
 export default function FinalCTA() {
   return (
     <>
+      <div id="contact" className="scroll-mt-16" />
       {/* ── Mobile ─────────────────────────── */}
       <section
-        id="contact"
         className="md:hidden relative overflow-hidden bg-[#0B1120] py-16 px-5 w-full flex flex-col items-center"
       >
         {/* Blue glow background */}
@@ -91,7 +91,6 @@ export default function FinalCTA() {
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
       <section
-        id="contact"
         className="hidden md:block py-24 md:py-32 px-5 bg-brand-navy text-white text-center relative overflow-hidden"
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[100px] pointer-events-none" />

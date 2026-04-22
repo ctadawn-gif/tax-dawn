@@ -123,10 +123,10 @@ export default function ContactForm({
 
   return (
     <>
+      <div id="inquiry-form" className="scroll-mt-20" />
       {/* ── Mobile ─────────────────────────── */}
       <section
-        id="inquiry-form"
-        className="md:hidden py-16 px-5 w-full flex flex-col items-center scroll-mt-20 bg-white"
+        className="md:hidden py-16 px-5 w-full flex flex-col items-center bg-white"
       >
         <div className="w-full mb-8">
           <h2 className="text-[28px] font-extrabold text-slate-900 leading-[1.35] tracking-tight mb-2.5">
@@ -318,8 +318,7 @@ export default function ContactForm({
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
       <section
-        id="inquiry-form"
-        className="hidden md:block py-24 px-5 scroll-mt-20"
+        className="hidden md:block py-24 px-5"
       >
         <div className="max-w-[640px] mx-auto">
           {status === "success" ? (

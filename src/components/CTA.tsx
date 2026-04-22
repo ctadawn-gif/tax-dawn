@@ -10,8 +10,9 @@ const BLOG_URL = "https://blog.naver.com/tax_dawn";
 export default function CTA() {
   return (
     <>
+      <div id="contact" className="scroll-mt-16" />
       {/* ── Mobile ─────────────────────────── */}
-      <section id="contact" className="md:hidden bg-slate-50 py-16 px-5 w-full">
+      <section className="md:hidden bg-slate-50 py-16 px-5 w-full">
         <div className="mb-10">
           <div className="inline-flex items-center justify-center bg-blue-50 text-brand-blue rounded-full px-3 py-1.5 text-[13px] font-semibold mb-4 tracking-tight">
             상담 안내
@@ -220,7 +221,7 @@ export default function CTA() {
       </section>
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
-      <section id="contact" className="hidden md:block relative py-14 md:py-20 px-5 md:px-6">
+      <section className="hidden md:block relative py-14 md:py-20 px-5 md:px-6">
         <div className="bg-grid" />
 
         <div className="max-w-[1000px] w-full bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-16 border border-ui-border shadow-[0_4px_20px_-6px_rgba(0,0,0,0.05)] md:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] relative z-10 flex flex-col items-center text-center mx-auto">
