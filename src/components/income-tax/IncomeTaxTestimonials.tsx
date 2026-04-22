@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type Review = {
   text: string;
@@ -71,7 +71,7 @@ const REVIEWS: Review[] = [
   {
     text:
       "늦은 시간에 요청드렸는데 너무 친절하고 명확하게 알려주셔서 감사합니다. 덕분에 오늘 발뻗고 잘 수 있겠어요. 앞으로 기장 업무 잘 부탁드립니다!!!",
-    reviewer: "라이언이라니까 고객",
+    reviewer: "라** 고객",
     source: "네이버 엑스퍼트",
   },
   {
@@ -91,13 +91,13 @@ const REVIEWS: Review[] = [
   {
     text:
       "김근량 세무사님 진심으로 감사드립니다~~ 😊🙏 10분 무료상담이였는데, 채팅하다가 직접 전화까지 주셔서 정말 자세하게 세무 관련 강의급으로, 밀도 높게 상담받았습니다. 진짜 찐 세무전문가란 이런거구나…",
-    reviewer: "미라클 고객",
+    reviewer: "미** 고객",
     source: "네이버 엑스퍼트",
   },
   {
     text:
       "오프라인에서 회계사무소나 세무사에 알아볼 때 잘 안 알려주려 하는 게 많아 답답했는데, 김근량 세무사님께서는 하나하나 궁금한 부분까지 꼼꼼히 봐주시고 설명도 잘해주셔서 너무 감사합니다!",
-    reviewer: "이거바바 고객",
+    reviewer: "이** 고객",
     source: "네이버 엑스퍼트",
   },
   {
@@ -115,13 +115,57 @@ const REVIEWS: Review[] = [
   {
     text:
       "궁금했던 부분을 사실 확인뿐만 아니라 대처까지 너무 잘 알려주셨어요. 종소세 신고할 때 연락드리겠습니다!",
-    reviewer: "푸우 고객",
+    reviewer: "푸** 고객",
     source: "네이버 엑스퍼트",
   },
   {
     text:
       "종합소득세 관련 상담 요청드렸는데, 빠르고 신속하게 처리해주셨습니다.",
     reviewer: "hanw*** 고객",
+    source: "네이버 엑스퍼트",
+  },
+];
+
+// 모바일 전용 — 짧고 임팩트 있는 리뷰 8개 큐레이션
+const MOBILE_REVIEWS: Review[] = [
+  {
+    text: "세무사 상담 중 제일 베스트였습니다. 단언컨대 제일 전문적이셔서, 무조건 김근량 세무사님께 오겠습니다.",
+    reviewer: "익명 고객",
+    source: "네이버 엑스퍼트",
+  },
+  {
+    text: "안 될 것 같은 부분은 과장 없이 현실적으로 조언해주셔서 너무 좋았습니다.",
+    reviewer: "익명 고객",
+    source: "네이버 엑스퍼트",
+  },
+  {
+    text: "오프라인 세무사에 알아볼 때 잘 안 알려주려 하는 게 많아 답답했는데, 하나하나 꼼꼼히 봐주시고 설명도 잘해주셨습니다.",
+    reviewer: "이** 고객",
+    source: "네이버 엑스퍼트",
+  },
+  {
+    text: "개인사업자 기장료 문의드렸는데, 단건으로 진행해도 된다고 정말 솔직하게 말씀해주셨습니다.",
+    reviewer: "tjsd*** 고객",
+    source: "네이버 엑스퍼트",
+  },
+  {
+    text: "급하게 문의 넣었는데 친절하고 빠르게 해결해주셨어요. 멘탈이 무너졌는데 시원하게 해결해주셨습니당 ❤️",
+    reviewer: "김** 고객",
+    source: "숨고",
+  },
+  {
+    text: "어플로 하다가 너무 많이 나오는 것 같아 부탁드렸는데, 빠르고 꼼꼼하게 처리해주셔서 종소세까지 맡길 예정입니다.",
+    reviewer: "천** 고객",
+    source: "숨고",
+  },
+  {
+    text: "늦은 시간에 요청드렸는데 친절하고 명확하게 알려주셔서 감사합니다. 덕분에 오늘 발뻗고 잘 수 있겠어요.",
+    reviewer: "라** 고객",
+    source: "네이버 엑스퍼트",
+  },
+  {
+    text: "궁금했던 부분을 사실 확인뿐만 아니라 대처까지 너무 잘 알려주셨어요. 종소세 신고할 때 연락드리겠습니다!",
+    reviewer: "푸** 고객",
     source: "네이버 엑스퍼트",
   },
 ];
@@ -135,6 +179,30 @@ function Star() {
       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   );
+}
+
+function StarLg() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-[18px] h-[18px]"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function sourceStyle(source: string) {
+  if (source === "숨고") return "bg-[#00C7AE]/10 text-[#00C7AE]";
+  if (source === "네이버 엑스퍼트") return "bg-[#03C75A]/10 text-[#03C75A]";
+  if (source === "택슬리") return "bg-blue-50 text-blue-600";
+  return "bg-slate-100 text-slate-600";
 }
 
 function ReviewCard({ review }: { review: Review }) {
@@ -167,6 +235,12 @@ export default function IncomeTaxTestimonials() {
   const [page, setPage] = useState(0);
   const [paused, setPaused] = useState(false);
 
+  // 모바일 캐러셀 상태
+  const [mobileIdx, setMobileIdx] = useState(0);
+  const [mobilePaused, setMobilePaused] = useState(false);
+  const touchStartX = useRef(0);
+  const touchCurrentX = useRef(0);
+
   useEffect(() => {
     if (paused) return;
     const timer = setInterval(() => {
@@ -175,102 +249,190 @@ export default function IncomeTaxTestimonials() {
     return () => clearInterval(timer);
   }, [paused]);
 
+  useEffect(() => {
+    if (mobilePaused) return;
+    const timer = setInterval(() => {
+      setMobileIdx((i) => (i + 1) % MOBILE_REVIEWS.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [mobilePaused]);
+
   const prev = () => setPage((p) => (p - 1 + TOTAL_PAGES) % TOTAL_PAGES);
   const next = () => setPage((p) => (p + 1) % TOTAL_PAGES);
 
+  const mobileNext = () => setMobileIdx((i) => (i + 1) % MOBILE_REVIEWS.length);
+  const mobilePrev = () =>
+    setMobileIdx((i) => (i - 1 + MOBILE_REVIEWS.length) % MOBILE_REVIEWS.length);
+
   return (
-    <section id="testimonials" className="py-24 px-5 bg-ui-surface border-y border-ui-border">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="text-center mb-14">
-          <h2 className="text-[32px] md:text-[40px] font-extrabold tracking-tight text-text-primary mb-4">
+    <>
+      {/* ── Mobile ─────────────────────────── */}
+      <section
+        id="testimonials"
+        className="md:hidden py-16 w-full flex flex-col overflow-hidden bg-white"
+      >
+        <div className="px-5 mb-8">
+          <h2 className="text-[26px] font-extrabold text-slate-900 leading-[1.35] tracking-tight">
             실제 고객 후기
           </h2>
-          <p className="text-[18px] text-text-secondary font-medium">
-            숨고·네이버 엑스퍼트에 남겨주신 리뷰 일부입니다.
+          <p className="text-[15px] font-medium text-slate-500 mt-2.5 tracking-tight leading-[1.45]">
+            숨고 · 엑스퍼트 · 택슬리에 남겨주신
+            <br />
+            리뷰 일부입니다.
           </p>
         </div>
 
         <div
-          className="relative"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+          className="w-full px-5 relative"
+          onTouchStart={(e) => {
+            setMobilePaused(true);
+            touchStartX.current = e.touches[0].clientX;
+            touchCurrentX.current = e.touches[0].clientX;
+          }}
+          onTouchMove={(e) => {
+            touchCurrentX.current = e.touches[0].clientX;
+          }}
+          onTouchEnd={() => {
+            const diff = touchStartX.current - touchCurrentX.current;
+            if (Math.abs(diff) > 50) {
+              if (diff > 0) mobileNext();
+              else mobilePrev();
+            }
+            setMobilePaused(false);
+          }}
         >
-          {/* 화살표 - 데스크톱 */}
-          <button
-            onClick={prev}
-            aria-label="이전 후기"
-            className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-ui-border shadow-md hover:shadow-lg hover:border-brand-blue hover:text-brand-blue items-center justify-center text-text-secondary transition-all z-10"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={next}
-            aria-label="다음 후기"
-            className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-ui-border shadow-md hover:shadow-lg hover:border-brand-blue hover:text-brand-blue items-center justify-center text-text-secondary transition-all z-10"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          {/* 슬라이드 뷰포트 */}
-          <div className="overflow-hidden">
+          <div className="-mx-1.5 overflow-hidden">
             <div
-              className="flex transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(-${page * 100}%)` }}
+              className="flex transition-transform duration-[400ms] ease-out"
+              style={{ transform: `translateX(-${mobileIdx * 100}%)` }}
             >
-              {Array.from({ length: TOTAL_PAGES }).map((_, pageIdx) => (
-                <div
-                  key={pageIdx}
-                  className="w-full shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-1 pt-3"
-                >
-                  {REVIEWS.slice(pageIdx * PER_PAGE, (pageIdx + 1) * PER_PAGE).map((r, i) => (
-                    <ReviewCard key={i} review={r} />
-                  ))}
+              {MOBILE_REVIEWS.map((review, idx) => (
+                <div key={idx} className="w-full shrink-0 px-1.5 flex flex-col items-stretch">
+                  <div className="bg-white rounded-[24px] shadow-[0_4px_24px_-6px_rgba(0,0,0,0.08)] border border-slate-100/80 p-6 flex flex-col h-full relative z-10 min-h-[280px]">
+                    <div className="flex items-center gap-0.5 text-amber-400 mb-5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <StarLg key={i} />
+                      ))}
+                    </div>
+
+                    <div className="flex-1">
+                      <p className="text-[16px] text-slate-800 leading-[1.65] font-semibold tracking-tight">
+                        &ldquo;{review.text}&rdquo;
+                      </p>
+                    </div>
+
+                    <div className="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-[14px] text-slate-600 font-semibold tracking-tight">
+                        {review.reviewer.replace(" 고객", "")}
+                      </span>
+                      <span
+                        className={`px-2.5 py-1 text-[11px] font-bold rounded-md ${sourceStyle(
+                          review.source
+                        )}`}
+                      >
+                        {review.source}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+        </div>
 
-          {/* 모바일 화살표 + 페이지 닷 */}
-          <div className="flex items-center justify-center gap-4 mt-10">
+        {/* Dot 인디케이터 */}
+        <div className="flex justify-center items-center gap-1.5 mt-8 px-5">
+          {MOBILE_REVIEWS.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setMobileIdx(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`h-2 rounded-full transition-all outline-none ${
+                idx === mobileIdx ? "w-5 bg-brand-blue" : "w-2 bg-slate-200"
+              }`}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Desktop (기존 유지) ─────────────────────────── */}
+      <section
+        id="testimonials"
+        className="hidden md:block py-24 px-5 bg-ui-surface border-y border-ui-border"
+      >
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-[32px] md:text-[40px] font-extrabold tracking-tight text-text-primary mb-4">
+              실제 고객 후기
+            </h2>
+            <p className="text-[18px] text-text-secondary font-medium">
+              숨고·네이버 엑스퍼트에 남겨주신 리뷰 일부입니다.
+            </p>
+          </div>
+
+          <div
+            className="relative"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            {/* 화살표 - 데스크톱 */}
             <button
               onClick={prev}
               aria-label="이전 후기"
-              className="md:hidden w-10 h-10 rounded-full bg-white border border-ui-border shadow-sm flex items-center justify-center text-text-secondary hover:text-brand-blue transition-colors"
+              className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-ui-border shadow-md hover:shadow-lg hover:border-brand-blue hover:text-brand-blue items-center justify-center text-text-secondary transition-all z-10"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-
-            <div className="flex gap-2">
-              {Array.from({ length: TOTAL_PAGES }).map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setPage(idx)}
-                  aria-label={`${idx + 1}번 페이지로 이동`}
-                  className={`h-2 rounded-full transition-all ${
-                    idx === page ? "w-8 bg-brand-blue" : "w-2 bg-slate-300 hover:bg-slate-400"
-                  }`}
-                />
-              ))}
-            </div>
-
             <button
               onClick={next}
               aria-label="다음 후기"
-              className="md:hidden w-10 h-10 rounded-full bg-white border border-ui-border shadow-sm flex items-center justify-center text-text-secondary hover:text-brand-blue transition-colors"
+              className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-ui-border shadow-md hover:shadow-lg hover:border-brand-blue hover:text-brand-blue items-center justify-center text-text-secondary transition-all z-10"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </button>
+
+            {/* 슬라이드 뷰포트 */}
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-700 ease-out"
+                style={{ transform: `translateX(-${page * 100}%)` }}
+              >
+                {Array.from({ length: TOTAL_PAGES }).map((_, pageIdx) => (
+                  <div
+                    key={pageIdx}
+                    className="w-full shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-1 pt-3"
+                  >
+                    {REVIEWS.slice(pageIdx * PER_PAGE, (pageIdx + 1) * PER_PAGE).map((r, i) => (
+                      <ReviewCard key={i} review={r} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* PC: 페이지 닷 */}
+            <div className="flex items-center justify-center gap-4 mt-10">
+              <div className="flex gap-2">
+                {Array.from({ length: TOTAL_PAGES }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setPage(idx)}
+                    aria-label={`${idx + 1}번 페이지로 이동`}
+                    className={`h-2 rounded-full transition-all ${
+                      idx === page ? "w-8 bg-brand-blue" : "w-2 bg-slate-300 hover:bg-slate-400"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

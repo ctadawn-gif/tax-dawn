@@ -16,16 +16,17 @@ export default function ContactPage() {
       <AnnouncementBar />
       <Navbar />
       <main>
-        <section className="pt-16 pb-10 md:pt-24 md:pb-14 px-5 text-center max-w-[780px] mx-auto">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-5">
+        <section className="pt-12 pb-8 md:pt-24 md:pb-14 px-5 text-center max-w-[780px] mx-auto">
+          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-4 md:mb-5">
             무료 상담 신청
           </span>
-          <h1 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-text-primary mb-4 leading-tight">
+          <h1 className="text-[26px] md:text-[44px] font-extrabold tracking-tight text-text-primary mb-3 md:mb-4 leading-[1.35] md:leading-tight">
             세무 관련 어떤 문의든
             <br className="sm:hidden" />
+            <span className="sm:hidden"> </span>
             편하게 남겨주세요
           </h1>
-          <p className="text-[16px] md:text-[18px] text-text-secondary font-medium leading-relaxed mb-10">
+          <p className="text-[15px] md:text-[18px] text-text-secondary font-medium leading-[1.55] md:leading-relaxed mb-8 md:mb-10">
             대표세무사 2인이 직접 확인하고
             <br className="sm:hidden" />
             <strong className="text-text-primary"> 24시간 이내 연락</strong>드립니다.

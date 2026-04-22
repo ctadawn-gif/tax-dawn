@@ -63,35 +63,35 @@ const problems = [
 
 export default function Problem() {
   return (
-    <section className="relative pt-24 pb-32 px-6 overflow-hidden">
+    <section className="relative pt-14 md:pt-24 pb-14 md:pb-32 px-5 md:px-6 overflow-hidden">
       <div className="bg-grid" />
 
       <div className="max-w-[1200px] mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-red-50 text-red-500 text-[13px] font-bold tracking-wide border border-red-100 mb-4">
+        <div className="text-center mb-12 md:mb-20">
+          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-red-50 text-red-500 text-[12px] md:text-[13px] font-bold tracking-wide border border-red-100 mb-3 md:mb-4">
             놓치면 손해입니다
           </span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
+          <h2 className="text-[24px] md:text-3xl lg:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
             세금, 이렇게 손해 보고 계십니다
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 items-stretch">
           {problems.map((p, i) => (
             <div
               key={i}
-              className="bg-white rounded-3xl p-8 md:p-10 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,82,255,0.15)] transition-all duration-300 hover:-translate-y-1 flex flex-col group"
+              className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 border border-ui-border shadow-[0_4px_20px_-6px_rgba(0,0,0,0.05)] md:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,82,255,0.15)] transition-all duration-300 md:hover:-translate-y-1 flex flex-col group"
             >
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 md:mb-8 text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300">
                 {p.icon}
               </div>
-              <span className="text-brand-blue font-bold text-sm tracking-wide mb-2 block">
+              <span className="text-brand-blue font-bold text-[12px] md:text-sm tracking-wide mb-1.5 md:mb-2 block">
                 {p.label}
               </span>
-              <h3 className="text-2xl font-bold text-text-primary mb-5 leading-snug">
+              <h3 className="text-[18px] md:text-2xl font-bold text-text-primary mb-4 md:mb-5 leading-snug">
                 {p.title}
               </h3>
-              <div className="text-[15px] leading-relaxed text-text-secondary flex-grow flex flex-col gap-4">
+              <div className="text-[14px] md:text-[15px] leading-relaxed text-text-secondary flex-grow flex flex-col gap-3 md:gap-4">
                 {p.flow && (
                   <div className="bg-ui-surface rounded-lg p-3 text-[13px] font-medium text-brand-navy border border-ui-border flex flex-wrap gap-1 items-center">
                     {p.flow.map((step, j) => (

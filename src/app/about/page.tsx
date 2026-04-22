@@ -54,16 +54,23 @@ export default function AboutPage() {
     <div className="min-h-screen bg-white relative">
       <div className="bg-grid" />
 
-      <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
+      {/* ── Mobile Nav ─────────────────────────── */}
+      <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
+        <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">세무회계 새벽</Link>
+        <Link href="/" className="text-slate-500 text-[13px] font-medium no-underline">← 홈으로</Link>
+      </header>
+
+      {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
+      <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
         <Link href="/" className="text-text-secondary text-sm font-medium hover:text-brand-blue transition-colors no-underline">← 홈으로</Link>
       </nav>
 
-      <div className="max-w-[1000px] w-full mx-auto px-6 pt-12 pb-20 relative z-10">
+      <div className="max-w-[1000px] w-full mx-auto px-5 md:px-6 pt-8 md:pt-12 pb-14 md:pb-20 relative z-10">
         {/* 헤더 */}
-        <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">세무회계 새벽</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">소개 · 오시는 길</h1>
+        <div className="text-center mb-10 md:mb-16">
+          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-3 md:mb-4">세무회계 새벽</span>
+          <h1 className="text-[26px] md:text-4xl lg:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-3 md:mb-4">소개 · 오시는 길</h1>
         </div>
 
         {/* 오시는 길 (지도) */}

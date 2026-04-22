@@ -2,19 +2,22 @@ import Image from "next/image";
 
 export default function CTA() {
   return (
-    <section id="contact" className="relative py-20 px-6">
+    <section id="contact" className="relative py-14 md:py-20 px-5 md:px-6">
       <div className="bg-grid" />
 
-      <div className="max-w-[1000px] w-full bg-white rounded-[32px] p-8 md:p-16 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] relative z-10 flex flex-col items-center text-center mx-auto">
-        <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-8">
+      <div className="max-w-[1000px] w-full bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-16 border border-ui-border shadow-[0_4px_20px_-6px_rgba(0,0,0,0.05)] md:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] relative z-10 flex flex-col items-center text-center mx-auto">
+        <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-5 md:mb-8">
           상담 안내
         </span>
 
-        <h2 className="text-3xl md:text-[42px] font-extrabold text-text-primary tracking-tight leading-[1.25] mb-6">
-          더 구체적인 상담이 필요하신가요?
+        <h2 className="text-[24px] md:text-[42px] font-extrabold text-text-primary tracking-tight leading-[1.3] md:leading-[1.25] mb-4 md:mb-6">
+          더 구체적인 상담이
+          <br className="md:hidden" />
+          <span className="md:hidden"> </span>
+          필요하신가요?
         </h2>
 
-        <p className="text-[17px] md:text-[19px] text-text-secondary leading-[1.7] mb-12 max-w-[640px]">
+        <p className="text-[15px] md:text-[19px] text-text-secondary leading-[1.6] md:leading-[1.7] mb-8 md:mb-12 max-w-[640px]">
           계산기로 간단하게 확인해보셨다면, 이제 정확한 절세 방법을 찾을
           차례입니다. 상속·증여세 신고, 종합소득세 절세, 사업자 기장대행,
           자금출처 소명 등 세무 업무 전반에 대해 편하게 연락주세요.

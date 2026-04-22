@@ -218,14 +218,76 @@ export default function IncomeTaxCalculator() {
     <div className="min-h-screen bg-white relative">
       <div className="bg-grid" />
 
-      <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
+      {/* ── Mobile Nav ─────────────────────────── */}
+      <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
+        <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">
+          세무회계 새벽
+        </Link>
+        <a
+          href="tel:01032623295"
+          aria-label="전화상담 연결"
+          className="text-slate-600 p-1 -mr-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.48-3.903-7.181-6.961l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+            />
+          </svg>
+        </a>
+      </header>
+
+      {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
+      <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
         <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
       </nav>
 
+      {/* ── Mobile Hero ─────────────────────────── */}
+      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
+          <span>🧮</span>
+          <span className="pt-[1px]">무료 세금 계산기</span>
+        </div>
+        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
+          종합소득세
+          <br />
+          예상세액 계산기
+        </h1>
+        <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">
+          소득과 공제를 입력하면
+          <br />
+          예상 세액을 바로 확인합니다.
+        </p>
+        <div className="mt-8 text-slate-400 animate-bounce">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
+            />
+          </svg>
+        </div>
+      </section>
+
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1200px] w-full mx-auto relative z-10">
-          <div className="text-center mb-16">
+          <div className="hidden md:block text-center mb-16">
             <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">종합소득세 예상세액 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">소득 유형과 공제 항목을 입력하면 예상 세액을 바로 확인할 수 있습니다</p>
@@ -405,7 +467,7 @@ export default function IncomeTaxCalculator() {
           </div>
 
           {/* 결과 섹션 */}
-          <div className="bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden mt-12 mb-12 relative">
+          <div id="result-section" className="bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden mt-12 mb-12 relative scroll-mt-16">
             <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue" />
                 <div className="mx-6 md:mx-8 mt-5 mb-0 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-[12px] text-amber-700 leading-relaxed"><svg className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>본 계산 결과는 참고용이며, 실제 세액과 다를 수 있습니다. 세무회계 새벽은 본 계산기의 결과에 대해 법적 책임을 지지 않습니다.</span></div>
 
@@ -413,17 +475,17 @@ export default function IncomeTaxCalculator() {
               <div className="flex flex-col gap-6">
                 {/* 사업소득 흐름 */}
                 {showBusiness && result.businessRevenue > 0 && (
-                  <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-center w-full max-w-4xl mx-auto">
+                  <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6 text-center w-full max-w-4xl mx-auto">
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">사업 수입금액</span>
                       <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{fmt(result.businessRevenue)}만원</span>
                     </div>
-                    <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
+                    <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">필요경비 ({result.appliedExpenseRate})</span>
                       <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {fmt(result.businessExpense)}만원</span>
                     </div>
-                    <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
+                    <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-bold text-brand-blue mb-1">사업소득금액</span>
                       <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{fmt(result.businessIncome)}만원</span>
@@ -433,17 +495,17 @@ export default function IncomeTaxCalculator() {
 
                 {/* 근로소득 흐름 */}
                 {showSalary && result.salaryRevenue > 0 && (
-                  <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-center w-full max-w-4xl mx-auto">
+                  <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6 text-center w-full max-w-4xl mx-auto">
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">총급여액</span>
                       <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{fmt(result.salaryRevenue)}만원</span>
                     </div>
-                    <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
+                    <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">근로소득공제</span>
                       <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {fmt(result.salaryDeduction)}만원</span>
                     </div>
-                    <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
+                    <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-bold text-brand-blue mb-1">근로소득금액</span>
                       <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{fmt(result.salaryIncome)}만원</span>
@@ -452,21 +514,21 @@ export default function IncomeTaxCalculator() {
                 )}
 
                 {/* 과세표준 */}
-                <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-center w-full max-w-4xl mx-auto">
+                <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6 text-center w-full max-w-4xl mx-auto">
                   {incomeType === "combined" && (
                     <>
                       <div className="flex flex-col">
                         <span className="text-[13px] font-medium text-text-secondary mb-1">종합소득금액</span>
                         <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{fmt(result.totalIncome)}만원</span>
                       </div>
-                      <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
+                      <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     </>
                   )}
                   <div className="flex flex-col">
                     <span className="text-[13px] font-medium text-text-secondary mb-1">소득공제 합계</span>
                     <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {fmt(result.totalDeduction)}만원</span>
                   </div>
-                  <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
+                  <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                   <div className="flex flex-col">
                     <span className="text-[13px] font-bold text-brand-blue mb-1">과세표준</span>
                     <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{fmt(result.taxableIncome)}만원</span>
@@ -609,7 +671,7 @@ export default function IncomeTaxCalculator() {
           </div>
 
           {/* CTA */}
-          <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
+          <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center mb-20 md:mb-0">
             <p className="text-[15px] text-text-secondary mb-6">계산기로 간단하게 확인해보셨다면, 정확한 절세 방법은 세무사와 상담하세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
               <Link href="/income-tax#inquiry-form" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">무료 상담 신청하기</Link>
@@ -618,6 +680,43 @@ export default function IncomeTaxCalculator() {
           </div>
         </div>
       </section>
+
+      {/* ── Mobile Sticky Result Summary ─────────────────── */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-5 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <a
+          href="#result-section"
+          className="no-underline flex items-center justify-between active:scale-[0.99] transition-transform"
+        >
+          <div className="flex flex-col leading-tight">
+            <span className="text-[11px] font-semibold text-slate-500 tracking-tight">
+              {result.totalTax > 0 ? "예상 납부 세액" : "예상 세액"}
+            </span>
+            {result.totalTax > 0 ? (
+              <div className="flex items-baseline gap-1">
+                <span className="text-[20px] font-extrabold text-slate-900 tracking-tight">
+                  {fmt(result.totalTax)}
+                </span>
+                <span className="text-[13px] font-semibold text-slate-600">만원</span>
+                {(hasWithholding || n(prepaidTax) > 0) && result.finalTax !== result.totalTax && (
+                  <span className={`ml-2 text-[12px] font-bold ${result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}`}>
+                    ({result.finalTax < 0 ? "환급" : "추납"} {fmt(Math.abs(result.finalTax))}만원)
+                  </span>
+                )}
+              </div>
+            ) : (
+              <span className="text-[15px] font-bold text-slate-400 tracking-tight">
+                입력하면 자동 계산
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1 bg-brand-blue text-white px-3 py-2 rounded-lg text-[13px] font-bold shrink-0">
+            상세 보기
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </a>
+      </div>
     </div>
   );
 }

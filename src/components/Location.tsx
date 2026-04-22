@@ -48,31 +48,31 @@ function KakaoMap() {
     document.head.appendChild(script);
   }, []);
 
-  return <div ref={mapRef} className="w-full h-[400px] rounded-2xl overflow-hidden border border-ui-border" />;
+  return <div ref={mapRef} className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden border border-ui-border" />;
 }
 
 export default function Location() {
   return (
-    <section id="location" className="relative pt-24 pb-20 px-6">
+    <section id="location" className="relative pt-14 md:pt-24 pb-14 md:pb-20 px-5 md:px-6">
       <div className="max-w-[1000px] mx-auto">
-        <div className="text-center mb-10">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">
+        <div className="text-center mb-8 md:mb-10">
+          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-3 md:mb-4">
             오시는 길
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-text-primary tracking-tight leading-tight">
+          <h2 className="text-[24px] md:text-3xl lg:text-4xl font-extrabold text-text-primary tracking-tight leading-tight">
             세무회계 새벽
           </h2>
         </div>
 
         <KakaoMap />
 
-        <div className="mt-5 bg-white rounded-2xl p-6 border border-ui-border shadow-sm">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="mt-4 md:mt-5 bg-white rounded-2xl p-5 md:p-6 border border-ui-border shadow-sm">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4">
             <div>
-              <h3 className="text-lg font-bold text-text-primary mb-1">서울 송파구 위례서로 252, 유원플러스송파 610호</h3>
-              <p className="text-[13px] text-text-secondary">방문 상담은 예약 후 가능합니다</p>
+              <h3 className="text-[15px] md:text-lg font-bold text-text-primary mb-1 leading-snug">서울 송파구 위례서로 252,<br className="md:hidden" /> 유원플러스송파 610호</h3>
+              <p className="text-[12.5px] md:text-[13px] text-text-secondary">방문 상담은 예약 후 가능합니다</p>
             </div>
-            <a href={PLACE_URL} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white border-2 border-ui-border rounded-xl text-[14px] font-bold text-text-primary hover:border-brand-blue hover:text-brand-blue transition-colors no-underline shrink-0">
+            <a href={PLACE_URL} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto px-5 md:px-6 py-3 bg-white border border-ui-border md:border-2 rounded-xl text-[14px] font-bold text-text-primary text-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline shrink-0">
               네이버 플레이스에서 보기 →
             </a>
           </div>

@@ -235,8 +235,36 @@ export default function VehicleCalculator() {
     <div className="min-h-screen bg-white relative">
       <div className="bg-grid" />
 
-      {/* 네비게이션 */}
-      <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
+      {/* ── Mobile Nav ─────────────────────────── */}
+      <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
+        <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">세무회계 새벽</Link>
+        <a href="tel:01032623295" aria-label="전화상담 연결" className="text-slate-600 p-1 -mr-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.48-3.903-7.181-6.961l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+          </svg>
+        </a>
+      </header>
+
+      {/* ── Mobile Hero ─────────────────────────── */}
+      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
+          <span>🧮</span>
+          <span className="pt-[1px]">무료 세금 계산기</span>
+        </div>
+        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
+          업무용승용차
+          <br />
+          비용 계산기
+        </h1>
+        <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">
+          매입 · 리스 · 렌트를
+          <br />
+          한눈에 비교해보세요.
+        </p>
+      </section>
+
+      {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
+      <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline">
           <img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" />
         </Link>
@@ -253,7 +281,7 @@ export default function VehicleCalculator() {
 
       <div className="max-w-[1200px] w-full mx-auto px-6 pt-12 pb-20 relative z-10">
         {/* 타이틀 */}
-        <div className="text-center mb-16">
+        <div className="hidden md:block text-center mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">
             무료 세금 계산기
           </span>

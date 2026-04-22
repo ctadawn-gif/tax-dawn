@@ -97,22 +97,32 @@ export default function UpdatesPage() {
     <div className="min-h-screen bg-white relative">
       <div className="bg-grid" />
 
-      <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
+      {/* ── Mobile Nav ─────────────────────────── */}
+      <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
+        <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">세무회계 새벽</Link>
+        <Link href="/" className="text-slate-500 text-[13px] font-medium no-underline">← 홈으로</Link>
+      </header>
+
+      {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
+      <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
         <Link href="/" className="text-text-secondary text-sm font-medium hover:text-brand-blue transition-colors no-underline">← 홈으로</Link>
       </nav>
 
       {/* 헤더 */}
-      <section className="pt-16 pb-12 px-6 text-center max-w-3xl mx-auto relative z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 border border-blue-100 rounded-full mb-6">
-          <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-          <span className="text-sm font-bold text-brand-blue">마지막 업데이트: 2026년 4월</span>
+      <section className="pt-10 md:pt-16 pb-8 md:pb-12 px-5 md:px-6 text-center max-w-3xl mx-auto relative z-10">
+        <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-blue-50 border border-blue-100 rounded-full mb-4 md:mb-6">
+          <svg className="w-3.5 h-3.5 md:w-4 md:h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+          <span className="text-[12px] md:text-sm font-bold text-brand-blue">마지막 업데이트: 2026년 4월</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-6 leading-tight">
+        <h1 className="text-[26px] md:text-4xl lg:text-5xl font-extrabold tracking-tight text-text-primary mb-4 md:mb-6 leading-tight">
           계산기 업데이트 내역
         </h1>
-        <p className="text-lg text-text-secondary font-medium leading-relaxed">
-          각 계산기에 반영된 최신 세법 개정사항과 법령 근거를 확인하세요.
+        <p className="text-[15px] md:text-lg text-text-secondary font-medium leading-[1.55] md:leading-relaxed">
+          각 계산기에 반영된 최신
+          <br className="md:hidden" />
+          <span className="md:hidden"> </span>
+          세법 개정사항과 법령 근거를 확인하세요.
         </p>
       </section>
 

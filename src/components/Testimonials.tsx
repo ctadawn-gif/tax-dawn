@@ -110,20 +110,23 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="relative pt-24 pb-32 px-6 overflow-hidden">
+    <section className="relative pt-14 md:pt-24 pb-14 md:pb-32 px-5 md:px-6 overflow-hidden">
       <div className="bg-grid" />
 
       <div className="max-w-[1200px] w-full mx-auto relative z-10">
-        <div className="text-center mb-6">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">
+        <div className="text-center mb-5 md:mb-6">
+          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-3 md:mb-4">
             고객 후기
           </span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
-            실제 상담을 받으신 분들의 이야기
+          <h2 className="text-[24px] md:text-3xl lg:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
+            실제 상담을 받으신
+            <br className="md:hidden" />
+            <span className="md:hidden"> </span>
+            분들의 이야기
           </h2>
         </div>
 
-        <div className="flex items-center justify-center gap-6 mb-12">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 mb-8 md:mb-12">
           <div className="flex items-center gap-2">
             <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (

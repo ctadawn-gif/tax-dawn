@@ -90,14 +90,43 @@ export default function InheritGiftCalculator() {
     <div className="min-h-screen bg-white relative">
       <div className="bg-grid" />
 
-      <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
+      {/* ── Mobile Nav ─────────────────────────── */}
+      <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
+        <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">세무회계 새벽</Link>
+        <a href="tel:01032623295" aria-label="전화상담 연결" className="text-slate-600 p-1 -mr-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.48-3.903-7.181-6.961l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+          </svg>
+        </a>
+      </header>
+
+      {/* ── Mobile Hero ─────────────────────────── */}
+      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
+          <span>🧮</span>
+          <span className="pt-[1px]">무료 세금 계산기</span>
+        </div>
+        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
+          상속·증여세
+          <br />
+          간편 계산기
+        </h1>
+        <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">
+          상속세와 증여세 예상 세액을
+          <br />
+          간편하게 확인합니다.
+        </p>
+      </section>
+
+      {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
+      <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
         <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
       </nav>
 
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1200px] w-full mx-auto relative z-10">
-          <div className="text-center mb-16">
+          <div className="hidden md:block text-center mb-16">
             <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">상속·증여세 간편 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">상속세와 증여세 예상 세액을 간편하게 확인해보세요</p>
