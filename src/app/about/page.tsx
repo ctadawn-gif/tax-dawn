@@ -159,7 +159,7 @@ export default function AboutPage() {
           <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.05)] p-5">
             <div className="flex items-center gap-4 mb-5">
               <div className="w-[80px] h-[80px] rounded-full border-4 border-blue-50 shrink-0 overflow-hidden">
-                <Image src="/kim.jpg" alt="김근량 세무사" width={80} height={80} className="w-full h-full object-cover" style={{ objectPosition: "65% top" }} />
+                <Image src="/kim.jpg" alt="김근량 세무사" width={80} height={80} className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-2">
@@ -365,7 +365,7 @@ export default function AboutPage() {
 
             <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] flex flex-col items-center text-center">
               <div className="w-28 h-28 rounded-full overflow-hidden mb-5 border-4 border-blue-50">
-                <Image src="/kim.jpg" alt="김근량 세무사" width={112} height={112} className="w-full h-full object-cover object-[65%_top]" />
+                <Image src="/kim.jpg" alt="김근량 세무사" width={112} height={112} className="w-full h-full object-cover" />
               </div>
               <h3 className="text-xl font-extrabold text-text-primary mb-1">김근량 세무사</h3>
               <p className="text-sm text-brand-blue font-bold mb-4">대표세무사</p>
