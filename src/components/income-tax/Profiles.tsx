@@ -15,7 +15,7 @@ const PROFILES: Profile[] = [
   {
     name: "김근량",
     photo: "/kim.jpg",
-    objectPosition: "60% top",
+    objectPosition: "65% top",
     specialties: [
       "종합소득세 · 부가가치세",
       "사업자 기장대행",

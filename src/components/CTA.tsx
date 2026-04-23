@@ -42,7 +42,7 @@ export default function CTA() {
                   width={88}
                   height={88}
                   className="w-full h-full object-cover"
-                  style={{ objectPosition: "60% top" }}
+                  style={{ objectPosition: "65% top" }}
                 />
               </div>
               <div className="flex flex-col pt-1">
@@ -257,7 +257,7 @@ export default function CTA() {
                   alt="김근량 세무사"
                   width={80}
                   height={80}
-                  className="w-full h-full object-cover object-[60%_top]"
+                  className="w-full h-full object-cover object-[65%_top]"
                 />
               </div>
               <span className="text-text-primary font-bold text-[17px] group-hover:text-brand-blue transition-colors">

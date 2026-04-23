@@ -93,7 +93,7 @@ export default function Hero() {
                 <img
                   src="/kim.jpg"
                   alt="김근량 세무사"
-                  className="w-9 h-9 rounded-full border-2 border-white object-cover object-[60%_top] -ml-3"
+                  className="w-9 h-9 rounded-full border-2 border-white object-cover object-[65%_top] -ml-3"
                 />
               </div>
               <div className="flex flex-col min-w-0">
