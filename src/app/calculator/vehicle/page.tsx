@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import PrintButton, { PrintHeader } from "@/components/PrintButton";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 const num = (v: string | number) =>
@@ -380,10 +381,17 @@ export default function VehicleCalculator() {
         </div>
 
         {/* 결과 카드 3열 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <ResultCard title="매입 결과" icon={<BuyIcon />} res={buyRes} entity={ent} cmpD1={buyCmp?.d1 ?? null} />
-          <ResultCard title="리스 결과" icon={<LeaseIcon />} res={leaseRes} entity={ent} cmpD1={leaseCmp?.d1 ?? null} />
-          <ResultCard title="렌트 결과" icon={<RentIcon />} res={rentRes} entity={ent} cmpD1={rentCmp?.d1 ?? null} />
+        <div className="print-area">
+          <PrintHeader title="업무용승용차 비용 비교 결과 (매입 / 리스 / 렌트)" />
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h3>
+            <PrintButton />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <ResultCard title="매입 결과" icon={<BuyIcon />} res={buyRes} entity={ent} cmpD1={buyCmp?.d1 ?? null} />
+            <ResultCard title="리스 결과" icon={<LeaseIcon />} res={leaseRes} entity={ent} cmpD1={leaseCmp?.d1 ?? null} />
+            <ResultCard title="렌트 결과" icon={<RentIcon />} res={rentRes} entity={ent} cmpD1={rentCmp?.d1 ?? null} />
+          </div>
         </div>
 
         {/* 안내 */}
