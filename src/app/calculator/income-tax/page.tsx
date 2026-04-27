@@ -302,7 +302,7 @@ export default function IncomeTaxCalculator() {
           </div>
 
           {/* 소득 유형 선택 */}
-          <div className="bg-white rounded-2xl p-4 md:px-8 md:py-5 border border-ui-border shadow-sm flex justify-center items-center mb-12">
+          <div className="no-print bg-white rounded-2xl p-4 md:px-8 md:py-5 border border-ui-border shadow-sm flex justify-center items-center mb-12">
             <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-[600px]">
               {incomeTypes.map((t) => (
                 <button key={t.k} onClick={() => setIncomeType(t.k)} className={`flex-1 px-4 py-2.5 rounded-md text-[15px] transition-all ${incomeType === t.k ? "bg-white shadow-sm font-bold text-brand-blue" : "font-medium text-text-secondary hover:text-text-primary"}`}>
@@ -313,7 +313,7 @@ export default function IncomeTaxCalculator() {
           </div>
 
           {/* 입력 카드 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div className="no-print grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* 사업/프리랜서 소득 */}
             {showBusiness && (
               <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">

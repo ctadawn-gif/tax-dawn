@@ -99,7 +99,7 @@ export default function VatCalculator() {
           </div>
 
           {/* 탭 */}
-          <div className="flex justify-center mb-10">
+          <div className="no-print flex justify-center mb-10">
             <div className="inline-flex bg-ui-surface p-1.5 rounded-2xl border border-ui-border shadow-sm">
               {(["general", "simplified"] as TaxpayerType[]).map((t) => (
                 <button key={t} onClick={() => setTaxpayerType(t)} className={`px-10 py-3 rounded-xl text-[16px] font-bold transition-all ${taxpayerType === t ? "bg-white text-text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]" : "text-text-secondary"}`}>
@@ -112,7 +112,7 @@ export default function VatCalculator() {
           {/* ========== 일반과세자 ========== */}
           {taxpayerType === "general" && (
             <>
-              <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 mb-12">
+              <div className="no-print bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 mb-12">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
@@ -238,7 +238,7 @@ export default function VatCalculator() {
           {/* ========== 간이과세자 ========== */}
           {taxpayerType === "simplified" && (
             <>
-              <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 mb-12">
+              <div className="no-print bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 mb-12">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>

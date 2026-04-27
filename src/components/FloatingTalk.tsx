@@ -8,7 +8,7 @@ export default function FloatingTalk() {
       href={TALK_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#03C75A] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center z-50 group"
+      className="no-print fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#03C75A] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center z-50 group"
       aria-label="네이버 톡톡 문의"
     >
       <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">

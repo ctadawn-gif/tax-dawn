@@ -60,67 +60,57 @@ body {
 
 /* ────────────────────────────────────────────────────────
    인쇄 / PDF 저장용 스타일
-   - 결과 섹션(#result-section)만 출력
-   - 입력 폼·네비·CTA·배경 모두 숨김
-   - .print-only 요소는 인쇄 시에만 표시
+   - 페이지 전체 PC 레이아웃 그대로 A4에 인쇄
+   - .no-print 클래스 가진 요소는 인쇄에서 제외 (네비, 입력폼, 푸터 등)
+   - .print-only 클래스는 인쇄 시에만 표시 (인쇄 헤더 등)
+   - 모바일 인쇄는 PrintButton 자체에서 hidden md: 처리
    ──────────────────────────────────────────────────────── */
 .print-only { display: none; }
 
 @media print {
-  /* 페이지 여백 */
+  /* A4 페이지 여백 */
   @page {
     size: A4;
-    margin: 14mm 12mm;
+    margin: 12mm;
   }
 
-  /* 인쇄 시 모든 요소 숨김 */
-  body * { visibility: hidden; }
-
-  /* 결과 섹션과 그 자식만 표시 (#result-section 또는 .print-area) */
-  #result-section,
-  #result-section *,
-  .print-area,
-  .print-area * { visibility: visible; }
-
-  /* 결과 섹션을 페이지 상단에 위치 */
-  #result-section,
-  .print-area {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    box-shadow: none !important;
-    border: none !important;
-    margin: 0 !important;
+  /* PC 폭 강제 — 인쇄 시 모바일 레이아웃 방지 */
+  html, body {
+    background: #ffffff !important;
+    min-width: 1024px;
+    width: 1024px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
   }
 
-  /* 인쇄 시 .print-area가 여러 개여도 안 보이는 것은 숨김
-     (조건부 렌더링으로 화면에 보이는 것만 인쇄됨) */
-  .print-area:not(:has(*[style*="display"])) { }
+  /* 자동 숨김: 네비, 푸터 시맨틱 태그 */
+  nav, header, footer { display: none !important; }
+
+  /* 명시적 숨김 */
+  .no-print,
+  .no-print * { display: none !important; }
 
   /* 인쇄용 전용 요소 표시 */
   .print-only { display: block !important; }
 
-  /* 인쇄 시 숨길 요소 */
-  .no-print,
-  .no-print * { display: none !important; visibility: hidden !important; }
+  /* fixed/sticky 요소를 일반 흐름으로 (페이지마다 반복 인쇄 방지) */
+  [class*="fixed"], [class*="sticky"] { position: static !important; }
 
-  /* 색상·배경 보존 (브라우저 기본은 절약 모드) */
+  /* 색상·배경 보존 (브라우저 기본은 잉크 절약 모드라 색이 빠짐) */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 그라데이션·다크 배경은 인쇄 시 흰색으로 */
-  .print-flatten-bg {
-    background: #ffffff !important;
-    color: #0f172a !important;
-  }
-  .print-flatten-bg * {
-    color: #0f172a !important;
+  /* 그림자 제거 (인쇄에 불필요) */
+  *, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
 
   /* 페이지 단절 방지 */
   article, section, .print-keep { break-inside: avoid; }
+
+  /* 강제 페이지 분리가 필요한 경우 */
+  .print-break-before { break-before: page; }
 }

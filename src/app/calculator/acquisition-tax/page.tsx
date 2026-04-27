@@ -102,7 +102,7 @@ export default function AcquisitionTaxCalculator() {
           </div>
 
           {/* 입력 */}
-          <div className="max-w-[700px] mx-auto mb-12">
+          <div className="no-print max-w-[700px] mx-auto mb-12">
             <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">

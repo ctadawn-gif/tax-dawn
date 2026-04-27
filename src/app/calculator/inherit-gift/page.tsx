@@ -132,7 +132,7 @@ export default function InheritGiftCalculator() {
           </div>
 
           {/* 탭 */}
-          <div className="bg-white rounded-2xl p-4 md:px-8 md:py-5 border border-ui-border shadow-sm flex justify-center items-center mb-12">
+          <div className="no-print bg-white rounded-2xl p-4 md:px-8 md:py-5 border border-ui-border shadow-sm flex justify-center items-center mb-12">
             <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-[400px]">
               {(["inheritance", "gift"] as Tab[]).map((t) => (
                 <button key={t} onClick={() => setTab(t)} className={`flex-1 px-4 py-2.5 rounded-md text-[15px] transition-all ${tab === t ? "bg-white shadow-sm font-bold text-brand-blue" : "font-medium text-text-secondary hover:text-text-primary"}`}>
@@ -145,7 +145,7 @@ export default function InheritGiftCalculator() {
           {/* ========== 상속세 탭 ========== */}
           {tab === "inheritance" && (
             <>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="no-print grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* 상속재산 카드 */}
                 <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">
                   <div className="flex items-center gap-3 mb-8">
@@ -295,7 +295,7 @@ export default function InheritGiftCalculator() {
           {/* ========== 증여세 탭 ========== */}
           {tab === "gift" && (
             <>
-              <div className="max-w-4xl mx-auto mb-8">
+              <div className="no-print max-w-4xl mx-auto mb-8">
                 <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
                   <div className="flex items-center gap-3 mb-8">
                     <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">

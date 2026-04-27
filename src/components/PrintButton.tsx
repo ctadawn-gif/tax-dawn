@@ -16,8 +16,9 @@ export default function PrintButton({ label = "인쇄 / PDF 저장" }: { label?:
     <button
       type="button"
       onClick={() => window.print()}
-      className="no-print inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-ui-border bg-white text-text-secondary text-[13px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors shadow-sm"
+      className="no-print hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-ui-border bg-white text-text-secondary text-[13px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors shadow-sm"
       aria-label={label}
+      title="PC에서만 인쇄/PDF 저장이 가능합니다"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

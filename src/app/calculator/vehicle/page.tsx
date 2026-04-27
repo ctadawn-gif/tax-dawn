@@ -293,7 +293,7 @@ export default function VehicleCalculator() {
         </div>
 
         {/* 설정 바 */}
-        <div className="bg-white rounded-2xl px-5 md:px-8 py-5 border border-ui-border shadow-sm flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
+        <div className="no-print bg-white rounded-2xl px-5 md:px-8 py-5 border border-ui-border shadow-sm flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
           <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-auto">
             {[
               { k: "corp", l: "법인" },
@@ -345,7 +345,7 @@ export default function VehicleCalculator() {
         </div>
 
         {/* 입력 카드 3열 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="no-print grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center"><BuyIcon /></div>

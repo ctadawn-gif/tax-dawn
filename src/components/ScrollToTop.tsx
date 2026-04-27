@@ -14,7 +14,7 @@ export default function ScrollToTop() {
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className={`fixed bottom-24 right-6 w-11 h-11 rounded-full bg-white border border-ui-border shadow-lg flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue transition-all duration-300 z-40 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
+      className={`no-print fixed bottom-24 right-6 w-11 h-11 rounded-full bg-white border border-ui-border shadow-lg flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue transition-all duration-300 z-40 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
       aria-label="맨 위로"
     >
       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
