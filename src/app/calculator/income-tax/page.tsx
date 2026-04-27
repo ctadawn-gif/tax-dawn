@@ -16,6 +16,27 @@ import {
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 
+// 입력은 "원" 단위로 받되, 계산 라이브러리는 "만원" 단위
+// 사용자 직관(월급 5천만원 = 50,000,000)에 맞춤
+const TO_MAN = 10000;
+const wonToMan = (v: number | string) => (v === "" || v == null ? 0 : Number(v) / TO_MAN);
+
+// 큰 금액을 한글 단위로 환산 표시 (1,234,567,890 → "12억 3,456만원")
+function formatKoreanMoney(won: number): string {
+  if (!won || won === 0) return "0원";
+  const isNeg = won < 0;
+  let abs = Math.round(Math.abs(won));
+  const eok = Math.floor(abs / 100000000);
+  abs = abs % 100000000;
+  const man = Math.floor(abs / 10000);
+  const won1 = abs % 10000;
+  const parts: string[] = [];
+  if (eok > 0) parts.push(`${eok.toLocaleString("ko-KR")}억`);
+  if (man > 0) parts.push(`${man.toLocaleString("ko-KR")}만`);
+  if (won1 > 0 || parts.length === 0) parts.push(`${won1.toLocaleString("ko-KR")}`);
+  return (isNeg ? "-" : "") + parts.join(" ") + "원";
+}
+
 function Counter({
   label,
   sub,
@@ -172,19 +193,19 @@ export default function IncomeTaxCalculator() {
     () =>
       calculateIncomeTax({
         incomeType,
-        businessRevenue: n(businessRevenue),
+        businessRevenue: wonToMan(businessRevenue),
         expenseMethod,
         industryRate,
         manualExpenseRate: n(manualExpenseRate),
-        bookExpense: n(bookExpense),
+        bookExpense: wonToMan(bookExpense),
         hasWithholding,
-        salaryRevenue: n(salaryRevenue),
+        salaryRevenue: wonToMan(salaryRevenue),
         hasSpouse,
         dependents,
         elderly,
         disabled,
-        socialInsurance: n(socialInsurance),
-        prepaidTax: n(prepaidTax),
+        socialInsurance: wonToMan(socialInsurance),
+        prepaidTax: wonToMan(prepaidTax),
       }),
     [incomeType, businessRevenue, expenseMethod, industryRate, manualExpenseRate, bookExpense, hasWithholding, salaryRevenue, hasSpouse, dependents, elderly, disabled, socialInsurance, prepaidTax]
   );
@@ -304,11 +325,14 @@ export default function IncomeTaxCalculator() {
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-[14px] font-bold text-text-secondary mb-2">총수입금액 <span className="text-xs font-normal text-slate-400">(연간)</span></label>
+                    <label className="block text-[14px] font-bold text-text-secondary mb-2">총수입금액 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                     <div className="relative">
-                      <input type="number" inputMode="numeric" value={businessRevenue} onChange={(e) => setBusinessRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
-                      <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                      <input type="number" inputMode="numeric" value={businessRevenue} onChange={(e) => setBusinessRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 50000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                      <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                     </div>
+                    {n(businessRevenue) > 0 && (
+                      <p className="mt-1.5 text-right text-[12px] text-brand-blue font-medium">≈ {formatKoreanMoney(n(businessRevenue))}</p>
+                    )}
                   </div>
 
                   <div>
@@ -347,11 +371,14 @@ export default function IncomeTaxCalculator() {
 
                   {expenseMethod === "book" && (
                     <div>
-                      <label className="block text-[14px] font-bold text-text-secondary mb-2">필요경비 <span className="text-xs font-normal text-slate-400">(직접 입력)</span></label>
+                      <label className="block text-[14px] font-bold text-text-secondary mb-2">필요경비 <span className="text-xs font-normal text-slate-400">(직접 입력, 원 단위)</span></label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={bookExpense} onChange={(e) => setBookExpense(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
-                        <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                        <input type="number" inputMode="numeric" value={bookExpense} onChange={(e) => setBookExpense(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 30000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                       </div>
+                      {n(bookExpense) > 0 && (
+                        <p className="mt-1.5 text-right text-[12px] text-brand-blue font-medium">≈ {formatKoreanMoney(n(bookExpense))}</p>
+                      )}
                     </div>
                   )}
 
@@ -369,11 +396,14 @@ export default function IncomeTaxCalculator() {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-blue"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
                         <span className="text-[15px] font-bold text-text-primary">근로소득</span>
                       </div>
-                      <label className="block text-[14px] font-bold text-text-secondary mb-2">총급여액 <span className="text-xs font-normal text-slate-400">(연간)</span></label>
+                      <label className="block text-[14px] font-bold text-text-secondary mb-2">총급여액 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={salaryRevenue} onChange={(e) => setSalaryRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
-                        <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                        <input type="number" inputMode="numeric" value={salaryRevenue} onChange={(e) => setSalaryRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 50000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                       </div>
+                      {n(salaryRevenue) > 0 && (
+                        <p className="mt-1.5 text-right text-[12px] text-brand-blue font-medium">≈ {formatKoreanMoney(n(salaryRevenue))}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -390,11 +420,14 @@ export default function IncomeTaxCalculator() {
                   <h3 className="text-xl font-bold text-text-primary">근로소득</h3>
                 </div>
                 <div>
-                  <label className="block text-[14px] font-bold text-text-secondary mb-2">총급여액 <span className="text-xs font-normal text-slate-400">(연간)</span></label>
+                  <label className="block text-[14px] font-bold text-text-secondary mb-2">총급여액 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                   <div className="relative">
-                    <input type="number" inputMode="numeric" value={salaryRevenue} onChange={(e) => setSalaryRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
-                    <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                    <input type="number" inputMode="numeric" value={salaryRevenue} onChange={(e) => setSalaryRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 50000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                    <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                   </div>
+                  {n(salaryRevenue) > 0 && (
+                    <p className="mt-1.5 text-right text-[12px] text-brand-blue font-medium">≈ {formatKoreanMoney(n(salaryRevenue))}</p>
+                  )}
                 </div>
               </div>
             )}
@@ -423,20 +456,26 @@ export default function IncomeTaxCalculator() {
                 <Counter label="장애인 공제" value={disabled} onChange={setDisabled} />
 
                 <div className="pt-2">
-                  <label className="block text-[14px] font-bold text-text-secondary mb-2">국민연금·건강보험료 <span className="text-xs font-normal text-slate-400">(연간)</span></label>
+                  <label className="block text-[14px] font-bold text-text-secondary mb-2">국민연금·건강보험료 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                   <div className="relative">
-                    <input type="number" inputMode="numeric" value={socialInsurance} onChange={(e) => setSocialInsurance(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
-                    <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                    <input type="number" inputMode="numeric" value={socialInsurance} onChange={(e) => setSocialInsurance(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 3000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                    <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                   </div>
+                  {n(socialInsurance) > 0 && (
+                    <p className="mt-1.5 text-right text-[12px] text-brand-blue font-medium">≈ {formatKoreanMoney(n(socialInsurance))}</p>
+                  )}
                 </div>
 
                 {!hasWithholding && (
                   <div className="pt-2">
-                    <label className="block text-[14px] font-bold text-text-secondary mb-2">기납부세액 <span className="text-xs font-normal text-slate-400">(미리 납부한 세금)</span></label>
+                    <label className="block text-[14px] font-bold text-text-secondary mb-2">기납부세액 <span className="text-xs font-normal text-slate-400">(원 단위)</span></label>
                     <div className="relative">
-                      <input type="number" inputMode="numeric" value={prepaidTax} onChange={(e) => setPrepaidTax(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
-                      <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                      <input type="number" inputMode="numeric" value={prepaidTax} onChange={(e) => setPrepaidTax(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 1000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                      <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                     </div>
+                    {n(prepaidTax) > 0 && (
+                      <p className="mt-1.5 text-right text-[12px] text-brand-blue font-medium">≈ {formatKoreanMoney(n(prepaidTax))}</p>
+                    )}
                   </div>
                 )}
 
@@ -444,7 +483,7 @@ export default function IncomeTaxCalculator() {
                   <div className="p-3 bg-blue-50/50 rounded-lg border border-blue-100 flex gap-2 items-start">
                     <svg className="w-4 h-4 text-brand-blue mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
                     <p className="text-xs leading-relaxed text-brand-blue font-medium">
-                      3.3% 원천징수(소득세 3% + 지방소득세 0.3%) 기납부세액이 자동 계산됩니다: {fmt(n(businessRevenue) * 0.033)}만원
+                      3.3% 원천징수(소득세 3% + 지방소득세 0.3%) 기납부세액이 자동 계산됩니다: {fmt(n(businessRevenue) * 0.033)}원
                     </p>
                   </div>
                 )}
@@ -464,17 +503,17 @@ export default function IncomeTaxCalculator() {
                   <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6 text-center w-full max-w-4xl mx-auto">
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">사업 수입금액</span>
-                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{fmt(result.businessRevenue)}만원</span>
+                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{formatKoreanMoney(result.businessRevenue * TO_MAN)}</span>
                     </div>
                     <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">필요경비 ({result.appliedExpenseRate})</span>
-                      <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {fmt(result.businessExpense)}만원</span>
+                      <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {formatKoreanMoney(result.businessExpense * TO_MAN)}</span>
                     </div>
                     <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-bold text-brand-blue mb-1">사업소득금액</span>
-                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{fmt(result.businessIncome)}만원</span>
+                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{formatKoreanMoney(result.businessIncome * TO_MAN)}</span>
                     </div>
                   </div>
                 )}
@@ -484,17 +523,17 @@ export default function IncomeTaxCalculator() {
                   <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6 text-center w-full max-w-4xl mx-auto">
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">총급여액</span>
-                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{fmt(result.salaryRevenue)}만원</span>
+                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{formatKoreanMoney(result.salaryRevenue * TO_MAN)}</span>
                     </div>
                     <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-medium text-text-secondary mb-1">근로소득공제</span>
-                      <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {fmt(result.salaryDeduction)}만원</span>
+                      <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {formatKoreanMoney(result.salaryDeduction * TO_MAN)}</span>
                     </div>
                     <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-bold text-brand-blue mb-1">근로소득금액</span>
-                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{fmt(result.salaryIncome)}만원</span>
+                      <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{formatKoreanMoney(result.salaryIncome * TO_MAN)}</span>
                     </div>
                   </div>
                 )}
@@ -505,19 +544,19 @@ export default function IncomeTaxCalculator() {
                     <>
                       <div className="flex flex-col">
                         <span className="text-[13px] font-medium text-text-secondary mb-1">종합소득금액</span>
-                        <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{fmt(result.totalIncome)}만원</span>
+                        <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-slate-200 pb-1">{formatKoreanMoney(result.totalIncome * TO_MAN)}</span>
                       </div>
                       <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                     </>
                   )}
                   <div className="flex flex-col">
                     <span className="text-[13px] font-medium text-text-secondary mb-1">소득공제 합계</span>
-                    <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {fmt(result.totalDeduction)}만원</span>
+                    <span className="text-base md:text-lg font-bold text-red-500 border-b-2 border-slate-200 pb-1">- {formatKoreanMoney(result.totalDeduction * TO_MAN)}</span>
                   </div>
                   <svg className="w-5 h-5 text-slate-300 shrink-0 rotate-90 md:rotate-0 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12L14 6M20 12L14 18" /></svg>
                   <div className="flex flex-col">
                     <span className="text-[13px] font-bold text-brand-blue mb-1">과세표준</span>
-                    <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{fmt(result.taxableIncome)}만원</span>
+                    <span className="text-base md:text-lg font-bold text-text-primary border-b-2 border-brand-blue pb-1">{formatKoreanMoney(result.taxableIncome * TO_MAN)}</span>
                   </div>
                   <svg className="w-5 h-5 text-slate-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                   <div className="flex flex-col">
@@ -533,28 +572,22 @@ export default function IncomeTaxCalculator() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <div className="bg-ui-surface rounded-2xl p-6 border border-ui-border">
                   <span className="text-sm font-bold text-text-secondary mb-2 block">소득세 (결정세액)</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-extrabold text-text-primary tracking-tight">{fmt(result.determinedTax)}</span>
-                    <span className="text-base text-text-secondary font-medium">만원</span>
-                  </div>
+                  <div className="text-xl md:text-2xl font-extrabold text-text-primary tracking-tight break-keep">{formatKoreanMoney(result.determinedTax * TO_MAN)}</div>
+                  <div className="text-[11px] text-text-secondary mt-1">{fmt(result.determinedTax * TO_MAN)} 원</div>
                 </div>
                 <div className="bg-ui-surface rounded-2xl p-6 border border-ui-border">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-bold text-text-secondary">지방소득세</span>
                     <span className="text-[11px] font-medium bg-slate-200 text-slate-600 px-2 py-0.5 rounded">소득세의 10%</span>
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-extrabold text-text-primary tracking-tight">{fmt(result.localTax)}</span>
-                    <span className="text-base text-text-secondary font-medium">만원</span>
-                  </div>
+                  <div className="text-xl md:text-2xl font-extrabold text-text-primary tracking-tight break-keep">{formatKoreanMoney(result.localTax * TO_MAN)}</div>
+                  <div className="text-[11px] text-text-secondary mt-1">{fmt(result.localTax * TO_MAN)} 원</div>
                 </div>
                 <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative shadow-lg overflow-hidden">
                   <div className="relative z-10">
                     <span className="text-blue-200 text-[15px] font-bold mb-2 block">총 납부세액 (소득세 + 지방소득세)</span>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl md:text-5xl font-extrabold tracking-tight">{fmt(result.totalTax)}</span>
-                      <span className="text-xl text-blue-100 font-medium">만원</span>
-                    </div>
+                    <div className="text-3xl md:text-4xl font-extrabold tracking-tight break-keep">{formatKoreanMoney(result.totalTax * TO_MAN)}</div>
+                    <div className="text-[13px] text-blue-200 mt-1.5">{fmt(result.totalTax * TO_MAN)} 원</div>
                   </div>
                 </div>
               </div>
@@ -564,15 +597,14 @@ export default function IncomeTaxCalculator() {
                   <div>
                     <span className="inline-block px-2.5 py-1 rounded bg-brand-blue text-white text-[11px] font-bold mb-2">기납부세액 반영</span>
                     <div className="text-sm font-medium text-text-primary">
-                      기납부세액 <span className="font-bold text-brand-blue ml-1">{fmt(result.prepaidTax)}만원</span> 을 제외한 최종 결과입니다.
+                      기납부세액 <span className="font-bold text-brand-blue ml-1">{formatKoreanMoney(result.prepaidTax * TO_MAN)}</span> 을 제외한 최종 결과입니다.
                     </div>
                   </div>
-                  <div className="flex items-baseline gap-2 bg-white px-5 py-3 rounded-xl border border-blue-100 shadow-sm">
+                  <div className="flex flex-col items-end gap-1 bg-white px-5 py-3 rounded-xl border border-blue-100 shadow-sm">
                     <span className="text-sm font-bold text-text-secondary">
                       예상 <span className={result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}>{result.finalTax < 0 ? "환급액" : "추가납부액"}</span>
                     </span>
-                    <span className={`text-xl font-extrabold tracking-tight ${result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}`}>{fmt(Math.abs(result.finalTax))}</span>
-                    <span className="text-sm text-text-secondary font-medium">만원</span>
+                    <span className={`text-xl font-extrabold tracking-tight ${result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}`}>{formatKoreanMoney(Math.abs(result.finalTax) * TO_MAN)}</span>
                   </div>
                 </div>
               )}
