@@ -9,6 +9,7 @@ import {
   type SimplifiedIndustry,
 } from "@/lib/vatCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 const fmtW = (v: number) => (v * 10000).toLocaleString("ko-KR");
@@ -130,14 +131,14 @@ export default function VatCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">과세 매출액 (공급가액)</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={sales} onChange={(e) => setSales(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sales)} onChange={(e) => setSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">그 중 신용카드/현금영수증 매출액</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={cardSales} onChange={(e) => setCardSales(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(cardSales)} onChange={(e) => setCardSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-2 ml-1">* 발행세액공제 산출용 (공급대가 기준 입력)</p>
@@ -163,14 +164,14 @@ export default function VatCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">매입액 - 세금계산서 수취분 (공급가액)</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={purchase} onChange={(e) => setPurchase(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(purchase)} onChange={(e) => setPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">매입액 - 신용카드/현금영수증 수취분</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={cardPurchase} onChange={(e) => setCardPurchase(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(cardPurchase)} onChange={(e) => setCardPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-2 ml-1">* 공제 대상에 한함 (공급가액 기준 입력)</p>
@@ -265,21 +266,21 @@ export default function VatCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">해당 과세기간 매출액 <span className="text-xs font-normal text-slate-400">(공급대가)</span></label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={sSales} onChange={(e) => setSSales(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sSales)} onChange={(e) => setSSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">매입액 - 세금계산서 등 수취분</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={sPurchase} onChange={(e) => setSPurchase(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sPurchase)} onChange={(e) => setSPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">그 중 신용카드/현금영수증 매출액</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={sCardSales} onChange={(e) => setSCardSales(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sCardSales)} onChange={(e) => setSCardSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-2 ml-1">* 신용카드 발행세액공제 1.3% 적용 (반기 500만원 한도)</p>

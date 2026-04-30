@@ -9,6 +9,7 @@ import {
   type GiftRelation,
 } from "@/lib/inheritGiftTaxCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 
@@ -158,14 +159,14 @@ export default function InheritGiftCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">총 상속재산가액</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={inhAssets} onChange={(e) => setInhAssets(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(inhAssets)} onChange={(e) => setInhAssets(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">채무·공과금·장례비용</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={inhDebts} onChange={(e) => setInhDebts(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(inhDebts)} onChange={(e) => setInhDebts(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                       </div>
                     </div>
@@ -179,7 +180,7 @@ export default function InheritGiftCalculator() {
                       <div className="pl-4 border-l-2 border-blue-100">
                         <label className="block text-[14px] font-bold text-text-secondary mb-2">배우자 실제 상속금액 <span className="text-xs font-normal text-slate-400 ml-1">(배우자 생존 시)</span></label>
                         <div className="relative">
-                          <input type="number" inputMode="numeric" value={inhSpouseAmount} onChange={(e) => setInhSpouseAmount(e.target.value === "" ? "" : Number(e.target.value))} placeholder="미입력 시 최소 5억 적용" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px] placeholder-slate-400" />
+                          <input type="text" inputMode="numeric" value={formatNumberInput(inhSpouseAmount)} onChange={(e) => setInhSpouseAmount(parseNumberInput(e.target.value))} placeholder="미입력 시 최소 5억 적용" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px] placeholder-slate-400" />
                           <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                         </div>
                       </div>
@@ -188,7 +189,7 @@ export default function InheritGiftCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">10년 내 사전증여 합산액</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={inhPriorGifts} onChange={(e) => setInhPriorGifts(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(inhPriorGifts)} onChange={(e) => setInhPriorGifts(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                       </div>
                     </div>
@@ -307,7 +308,7 @@ export default function InheritGiftCalculator() {
                     <div className="md:col-span-2">
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">증여재산가액</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={giftAmount} onChange={(e) => setGiftAmount(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-lg md:text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(giftAmount)} onChange={(e) => setGiftAmount(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-lg md:text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-medium">만원</span>
                       </div>
                     </div>
@@ -330,14 +331,14 @@ export default function InheritGiftCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">채무 인수액 <span className="text-xs font-normal text-slate-400 ml-1">(부담부증여 시)</span></label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={giftDebt} onChange={(e) => setGiftDebt(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(giftDebt)} onChange={(e) => setGiftDebt(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">10년 내 동일인 사전증여 합산액</label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={giftPrior} onChange={(e) => setGiftPrior(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(giftPrior)} onChange={(e) => setGiftPrior(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                       </div>
                     </div>

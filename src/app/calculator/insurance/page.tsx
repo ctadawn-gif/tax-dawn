@@ -10,6 +10,7 @@ import {
   type IndustryType,
 } from "@/lib/socialInsuranceCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => v.toLocaleString("ko-KR");
 
@@ -126,7 +127,7 @@ export default function InsuranceCalculator() {
                 <div>
                   <label className="block text-[14px] font-bold text-text-secondary mb-2">월 총 급여 <span className="text-xs font-normal text-slate-400">(세전)</span></label>
                   <div className="relative">
-                    <input type="number" inputMode="numeric" value={salary} onChange={(e) => setSalary(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                    <input type="text" inputMode="numeric" value={formatNumberInput(salary)} onChange={(e) => setSalary(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                     <span className="absolute right-4 top-4 text-text-secondary text-base font-medium mt-0.5">원</span>
                   </div>
                 </div>
@@ -170,28 +171,28 @@ export default function InsuranceCalculator() {
                     <div className="flex items-center gap-3">
                       <span className="text-[13px] text-text-secondary w-28 shrink-0">식대</span>
                       <div className="relative flex-1">
-                        <input type="number" inputMode="numeric" value={taxFreeMeal} onChange={(e) => setTaxFreeMeal(e.target.value === "" ? "" : Number(e.target.value))} placeholder="200000" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(taxFreeMeal)} onChange={(e) => setTaxFreeMeal(parseNumberInput(e.target.value))} placeholder="200,000" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
                         <span className="absolute right-3 top-2.5 text-text-secondary text-xs">원</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-[13px] text-text-secondary w-28 shrink-0">자가운전보조금</span>
                       <div className="relative flex-1">
-                        <input type="number" inputMode="numeric" value={taxFreeCar} onChange={(e) => setTaxFreeCar(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(taxFreeCar)} onChange={(e) => setTaxFreeCar(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
                         <span className="absolute right-3 top-2.5 text-text-secondary text-xs">원</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-[13px] text-text-secondary w-28 shrink-0">출산·보육수당</span>
                       <div className="relative flex-1">
-                        <input type="number" inputMode="numeric" value={taxFreeChildcare} onChange={(e) => setTaxFreeChildcare(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(taxFreeChildcare)} onChange={(e) => setTaxFreeChildcare(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
                         <span className="absolute right-3 top-2.5 text-text-secondary text-xs">원</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-[13px] text-text-secondary w-28 shrink-0">기타 비과세</span>
                       <div className="relative flex-1">
-                        <input type="number" inputMode="numeric" value={taxFreeOther} onChange={(e) => setTaxFreeOther(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(taxFreeOther)} onChange={(e) => setTaxFreeOther(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-3 pr-8 py-2.5 bg-ui-surface border border-ui-border rounded-lg focus:bg-white focus:outline-none focus:border-brand-blue transition-all text-right font-semibold text-text-primary text-[14px]" />
                         <span className="absolute right-3 top-2.5 text-text-secondary text-xs">원</span>
                       </div>
                     </div>

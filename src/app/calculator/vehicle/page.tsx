@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 const num = (v: string | number) =>
@@ -75,12 +76,10 @@ function InputField({
       </label>
       <div className="relative">
         <input
-          type="number"
+          type="text"
           inputMode="numeric"
-          value={value}
-          onChange={(e) =>
-            onChange(e.target.value === "" ? "" : Number(e.target.value))
-          }
+          value={formatNumberInput(value)}
+          onChange={(e) => onChange(parseNumberInput(e.target.value))}
           placeholder={placeholder}
           className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]"
         />

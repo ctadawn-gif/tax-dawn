@@ -14,6 +14,7 @@ import {
   type IndustryRate,
 } from "@/lib/industryRates";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 
@@ -328,7 +329,7 @@ export default function IncomeTaxCalculator() {
                   <div>
                     <label className="block text-[14px] font-bold text-text-secondary mb-2">총수입금액 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                     <div className="relative">
-                      <input type="number" inputMode="numeric" value={businessRevenue} onChange={(e) => setBusinessRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 50000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                      <input type="text" inputMode="numeric" value={formatNumberInput(businessRevenue)} onChange={(e) => setBusinessRevenue(parseNumberInput(e.target.value))} placeholder="예: 50,000,000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                       <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                     </div>
                     {n(businessRevenue) > 0 && (
@@ -374,7 +375,7 @@ export default function IncomeTaxCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">필요경비 <span className="text-xs font-normal text-slate-400">(직접 입력, 원 단위)</span></label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={bookExpense} onChange={(e) => setBookExpense(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 30000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(bookExpense)} onChange={(e) => setBookExpense(parseNumberInput(e.target.value))} placeholder="예: 30,000,000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                       </div>
                       {n(bookExpense) > 0 && (
@@ -399,7 +400,7 @@ export default function IncomeTaxCalculator() {
                       </div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">총급여액 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                       <div className="relative">
-                        <input type="number" inputMode="numeric" value={salaryRevenue} onChange={(e) => setSalaryRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 50000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(salaryRevenue)} onChange={(e) => setSalaryRevenue(parseNumberInput(e.target.value))} placeholder="예: 50,000,000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                       </div>
                       {n(salaryRevenue) > 0 && (
@@ -423,7 +424,7 @@ export default function IncomeTaxCalculator() {
                 <div>
                   <label className="block text-[14px] font-bold text-text-secondary mb-2">총급여액 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                   <div className="relative">
-                    <input type="number" inputMode="numeric" value={salaryRevenue} onChange={(e) => setSalaryRevenue(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 50000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                    <input type="text" inputMode="numeric" value={formatNumberInput(salaryRevenue)} onChange={(e) => setSalaryRevenue(parseNumberInput(e.target.value))} placeholder="예: 50,000,000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                     <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                   </div>
                   {n(salaryRevenue) > 0 && (
@@ -459,7 +460,7 @@ export default function IncomeTaxCalculator() {
                 <div className="pt-2">
                   <label className="block text-[14px] font-bold text-text-secondary mb-2">국민연금·건강보험료 <span className="text-xs font-normal text-slate-400">(연간, 원 단위)</span></label>
                   <div className="relative">
-                    <input type="number" inputMode="numeric" value={socialInsurance} onChange={(e) => setSocialInsurance(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 3000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                    <input type="text" inputMode="numeric" value={formatNumberInput(socialInsurance)} onChange={(e) => setSocialInsurance(parseNumberInput(e.target.value))} placeholder="예: 3,000,000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                     <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                   </div>
                   {n(socialInsurance) > 0 && (
@@ -471,7 +472,7 @@ export default function IncomeTaxCalculator() {
                   <div className="pt-2">
                     <label className="block text-[14px] font-bold text-text-secondary mb-2">기납부세액 <span className="text-xs font-normal text-slate-400">(원 단위)</span></label>
                     <div className="relative">
-                      <input type="number" inputMode="numeric" value={prepaidTax} onChange={(e) => setPrepaidTax(e.target.value === "" ? "" : Number(e.target.value))} placeholder="예: 1000000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                      <input type="text" inputMode="numeric" value={formatNumberInput(prepaidTax)} onChange={(e) => setPrepaidTax(parseNumberInput(e.target.value))} placeholder="예: 1,000,000" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
                       <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">원</span>
                     </div>
                     {n(prepaidTax) > 0 && (

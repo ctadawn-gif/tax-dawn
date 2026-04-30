@@ -9,6 +9,7 @@ import {
   type HouseCount,
 } from "@/lib/acquisitionTaxCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 const fmtWon = (v: number) => (v * 10000).toLocaleString("ko-KR");
@@ -140,7 +141,7 @@ export default function AcquisitionTaxCalculator() {
                 <div>
                   <label className="block text-[14px] font-bold text-text-secondary mb-2">취득가액</label>
                   <div className="relative">
-                    <input type="number" inputMode="numeric" value={price} onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                    <input type="text" inputMode="numeric" value={formatNumberInput(price)} onChange={(e) => setPrice(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
                     <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                   </div>
                 </div>
