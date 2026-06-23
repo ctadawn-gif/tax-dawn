@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const navLinks = [
   { label: "계산기", href: "/#calculators" },
+  { label: "자료실", href: "/resources" },
   { label: "상담 안내", href: "/#contact" },
   { label: "오시는 길", href: "/#location" },
   { label: "블로그", href: "https://blog.naver.com/tax_dawn", external: true },
