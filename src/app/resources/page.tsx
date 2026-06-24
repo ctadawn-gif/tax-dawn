@@ -92,15 +92,10 @@ export default function ResourcesPage() {
         </div>
 
         <p className="mt-8 text-[13px] text-text-secondary">
-          원하는 자료가 있으신가요?{" "}
-          <a
-            href="https://blog.naver.com/tax_dawn"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold text-brand-blue hover:underline"
-          >
-            블로그로 알려주세요 →
-          </a>
+          더 궁금하신 내용이 있으신가요?{" "}
+          <Link href="/#contact" className="font-bold text-brand-blue hover:underline">
+            상담 문의 →
+          </Link>
         </p>
       </main>
 

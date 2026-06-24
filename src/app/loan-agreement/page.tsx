@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import PrintButton from "@/components/PrintButton";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 import {
   numberToKoreanFormal,
@@ -90,6 +90,7 @@ export default function LoanAgreementPage() {
   // 거래조건
   const [amount, setAmount] = useState<number | "">("");
   const [loanDate, setLoanDate] = useState("");
+  const [purpose, setPurpose] = useState("");
   const [bank, setBank] = useState("");
   const [account, setAccount] = useState("");
   const [holder, setHolder] = useState("");
@@ -103,6 +104,8 @@ export default function LoanAgreementPage() {
   const [repayDay, setRepayDay] = useState("");
   const [balloon, setBalloon] = useState(false);
   const [extra, setExtra] = useState("");
+  // 면책 동의 모달 (첫 진입 시 표시)
+  const [agreed, setAgreed] = useState(false);
   // 인적사항(선택)
   const [nameA, setNameA] = useState("");
   const [idA, setIdA] = useState("");
@@ -118,6 +121,23 @@ export default function LoanAgreementPage() {
     const t = new Date();
     const p = (n: number) => String(n).padStart(2, "0");
     setWriteDate(`${t.getFullYear()}-${p(t.getMonth() + 1)}-${p(t.getDate())}`);
+  }, []);
+
+  // 인쇄 시 브라우저 머리글의 문서 제목을 깔끔하게 (사이트명 노출 방지)
+  useEffect(() => {
+    const orig = document.title;
+    const before = () => {
+      document.title = "금전소비대차계약서";
+    };
+    const after = () => {
+      document.title = orig;
+    };
+    window.addEventListener("beforeprint", before);
+    window.addEventListener("afterprint", after);
+    return () => {
+      window.removeEventListener("beforeprint", before);
+      window.removeEventListener("afterprint", after);
+    };
   }, []);
 
   const amt = Number(amount) || 0;
@@ -136,11 +156,40 @@ export default function LoanAgreementPage() {
     return { korean, benefit, safe, minR, lenderTax, months, repay, gauge };
   }, [amt, r, mAmt, loanDate, dueDate]);
 
-  const interestFree = amt > 0 && amt <= INTEREST_FREE_LIMIT;
-
   return (
     <div className="min-h-screen bg-white relative">
       <Navbar />
+
+      {/* 면책 고지 모달 (첫 진입) */}
+      {!agreed && (
+        <div className="no-print fixed inset-0 z-[60] flex items-center justify-center p-5 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h2 className="text-[18px] font-extrabold text-text-primary mb-3">안내 및 면책 고지</h2>
+            <div className="text-[13px] text-text-secondary leading-relaxed space-y-2">
+              <p>
+                본 차용증 서식은{" "}
+                <b className="text-text-primary">일반적인 정보 제공 목적의 자동 생성 도구</b>입니다.
+              </p>
+              <ul className="list-disc pl-4 space-y-1.5">
+                <li>법적 효력은 개별 사안에 따라 달라질 수 있습니다.</li>
+                <li>
+                  본 서식의 사용 및 그로 인한 결과(세무·법률적 효과 포함)에 대한 책임은{" "}
+                  <b className="text-text-primary">전적으로 이용자 본인</b>에게 있으며, 세무회계 새벽은 이에
+                  대해 <b className="text-text-primary">어떠한 법적 책임도 지지 않습니다.</b>
+                </li>
+                <li>금액이 크거나 다툼의 소지가 있는 거래는 반드시 전문가 상담을 받으시기 바랍니다.</li>
+              </ul>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAgreed(true)}
+              className="mt-5 w-full py-3 rounded-xl bg-brand-blue text-white font-bold text-[15px] hover:bg-blue-700 transition-colors"
+            >
+              확인했습니다
+            </button>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-[1280px] mx-auto px-5 lg:px-10 py-8 lg:py-12">
         {/* 헤더 */}
@@ -189,10 +238,13 @@ export default function LoanAgreementPage() {
                   )}
                 </Field>
                 <Field label="차용일 (돈을 빌린 날)">
+                  <DateInput value={loanDate} onChange={setLoanDate} />
+                </Field>
+                <Field label="차용 목적" hint="선택">
                   <input
-                    type="date"
-                    value={loanDate}
-                    onChange={(e) => setLoanDate(e.target.value)}
+                    value={purpose}
+                    onChange={(e) => setPurpose(e.target.value)}
+                    placeholder="예: 주택구입자금"
                     className={inputCls}
                   />
                 </Field>
@@ -223,8 +275,8 @@ export default function LoanAgreementPage() {
                   </Field>
                 </div>
                 <p className="text-[12px] text-slate-400 -mt-1">
-                  ※ 차용금은 반드시 <b className="text-slate-500">계좌이체</b>로 주고받아야 거래 사실이
-                  입증됩니다.
+                  ※ 위 입금 계좌는 차용금을 받는 <b className="text-slate-500">채무자(을)</b> 명의여야 하며,
+                  차용금은 반드시 <b className="text-slate-500">계좌이체</b>로 주고받아야 거래 사실이 입증됩니다.
                 </p>
               </div>
             </div>
@@ -237,7 +289,7 @@ export default function LoanAgreementPage() {
                 </span>
                 이자
               </h2>
-              <div className="grid grid-cols-2 gap-2 mb-1">
+              <div className={`${r > 0 ? "grid grid-cols-2 gap-2" : ""} mb-1`}>
                 <Field label="약정 이자율 (연 %)">
                   <input
                     inputMode="decimal"
@@ -247,15 +299,18 @@ export default function LoanAgreementPage() {
                     className={inputCls}
                   />
                 </Field>
-                <Field label="이자 지급일" hint="매월">
-                  <input
-                    inputMode="numeric"
-                    value={intDay}
-                    onChange={(e) => setIntDay(e.target.value.replace(/[^0-9]/g, "").slice(0, 2))}
-                    placeholder="예: 25"
-                    className={inputCls}
-                  />
-                </Field>
+                {/* 무이자(0%)면 이자 지급일 불필요 → 숨김 */}
+                {r > 0 && (
+                  <Field label="이자 지급일" hint="매월">
+                    <input
+                      inputMode="numeric"
+                      value={intDay}
+                      onChange={(e) => setIntDay(e.target.value.replace(/[^0-9]/g, "").slice(0, 2))}
+                      placeholder="예: 25"
+                      className={inputCls}
+                    />
+                  </Field>
+                )}
               </div>
 
               {/* 이자율 시뮬레이터 */}
@@ -349,12 +404,7 @@ export default function LoanAgreementPage() {
               </h2>
               <div className="space-y-4">
                 <Field label="변제 기일 (만기)">
-                  <input
-                    type="date"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                    className={inputCls}
-                  />
+                  <DateInput value={dueDate} onChange={setDueDate} />
                   {calc.months > 0 && (
                     <p className="mt-1.5 text-[12px] text-text-secondary">상환기간 약 {calc.months}개월</p>
                   )}
@@ -404,29 +454,20 @@ export default function LoanAgreementPage() {
                       </Field>
                     </div>
 
-                    {/* 상환계획 정합성 */}
-                    {amt > 0 && calc.months > 0 && mAmt > 0 && (
+                    {/* 상환계획 정합성 — 항상 점검·안내 */}
+                    {amt > 0 && (
                       <div className="rounded-xl bg-ui-surface border border-ui-border p-4 space-y-2.5">
                         <div className="text-[13px] font-extrabold text-text-primary">
                           📋 상환계획 점검
                         </div>
-                        <div className="flex items-center justify-between text-[13px]">
-                          <span className="text-text-secondary">
-                            {calc.months}개월 × {won(mAmt)}원 = 상환총액
-                          </span>
-                          <span className="font-bold text-text-primary">
-                            {won(calc.repay.totalScheduled)}원
-                          </span>
-                        </div>
-                        {calc.repay.fullyRepaid ? (
-                          <p className="text-[13px] font-bold text-emerald-600">
-                            ✅ 약 {calc.repay.payoffMonths}개월차 완납 (마지막 회차{" "}
-                            {won(calc.repay.lastPayment || 0)}원)
+                        {calc.months <= 0 ? (
+                          <p className="text-[13px] font-bold text-amber-600">
+                            ⚠️ 차용일·변제 기일을 입력하면 만기까지 완납 가능한지 점검해 드립니다.
                           </p>
-                        ) : (
+                        ) : mAmt <= 0 ? (
                           <>
-                            <p className="text-[13px] font-bold text-amber-600">
-                              ⚠️ 만기까지 {won(calc.repay.shortfall)}원이 남습니다 (잔액)
+                            <p className="text-[13px] text-text-secondary">
+                              상환기간 {calc.months}개월. 월 상환액을 입력하면 완납 여부를 점검합니다.
                             </p>
                             <div className="flex items-center justify-between text-[13px]">
                               <span className="text-text-secondary">기간 내 완납 권장 월상환액</span>
@@ -443,31 +484,56 @@ export default function LoanAgreementPage() {
                                 </button>
                               </div>
                             </div>
-                            <label className="flex items-start gap-2 pt-1 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={balloon}
-                                onChange={(e) => setBalloon(e.target.checked)}
-                                className="mt-0.5 accent-brand-blue"
-                              />
-                              <span className="text-[12px] text-text-secondary leading-snug">
-                                잔액은 <b className="text-text-primary">만기에 일시 상환</b>한다는 약정을
-                                계약서에 추가
-                                {balloon && (
-                                  <span
-                                    className={`block mt-1 font-bold ${
-                                      calc.repay.balloonRatio > 0.5 ? "text-red-600" : "text-emerald-600"
-                                    }`}
-                                  >
-                                    만기 일시상환 비중{" "}
-                                    {Math.round(calc.repay.balloonRatio * 100)}% —{" "}
-                                    {calc.repay.balloonRatio > 0.5
-                                      ? "⚠️ 비중이 높아요. 분할 비중을 높이는 걸 권장"
-                                      : "적정"}
-                                  </span>
-                                )}
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between text-[13px]">
+                              <span className="text-text-secondary">
+                                {calc.months}개월 × {won(mAmt)}원 = 상환총액
                               </span>
-                            </label>
+                              <span className="font-bold text-text-primary">
+                                {won(calc.repay.totalScheduled)}원
+                              </span>
+                            </div>
+                            {calc.repay.fullyRepaid ? (
+                              <p className="text-[13px] font-bold text-emerald-600">
+                                ✅ 약 {calc.repay.payoffMonths}개월차 완납 (마지막 회차{" "}
+                                {won(calc.repay.lastPayment || 0)}원)
+                              </p>
+                            ) : (
+                              <>
+                                <p className="text-[13px] font-bold text-amber-600">
+                                  ⚠️ 만기까지 {won(calc.repay.shortfall)}원이 남습니다 (잔액)
+                                </p>
+                                <div className="flex items-center justify-between text-[13px]">
+                                  <span className="text-text-secondary">기간 내 완납 권장 월상환액</span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-extrabold text-brand-blue">
+                                      {won(calc.repay.recommendedMonthly)}원
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => setMonthly(calc.repay.recommendedMonthly)}
+                                      className="text-[11px] font-bold px-2 py-1 rounded-md bg-brand-blue text-white hover:bg-blue-700 transition-colors"
+                                    >
+                                      적용
+                                    </button>
+                                  </div>
+                                </div>
+                                <label className="flex items-start gap-2 pt-1 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={balloon}
+                                    onChange={(e) => setBalloon(e.target.checked)}
+                                    className="mt-0.5 accent-brand-blue"
+                                  />
+                                  <span className="text-[12px] text-text-secondary leading-snug">
+                                    잔액은 <b className="text-text-primary">만기에 일시 상환</b>한다는 약정을
+                                    계약서에 추가
+                                  </span>
+                                </label>
+                              </>
+                            )}
                           </>
                         )}
                       </div>
@@ -570,15 +636,20 @@ export default function LoanAgreementPage() {
 
           {/* ───────────── 실시간 미리보기 ───────────── */}
           <section className="lg:sticky lg:top-6">
-            <div className="no-print flex items-center justify-between mb-3">
-              <span className="text-[13px] font-bold text-text-secondary">실시간 미리보기</span>
-              <PrintButton label="인쇄 / PDF 저장" />
+            <div className="no-print mb-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[13px] font-bold text-text-secondary">실시간 미리보기</span>
+                <PrintButton label="인쇄 / PDF 저장" />
+              </div>
+              <p className="mt-1.5 text-[11px] text-slate-400 leading-relaxed">
+                💡 인쇄가 깔끔하게 나오려면, 인쇄창에서{" "}
+                <b className="text-slate-500">‘옵션 더보기 → 머리글 및 바닥글’</b> 체크를 해제하세요. (브라우저가
+                자동으로 붙이는 URL·날짜가 사라집니다)
+              </p>
             </div>
 
             <div className="rounded-2xl border border-ui-border shadow-sm overflow-hidden">
               <article className="bg-white p-7 lg:p-9 text-[13px] leading-relaxed text-slate-900 print-keep">
-                <PrintHeader title="금전소비대차 계약서 (차용증)" />
-
                 <h2 className="text-center text-[20px] font-extrabold tracking-tight mb-5">
                   금전소비대차 계약서
                 </h2>
@@ -598,7 +669,10 @@ export default function LoanAgreementPage() {
                     <DocRow label="차용일">
                       <Fill value={dateKo(loanDate)} w="160px" />
                     </DocRow>
-                    <DocRow label="입금 계좌">
+                    <DocRow label="차용 목적">
+                      <Fill value={purpose} w="220px" />
+                    </DocRow>
+                    <DocRow label="입금 계좌(을)">
                       <Fill value={bank} w="80px" /> <Fill value={account} w="130px" /> (예금주:{" "}
                       <Fill value={holder} w="70px" />)
                     </DocRow>
@@ -614,9 +688,11 @@ export default function LoanAgreementPage() {
                       연 <Fill value={rate ? ratePct(r) : ""} w="50px" />%{" "}
                       <span className="text-slate-400">(세법상 적정이자율 {ratePct(ADEQUATE_RATE)}%)</span>
                     </DocRow>
-                    <DocRow label="이자 지급">
-                      매월 <Fill value={intDay} w="36px" />일, 갑의 계좌로 계좌이체
-                    </DocRow>
+                    {r > 0 && (
+                      <DocRow label="이자 지급">
+                        매월 <Fill value={intDay} w="36px" />일, 갑의 계좌로 계좌이체
+                      </DocRow>
+                    )}
                   </tbody>
                 </table>
 
@@ -776,6 +852,82 @@ function DocRow({ label, children }: { label: string; children: React.ReactNode 
       </th>
       <td className="border border-slate-300 p-2">{children}</td>
     </tr>
+  );
+}
+
+/**
+ * 연·월·일 분할 입력. 연도 4자리 입력 시 월로, 월 완료 시 일로 자동 이동.
+ * value/onChange는 "YYYY-MM-DD" 문자열 (미완성이면 빈 문자열).
+ */
+function DateInput({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const init = (value || "").split("-");
+  const [y, setY] = useState(init[0] || "");
+  const [m, setM] = useState(init[1] || "");
+  const [d, setD] = useState(init[2] || "");
+  const mRef = useRef<HTMLInputElement>(null);
+  const dRef = useRef<HTMLInputElement>(null);
+
+  // 세 칸 상태가 바뀔 때마다 상위로 통합 값 전달 (stale closure 방지)
+  useEffect(() => {
+    if (y.length === 4 && m !== "" && d !== "") {
+      onChange(`${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`);
+    } else {
+      onChange("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [y, m, d]);
+
+  const seg = "bg-transparent outline-none text-center tabular-nums placeholder:text-slate-400";
+
+  return (
+    <div className="flex items-center gap-1 w-full px-3.5 py-2.5 rounded-xl bg-ui-surface border border-transparent focus-within:border-brand-blue focus-within:bg-white transition-colors text-[15px] text-text-primary">
+      <input
+        inputMode="numeric"
+        value={y}
+        onChange={(e) => {
+          const v = e.target.value.replace(/\D/g, "").slice(0, 4);
+          setY(v);
+          if (v.length === 4) mRef.current?.focus();
+        }}
+        placeholder="YYYY"
+        aria-label="연도"
+        className={`${seg} w-[4.5ch]`}
+      />
+      <span className="text-slate-400">년</span>
+      <input
+        ref={mRef}
+        inputMode="numeric"
+        value={m}
+        onChange={(e) => {
+          const v = e.target.value.replace(/\D/g, "").slice(0, 2);
+          setM(v);
+          if (v.length === 2 || (v.length === 1 && Number(v) > 1)) dRef.current?.focus();
+        }}
+        placeholder="MM"
+        aria-label="월"
+        className={`${seg} w-[3ch]`}
+      />
+      <span className="text-slate-400">월</span>
+      <input
+        ref={dRef}
+        inputMode="numeric"
+        value={d}
+        onChange={(e) => {
+          const v = e.target.value.replace(/\D/g, "").slice(0, 2);
+          setD(v);
+        }}
+        placeholder="DD"
+        aria-label="일"
+        className={`${seg} w-[3ch]`}
+      />
+      <span className="text-slate-400">일</span>
+    </div>
   );
 }
 
