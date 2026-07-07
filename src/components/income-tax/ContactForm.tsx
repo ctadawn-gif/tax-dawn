@@ -10,7 +10,7 @@ type FormState = {
 };
 
 type Status = "idle" | "submitting" | "success" | "error";
-type Variant = "income-tax" | "general";
+type Variant = "income-tax" | "general" | "vat";
 
 const INITIAL: FormState = {
   name: "",
@@ -39,6 +39,14 @@ const GENERAL_TOPICS = [
   "기타 (자금조달계획서 등)",
 ];
 
+/** /vat 페이지용 — 부가가치세 과세 유형 */
+const VAT_TYPES = [
+  "일반과세자",
+  "간이과세자",
+  "면세사업자",
+  "기타 / 잘 모르겠음",
+];
+
 const VARIANT_CONFIG: Record<
   Variant,
   { topics: string[]; topicLabel: string; topicPlaceholder: string }
@@ -51,6 +59,11 @@ const VARIANT_CONFIG: Record<
   general: {
     topics: GENERAL_TOPICS,
     topicLabel: "상담 주제",
+    topicPlaceholder: "선택해주세요",
+  },
+  vat: {
+    topics: VAT_TYPES,
+    topicLabel: "과세 유형",
     topicPlaceholder: "선택해주세요",
   },
 };

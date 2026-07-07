@@ -13,9 +13,9 @@ const navLinks = [
 
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
 
-// 종합소득세 신고 시즌(5월) 프로모션 배너 — 신고기한 종료로 내려둔 상태입니다.
-// 다시 켜려면 true 로만 바꾸면 됩니다. (다음 시즌엔 아래 '5월' 배지·문구·링크도 함께 수정하세요)
-const SHOW_SEASONAL_PROMO = false;
+// 시즌 프로모션 배너 — 현재 부가가치세 신고접수(7월) 노출 중.
+// 시즌 종료 시 false 로 내리고, 다음 시즌엔 아래 배지·문구·링크(/vat 등)를 함께 수정하세요.
+const SHOW_SEASONAL_PROMO = true;
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function Navbar() {
       <div className="hidden lg:flex items-center gap-2">
         {SHOW_SEASONAL_PROMO && (
           <Link
-            href="/income-tax"
+            href="/vat"
             className="relative px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 hover:-translate-y-0.5 transition-transform flex items-center gap-1.5 no-underline animate-glow-pulse"
           >
             {/* 알림 핑 닷 */}
@@ -54,9 +54,9 @@ export default function Navbar() {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
             </span>
             <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
-              5월
+              7월
             </span>
-            종합소득세 신고대행
+            부가가치세 신고접수
           </Link>
         )}
         <Link
@@ -109,7 +109,7 @@ export default function Navbar() {
           ))}
           {SHOW_SEASONAL_PROMO && (
             <Link
-              href="/income-tax"
+              href="/vat"
               onClick={() => setMenuOpen(false)}
               className="relative px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-1.5 no-underline"
             >
@@ -118,9 +118,9 @@ export default function Navbar() {
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
               </span>
               <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
-                5월
+                7월
               </span>
-              종합소득세 신고대행
+              부가가치세 신고접수
             </Link>
           )}
           <Link
