@@ -4,6 +4,7 @@ const calculators = [
   { name: "종합소득세", href: "/calculator/income-tax" },
   { name: "상속·증여세", href: "/calculator/inherit-gift" },
   { name: "취득세", href: "/calculator/acquisition-tax" },
+  { name: "보유세", href: "/calculator/holding-tax" },
   { name: "업무용승용차", href: "/calculator/vehicle" },
   { name: "4대보험료", href: "/calculator/insurance" },
 ];

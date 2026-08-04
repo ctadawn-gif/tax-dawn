@@ -56,6 +56,15 @@ const services = [
     shortDesc: "근로자·사업주 부담분 분리 계산",
     href: "/calculator/insurance",
   },
+  {
+    label: "07",
+    title: "보유세 계산기",
+    description:
+      "재산세와 종합부동산세를 합산한 보유세를, 현행과 2026 세제개편안(정부안) 기준으로 연도별 비교합니다. 1세대1주택·다주택, 공시가격·거주·세액공제를 반영합니다.",
+    result: "현행·'27·'28 비교, 종부세 세액공제·재산세 합산 (정부안·참고용)",
+    shortDesc: "재산세+종부세, 개편안 연도 비교",
+    href: "/calculator/holding-tax",
+  },
 ];
 
 export default function Services() {

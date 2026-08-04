@@ -9,7 +9,7 @@ const GA_MEASUREMENT_ID = "G-P6BJGQ9688";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.dawntax.com"),
   title: {
-    default: "세무회계 새벽 | 무료 세금 계산기 6종",
+    default: "세무회계 새벽 | 무료 세금 계산기 7종",
     template: "%s | 세무회계 새벽",
   },
   description:
@@ -43,7 +43,7 @@ const organizationJsonLd = {
   logo: "https://www.dawntax.com/logo.png",
   image: "https://www.dawntax.com/logo.png",
   description:
-    "종합소득세·부가세·상속증여세·취득세·4대보험까지, 세무사가 직접 만든 무료 세금 계산기 6종과 대표세무사 2인 크로스체크 신고대행.",
+    "종합소득세·부가세·상속증여세·취득세·보유세·4대보험까지, 세무사가 직접 만든 무료 세금 계산기 7종과 대표세무사 2인 크로스체크 신고대행.",
   priceRange: "₩₩",
   address: {
     "@type": "PostalAddress",

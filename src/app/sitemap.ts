@@ -12,13 +12,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }> = [
     { path: "", changeFrequency: "weekly", priority: 1.0 },
     { path: "/income-tax", changeFrequency: "weekly", priority: 0.9 },
+    { path: "/vat", changeFrequency: "weekly", priority: 0.9 },
     { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
     { path: "/about", changeFrequency: "monthly", priority: 0.6 },
     { path: "/updates", changeFrequency: "weekly", priority: 0.6 },
+    { path: "/resources", changeFrequency: "weekly", priority: 0.7 },
+    { path: "/loan-agreement", changeFrequency: "monthly", priority: 0.8 },
     { path: "/calculator/income-tax", changeFrequency: "weekly", priority: 0.9 },
     { path: "/calculator/inherit-gift", changeFrequency: "monthly", priority: 0.8 },
     { path: "/calculator/vat", changeFrequency: "monthly", priority: 0.8 },
     { path: "/calculator/acquisition-tax", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/calculator/holding-tax", changeFrequency: "weekly", priority: 0.9 },
     { path: "/calculator/vehicle", changeFrequency: "monthly", priority: 0.8 },
     { path: "/calculator/insurance", changeFrequency: "monthly", priority: 0.8 },
   ];
