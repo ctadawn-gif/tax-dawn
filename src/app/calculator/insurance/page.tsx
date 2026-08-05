@@ -10,6 +10,7 @@ import {
   type IndustryType,
 } from "@/lib/socialInsuranceCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import ShareButton from "@/components/ShareButton";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => v.toLocaleString("ko-KR");
@@ -257,7 +258,14 @@ export default function InsuranceCalculator() {
             <PrintHeader title="4대보험료 계산 결과" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
-              <PrintButton />
+              <div className="flex items-center gap-2">
+                <ShareButton
+                  title="4대보험료 계산기"
+                  description="월 급여만 입력하면 국민연금·건강보험·고용·산재보험 근로자·사업주 부담분을 자동 계산."
+                  imageUrl="/api/kakao-image?c=insurance"
+                />
+                <PrintButton />
+              </div>
             </div>
                 <div className="mx-6 md:mx-8 mt-2 mb-0 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-[12px] text-amber-700 leading-relaxed"><svg className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>본 계산 결과는 참고용이며, 실제 세액과 다를 수 있습니다. 세무회계 새벽은 본 계산기의 결과에 대해 법적 책임을 지지 않습니다.</span></div>
 

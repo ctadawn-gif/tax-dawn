@@ -198,7 +198,7 @@ export default function HoldingTaxCalculator() {
                 <ShareButton
                   title="보유세 계산기 (재산세+종부세)"
                   description="2026 세제개편안 반영 — 현행·'27·'28년 보유세를 한 번에 비교해보세요."
-                  imageUrl="/calculator/holding-tax/kakao-image"
+                  imageUrl="/api/kakao-image?c=holding-tax"
                 />
                 <PrintButton />
               </div>
