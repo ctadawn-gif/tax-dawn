@@ -9,6 +9,7 @@ import {
   type Household,
 } from "@/lib/holdingTaxCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
+import ShareButton from "@/components/ShareButton";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmtWon = (manwon: number) => Math.round(manwon * 10000).toLocaleString("ko-KR");
@@ -193,7 +194,14 @@ export default function HoldingTaxCalculator() {
             <PrintHeader title="보유세 예상 계산 결과 (2026 개편안·정부안)" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">연도별 보유세 비교</h4>
-              <PrintButton />
+              <div className="flex items-center gap-2">
+                <ShareButton
+                  title="보유세 계산기 (재산세+종부세)"
+                  description="2026 세제개편안 반영 — 현행·'27·'28년 보유세를 한 번에 비교해보세요."
+                  imageUrl="/calculator/holding-tax/opengraph-image"
+                />
+                <PrintButton />
+              </div>
             </div>
             <div className="mx-6 md:mx-8 mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-[12px] text-amber-700 leading-relaxed"><span>⚠️</span><span>2026 세제개편안(정부안) 기준·국회 통과 전이라 확정 시 변동 가능. 참고용이며 세무회계 새벽은 결과에 법적 책임을 지지 않습니다.</span></div>
 
