@@ -10,6 +10,7 @@ import {
 } from "@/lib/holdingTaxCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import ShareButton from "@/components/ShareButton";
+import PublicPriceFinder from "@/components/PublicPriceFinder";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmtWon = (manwon: number) => Math.round(manwon * 10000).toLocaleString("ko-KR");
@@ -126,6 +127,15 @@ export default function HoldingTaxCalculator() {
                     <Suffix t="만원" />
                   </div>
                   {hasInput && <p className="mt-1.5 text-[12px] text-text-secondary text-right">= {fmtWon(n(price))}원</p>}
+                  <div className="mt-2">
+                    <PublicPriceFinder
+                      onSelect={(manwon) =>
+                        setPrice((prev) =>
+                          household === "multi" ? (Number(prev) || 0) + manwon : manwon,
+                        )
+                      }
+                    />
+                  </div>
                 </div>
 
                 {household === "multi" ? (
