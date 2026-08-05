@@ -10,7 +10,6 @@ import {
 } from "@/lib/holdingTaxCalc";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import ShareButton from "@/components/ShareButton";
-import PublicPriceFinder from "@/components/PublicPriceFinder";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmtWon = (manwon: number) => Math.round(manwon * 10000).toLocaleString("ko-KR");
@@ -127,14 +126,34 @@ export default function HoldingTaxCalculator() {
                     <Suffix t="만원" />
                   </div>
                   {hasInput && <p className="mt-1.5 text-[12px] text-text-secondary text-right">= {fmtWon(n(price))}원</p>}
-                  <div className="mt-2">
-                    <PublicPriceFinder
-                      onSelect={(manwon) =>
-                        setPrice((prev) =>
-                          household === "multi" ? (Number(prev) || 0) + manwon : manwon,
-                        )
-                      }
-                    />
+                  {/* 공시가격 조회 — 국토교통부 부동산공시가격알리미 (새 창) */}
+                  <div className="mt-2 rounded-xl border border-ui-border bg-ui-surface p-3">
+                    <p className="text-[12px] font-bold text-text-primary mb-2">
+                      🔎 내 집 공시가격을 모르시나요?
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <a
+                        href="https://www.realtyprice.kr/notice/town/siteLink.htm"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center justify-center gap-0.5 rounded-lg bg-white border border-ui-border px-3 py-2.5 text-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline"
+                      >
+                        <span className="text-[13px] font-bold text-text-primary">아파트·빌라 ↗</span>
+                        <span className="text-[11px] text-text-secondary">공동주택 공시가격</span>
+                      </a>
+                      <a
+                        href="https://www.realtyprice.kr/notice/nf/nfCommon.htm?page_gbn=hpi_search"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center justify-center gap-0.5 rounded-lg bg-white border border-ui-border px-3 py-2.5 text-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline"
+                      >
+                        <span className="text-[13px] font-bold text-text-primary">단독주택 ↗</span>
+                        <span className="text-[11px] text-text-secondary">개별주택 공시가격</span>
+                      </a>
+                    </div>
+                    <p className="mt-2 text-[11px] text-slate-400 leading-relaxed">
+                      국토교통부 부동산공시가격알리미가 새 창으로 열립니다. 조회한 금액을 위 칸에 입력하세요.
+                    </p>
                   </div>
                 </div>
 
