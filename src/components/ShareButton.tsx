@@ -52,6 +52,8 @@ export default function ShareButton({
   title,
   description,
   imageUrl,
+  imageWidth = 800,
+  imageHeight = 800,
   buttonLabel = "계산해보기",
   className = "",
 }: {
@@ -59,6 +61,9 @@ export default function ShareButton({
   description: string;
   /** 절대 경로 권장. 상대 경로면 현재 origin 기준으로 변환 */
   imageUrl: string;
+  /** 카카오에 이미지 비율을 알려 좌우 크롭을 막는다 (기본 1:1) */
+  imageWidth?: number;
+  imageHeight?: number;
   buttonLabel?: string;
   className?: string;
 }) {
@@ -104,6 +109,8 @@ export default function ShareButton({
           title,
           description,
           imageUrl: image,
+          imageWidth,
+          imageHeight,
           link: { mobileWebUrl: url, webUrl: url },
         },
         buttons: [{ title: buttonLabel, link: { mobileWebUrl: url, webUrl: url } }],
