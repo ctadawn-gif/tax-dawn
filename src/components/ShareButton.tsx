@@ -75,6 +75,19 @@ export default function ShareButton({
     return () => clearTimeout(t);
   }, [toast]);
 
+  // SDK는 마운트 시 미리 로드·초기화해 둔다.
+  // 클릭 후 await로 로드하면 브라우저의 사용자 제스처 인정이 끊겨
+  // 카카오가 여는 팝업/앱 호출이 팝업 차단에 걸린다(특히 iOS Safari·인앱브라우저).
+  useEffect(() => {
+    loadSdk().then((kakao) => {
+      try {
+        if (kakao && !kakao.isInitialized()) kakao.init(KAKAO_KEY);
+      } catch {
+        /* 초기화 실패 시 클릭 시점에 폴백 */
+      }
+    });
+  }, []);
+
   const fallback = async (url: string) => {
     // 2순위: 기기 기본 공유 시트 (모바일에서 카카오톡 포함)
     if (navigator.share) {
@@ -94,30 +107,34 @@ export default function ShareButton({
     }
   };
 
-  const handleShare = async () => {
+  // 클릭 핸들러는 동기 실행 — await 없이 바로 sendDefault를 호출해야
+  // 팝업·앱 호출이 사용자 제스처 안에서 일어나 차단되지 않는다.
+  const handleShare = () => {
     const url = window.location.href;
     const image = imageUrl.startsWith("http") ? imageUrl : `${window.location.origin}${imageUrl}`;
 
-    const kakao = await loadSdk();
-    if (!kakao) return fallback(url);
-
-    try {
-      if (!kakao.isInitialized()) kakao.init(KAKAO_KEY);
-      kakao.Share.sendDefault({
-        objectType: "feed",
-        content: {
-          title,
-          description,
-          imageUrl: image,
-          imageWidth,
-          imageHeight,
-          link: { mobileWebUrl: url, webUrl: url },
-        },
-        buttons: [{ title: buttonLabel, link: { mobileWebUrl: url, webUrl: url } }],
-      });
-    } catch {
-      fallback(url);
+    const kakao = getKakao();
+    if (kakao) {
+      try {
+        if (!kakao.isInitialized()) kakao.init(KAKAO_KEY);
+        kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title,
+            description,
+            imageUrl: image,
+            imageWidth,
+            imageHeight,
+            link: { mobileWebUrl: url, webUrl: url },
+          },
+          buttons: [{ title: buttonLabel, link: { mobileWebUrl: url, webUrl: url } }],
+        });
+        return;
+      } catch {
+        /* 아래 폴백으로 */
+      }
     }
+    void fallback(url);
   };
 
   return (

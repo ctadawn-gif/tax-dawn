@@ -286,6 +286,109 @@ export default function HoldingTaxCalculator() {
             </div>
           </div>
 
+          {/* 사용 가이드 + 예시 */}
+          <div className="no-print mt-10">
+            <h3 className="text-[20px] md:text-[24px] font-extrabold text-text-primary text-center mb-2">
+              이렇게 사용하세요
+            </h3>
+            <p className="text-[14px] text-text-secondary text-center mb-6">
+              3단계면 끝납니다. 공시가격만 알면 30초면 확인돼요.
+            </p>
+            <div className="grid md:grid-cols-3 gap-3 mb-10">
+              {[
+                { n: "1", t: "보유 형태 선택", d: "1세대 1주택인지 다주택인지 선택합니다. 기본공제·세율이 여기서 갈립니다." },
+                { n: "2", t: "공시가격·조건 입력", d: "공시가격(인별 합산)과 거주 여부, 연령·보유·거주기간을 입력합니다. 공시가격은 위 국토부 링크에서 바로 조회됩니다." },
+                { n: "3", t: "연도별 카드 비교", d: "현행·'27·'28 카드를 클릭하면 재산세·종부세 상세 계산 과정이 펼쳐집니다." },
+              ].map((s) => (
+                <div key={s.n} className="rounded-2xl border border-ui-border bg-white p-5">
+                  <div className="w-8 h-8 rounded-lg bg-brand-blue text-white text-[14px] font-bold flex items-center justify-center mb-3">{s.n}</div>
+                  <div className="text-[15px] font-extrabold text-text-primary mb-1.5">{s.t}</div>
+                  <p className="text-[13px] text-text-secondary leading-relaxed">{s.d}</p>
+                </div>
+              ))}
+            </div>
+
+            <h3 className="text-[20px] md:text-[24px] font-extrabold text-text-primary text-center mb-2">
+              개편안, 누가 유리하고 누가 불리해질까요?
+            </h3>
+            <p className="text-[14px] text-text-secondary text-center mb-6">
+              실제 이 계산기로 계산한 대표 사례입니다. <b className="text-text-primary">핵심은 &lsquo;거주 여부&rsquo;</b>입니다.
+            </p>
+            <div className="grid md:grid-cols-3 gap-3 mb-4">
+              {[
+                {
+                  tag: "변화 없음", tone: "slate",
+                  t: "공시 12억 · 1주택 거주",
+                  rows: [["현행", "260만"], ["'28년~", "260만"]],
+                  d: "과세 문턱(개편 후 14억) 아래라 종부세가 없습니다. 대다수 1주택자가 여기 해당합니다.",
+                },
+                {
+                  tag: "감세 ↓", tone: "emerald",
+                  t: "공시 15억 · 1주택 거주 (60세·10년)",
+                  rows: [["현행", "371만"], ["'28년~", "354만 (−17만)"]],
+                  d: "기본공제가 12억→14억으로 늘어 종부세가 줄어듭니다. 거주 중인 1주택자는 개편 수혜입니다.",
+                },
+                {
+                  tag: "증세 ↑", tone: "red",
+                  t: "공시 15억 · 1주택 비거주",
+                  rows: [["현행", "371만"], ["'28년~", "494만 (+123만)"]],
+                  d: "같은 15억 주택도 안 살면 공제가 9억으로 줄고 거주공제가 사라져, 거주 대비 연 140만원 차이가 납니다.",
+                },
+              ].map((c) => (
+                <div key={c.t} className="rounded-2xl border border-ui-border bg-white p-5 flex flex-col">
+                  <span className={`self-start text-[11px] font-extrabold rounded-full px-2.5 py-1 mb-3 ${
+                    c.tone === "emerald" ? "bg-emerald-50 text-emerald-600" : c.tone === "red" ? "bg-red-50 text-red-600" : "bg-slate-100 text-slate-500"
+                  }`}>{c.tag}</span>
+                  <div className="text-[14px] font-extrabold text-text-primary mb-3 leading-snug">{c.t}</div>
+                  <div className="space-y-1 mb-3">
+                    {c.rows.map(([k, v]) => (
+                      <div key={k} className="flex items-center justify-between text-[13px]">
+                        <span className="text-text-secondary">{k} 보유세</span>
+                        <span className="font-bold text-text-primary">{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[12px] text-text-secondary leading-relaxed mt-auto">{c.d}</p>
+                </div>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-2 gap-3">
+              {[
+                {
+                  tag: "한도 제한", tone: "amber",
+                  t: "공시 30억 · 1주택 거주 (70세·10년)",
+                  rows: [["현행", "916만"], ["'28년~", "1,042만 (+126만)"]],
+                  d: "세액공제율은 80% 만점이어도 금액한도('27 800만·'28 600만)가 새로 생겨 고가주택은 부담이 늘어납니다.",
+                },
+                {
+                  tag: "증세 ↑↑", tone: "red",
+                  t: "3주택 · 합산 30억 · 조정지역",
+                  rows: [["현행", "1,974만"], ["'28년~", "3,639만 (+1,665만)"]],
+                  d: "다주택 기본공제 축소(9억→4억+거주비중)에 공정시장가액비율 80%까지 겹쳐 보유세가 약 1.8배가 됩니다.",
+                },
+              ].map((c) => (
+                <div key={c.t} className="rounded-2xl border border-ui-border bg-white p-5 flex flex-col">
+                  <span className={`self-start text-[11px] font-extrabold rounded-full px-2.5 py-1 mb-3 ${
+                    c.tone === "amber" ? "bg-amber-50 text-amber-600" : "bg-red-50 text-red-600"
+                  }`}>{c.tag}</span>
+                  <div className="text-[14px] font-extrabold text-text-primary mb-3 leading-snug">{c.t}</div>
+                  <div className="space-y-1 mb-3">
+                    {c.rows.map(([k, v]) => (
+                      <div key={k} className="flex items-center justify-between text-[13px]">
+                        <span className="text-text-secondary">{k} 보유세</span>
+                        <span className="font-bold text-text-primary">{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[12px] text-text-secondary leading-relaxed mt-auto">{c.d}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-center text-[13px] font-bold text-text-primary">
+              &ldquo;거주하면 감세, 안 살면 증세&rdquo; — 위 계산기에 내 조건을 넣어 직접 확인해보세요.
+            </p>
+          </div>
+
           {/* 참고사항 */}
           <div className="bg-slate-50 rounded-xl p-6 border border-ui-border mt-8 mb-8">
             <h5 className="text-sm font-bold text-text-primary mb-3">알아두세요 (참고사항)</h5>
