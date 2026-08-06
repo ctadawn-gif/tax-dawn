@@ -42,6 +42,11 @@ const CARDS: Record<string, KakaoShareContent> = {
     lines: [{ text: "국민연금·건강보험" }, { text: "4대보험료 계산기", accent: true }],
     tags: ["비과세 급여 반영", "업종별 산재보험료"],
   },
+  "loan-agreement": {
+    badge: "무료 서식 · 로그인 없음",
+    lines: [{ text: "빈칸만 채우면 완성" }, { text: "차용증 자동작성", accent: true }],
+    tags: ["증여세 안전선 체크", "상환계획 점검"],
+  },
 };
 
 const FALLBACK: KakaoShareContent = {

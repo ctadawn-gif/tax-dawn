@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PrintButton from "@/components/PrintButton";
+import ShareButton from "@/components/ShareButton";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 import {
   numberToKoreanFormal,
@@ -639,7 +640,15 @@ export default function LoanAgreementPage() {
             <div className="no-print mb-3">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-bold text-text-secondary">실시간 미리보기</span>
-                <PrintButton label="인쇄 / PDF 저장" />
+                <div className="flex items-center gap-2">
+                  <ShareButton
+                    title="차용증 자동작성 (무료)"
+                    description="빈칸만 채우면 금전소비대차 계약서 완성. 증여세 안전선(4.6%·2.17억)까지 자동 점검."
+                    imageUrl="/api/kakao-image?c=loan-agreement"
+                    buttonLabel="작성해보기"
+                  />
+                  <PrintButton label="인쇄 / PDF 저장" />
+                </div>
               </div>
               <p className="mt-1.5 text-[11px] text-slate-400 leading-relaxed">
                 💡 인쇄가 깔끔하게 나오려면, 인쇄창에서{" "}
