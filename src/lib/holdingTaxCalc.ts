@@ -32,8 +32,10 @@ export interface HoldingTaxInput {
   holdYears: number;
   /** (1세대1주택) 거주기간(년) */
   resideYears: number;
-  /** 직전연도 보유세 총액 (만원) — 세부담상한 계산용(선택, 0이면 미적용) */
+  /** 직전연도 재산세 본세+종부세 본세 합계 (만원) — 세부담상한 계산용(선택, 0이면 미적용) */
   prevYearHoldingTax: number;
+  /** 도시지역(도시계획구역) 내 주택 여부 — 재산세 도시지역분 0.14% 부과 (기본 true) */
+  inUrbanArea?: boolean;
 }
 
 export interface HoldingTaxResult {
@@ -54,6 +56,8 @@ export interface HoldingTaxResult {
   ruralTax: number; // 농어촌특별세
   jongbuTotal: number; // 종부세 합계(농특세 포함)
   burdenCapApplied: boolean; // 세부담상한 적용 여부
+  burdenCap: number; // 세부담상한액 (직전연도 본세 합계 × 상한율, 0=직전연도 미입력)
+  burdenCapCut: number; // 상한 초과로 종부세 본세에서 차감된 금액
   // 합계
   holdingTaxTotal: number; // 보유세 = 재산세 + 종부세
 }
@@ -209,7 +213,7 @@ export function calculateHoldingTax(input: HoldingTaxInput): HoldingTaxResult {
   const pRates = useSpecialRate ? PROP_SPECIAL_RATES : PROP_STD_RATES;
   // 누진공제 방식으로 계산 후 progressive 결과와 동일
   const propertyTax = Math.round(progressive(propertyTaxBase, PROP_EDGES, pRates));
-  const urbanAreaTax = Math.round(propertyTaxBase * 0.0014); // 도시지역분
+  const urbanAreaTax = input.inUrbanArea === false ? 0 : Math.round(propertyTaxBase * 0.0014); // 도시지역분
   const localEduTax = Math.round(propertyTax * 0.2); // 지방교육세
   const propertyTaxTotal = propertyTax + urbanAreaTax + localEduTax;
 
@@ -242,16 +246,20 @@ export function calculateHoldingTax(input: HoldingTaxInput): HoldingTaxResult {
 
   let jongbuTax = Math.max(0, afterPropCredit - taxCredit);
 
-  // ⑤ 세부담상한 (재산세+종부세가 전년 보유세 × 상한율 초과 시 초과분 미부과)
+  // ⑤ 세부담상한 — 비교 기준은 "주택분 재산세 본세 + 종부세 본세" (종부세법 §10 상당액 방식)
+  //    도시지역분·지방교육세·농어촌특별세는 상당액에서 제외하고, 초과분은 종부세 본세에서 차감.
+  //    prevYearHoldingTax 에는 직전연도의 같은 기준(재산세 본세+종부세 본세 합계)을 넣는다.
+  //    (재산세 자체의 상한 105~130%는 별도 체계라 미반영 — cap이 재산세 본세보다 작아도 재산세는 유지)
   let burdenCapApplied = false;
+  let burdenCap = 0;
+  let burdenCapCut = 0;
   if (input.prevYearHoldingTax > 0) {
-    const cap = input.prevYearHoldingTax * BURDEN_CAP_RATE[yearMode];
-    if (propertyTaxTotal + jongbuTax * 1.2 > cap) {
-      const allowedJongbu = Math.max(0, (cap - propertyTaxTotal) / 1.2);
-      if (allowedJongbu < jongbuTax) {
-        jongbuTax = Math.round(allowedJongbu);
-        burdenCapApplied = true;
-      }
+    burdenCap = Math.round(input.prevYearHoldingTax * BURDEN_CAP_RATE[yearMode]);
+    if (propertyTax + jongbuTax > burdenCap) {
+      const capped = Math.max(0, burdenCap - propertyTax);
+      burdenCapCut = jongbuTax - capped;
+      jongbuTax = capped;
+      burdenCapApplied = true;
     }
   }
 
@@ -275,6 +283,8 @@ export function calculateHoldingTax(input: HoldingTaxInput): HoldingTaxResult {
     ruralTax,
     jongbuTotal,
     burdenCapApplied,
+    burdenCap,
+    burdenCapCut,
     holdingTaxTotal: propertyTaxTotal + jongbuTotal,
   };
 }
@@ -282,13 +292,13 @@ export function calculateHoldingTax(input: HoldingTaxInput): HoldingTaxResult {
 /**
  * 연도 3모드 일괄 계산 — 세부담상한 "연쇄" 적용
  *
- * 세부담상한의 기준은 각 연도의 "직전연도 상한 적용 후 세액"이다(공시가격 동결 가정).
- *   '26 상한 = 사용자가 입력한 직전연도('25 납부) 보유세 × 150%
- *   '27 상한 = '26년 계산 결과(상한 적용 후) × 200%
+ * 세부담상한의 기준은 각 연도의 "직전연도 재산세 본세+종부세 본세"다(공시가격 동결 가정).
+ *   '26 상한 = 사용자가 입력한 직전연도('25) 본세 합계 × 150%
+ *   '27 상한 = '26년 계산 결과(재산세 본세+종부 본세, 상한 적용 후) × 200%
  *   '28 상한 = '27년 계산 결과 × 200%
  * 단일 입력값을 세 모드에 그대로 꽂으면 '27·'28 상한이 실제보다 낮게 걸리므로
- * (예: 입력 300만 → '27 상한이 600만으로 계산되는 오류) 반드시 이 함수를 쓸 것.
- * prevYearHoldingTax(=입력값)는 '26 모드에만 직접 쓰이고, 이후는 앞 연도 결과로 대체된다.
+ * 반드시 이 함수를 쓸 것. 검증: 압구정한양2차(공시 58.09억·70세·10년 거주) 정밀 시트와
+ * '27 상한 차감 904.3만원까지 일치(만원 반올림 이내).
  */
 export function calculateHoldingTaxAll(
   base: Omit<HoldingTaxInput, "yearMode">
@@ -297,12 +307,12 @@ export function calculateHoldingTaxAll(
   const r27 = calculateHoldingTax({
     ...base,
     yearMode: "2027",
-    prevYearHoldingTax: r26.holdingTaxTotal,
+    prevYearHoldingTax: r26.propertyTax + r26.jongbuTax,
   });
   const r28 = calculateHoldingTax({
     ...base,
     yearMode: "2028",
-    prevYearHoldingTax: r27.holdingTaxTotal,
+    prevYearHoldingTax: r27.propertyTax + r27.jongbuTax,
   });
   return { "2026": r26, "2027": r27, "2028": r28 };
 }

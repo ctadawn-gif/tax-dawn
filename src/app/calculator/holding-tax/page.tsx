@@ -31,6 +31,7 @@ export default function HoldingTaxCalculator() {
   const [hold, setHold] = useState<number | string>("");
   const [reside, setReside] = useState<number | string>("");
   const [prevTax, setPrevTax] = useState<number | string>("");
+  const [urban, setUrban] = useState(true);
   const [detailMode, setDetailMode] = useState<YearMode>("2028");
 
   const n = (v: number | string) => (v === "" ? 0 : Number(v));
@@ -49,10 +50,11 @@ export default function HoldingTaxCalculator() {
       holdYears: n(hold),
       resideYears: household === "single" ? (isResident ? n(reside) : 0) : 0,
       prevYearHoldingTax: n(prevTax),
+      inUrbanArea: urban,
     };
     return calculateHoldingTaxAll(base);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [household, price, houseCount, residentPrice, isAdjusted, isResident, age, hold, reside, prevTax]);
+  }, [household, price, houseCount, residentPrice, isAdjusted, isResident, age, hold, reside, prevTax, urban]);
 
   const detail = results[detailMode];
   const hasInput = n(price) > 0;
@@ -204,13 +206,19 @@ export default function HoldingTaxCalculator() {
                   </>
                 )}
 
-                {/* 직전연도 보유세 */}
+                {/* 도시지역분 */}
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div className="flex flex-col"><span className="text-[15px] font-bold text-text-primary">도시지역(도시계획구역) 내 주택</span><span className="text-[12px] text-text-secondary">재산세 도시지역분(과표의 0.14%) 부과 — 아파트 등 대부분 해당</span></div>
+                  <button onClick={() => setUrban(!urban)} className={`relative inline-block w-11 h-6 rounded-full transition-colors ${urban ? "bg-brand-blue" : "bg-slate-300"}`}><div className={`absolute w-5 h-5 rounded-full bg-white top-[2px] shadow transition-all ${urban ? "left-[22px]" : "left-[2px]"}`} /></button>
+                </label>
+
+                {/* 직전연도 본세 합계 (세부담상한) */}
                 <div>
-                  <label className="block text-[14px] font-bold text-text-secondary mb-2">직전연도('25년 납부) 보유세 <span className="text-slate-400 font-normal">· 선택 (세부담상한)</span></label>
+                  <label className="block text-[14px] font-bold text-text-secondary mb-2">직전연도('25년) 재산세+종부세 <span className="text-slate-400 font-normal">· 선택 (세부담상한)</span></label>
                   <div className="relative"><input type="text" inputMode="numeric" value={formatNumberInput(prevTax)} onChange={(e) => setPrevTax(parseNumberInput(e.target.value))} placeholder="0" className={inputCls} /><Suffix t="만원" /></div>
                   <p className="mt-1.5 text-[12px] text-text-secondary leading-relaxed">
-                    ‘26년 상한(150%)에 적용됩니다. ‘27·‘28년 상한(200%)은{" "}
-                    <b className="text-text-primary">앞 연도 계산 결과 기준으로 자동 연쇄 적용</b>됩니다.
+                    <b className="text-text-primary">본세 합계 기준</b>(도시지역분·지방교육세·농특세 제외)이며 ‘26년 상한(150%)에 쓰입니다. ‘27·‘28년
+                    상한(200%)은 <b className="text-text-primary">앞 연도 계산 결과로 자동 연쇄 적용</b>됩니다.
                   </p>
                 </div>
               </div>
@@ -272,10 +280,16 @@ export default function HoldingTaxCalculator() {
                     <Row l="산출세액" v={detail.jongbuGross} />
                     <Row l="− 재산세 공제" v={-detail.propertyTaxCredit} />
                     {detail.taxCredit > 0 && <Row l={`− 세액공제 (${Math.round(detail.taxCreditRate * 100)}%)`} v={-detail.taxCredit} />}
+                    {detail.burdenCapCut > 0 && <Row l="− 세부담상한 차감" v={-detail.burdenCapCut} />}
                     <Row l="농어촌특별세" v={detail.ruralTax} />
                     <div className="h-px bg-slate-100 my-2" />
                     <Row l="종부세 합계" v={detail.jongbuTotal} bold />
-                    {detail.burdenCapApplied && <p className="mt-2 text-[11px] text-amber-600 font-bold">※ 세부담상한 적용됨</p>}
+                    {detail.burdenCap > 0 && (
+                      <p className={`mt-2 text-[11px] font-bold ${detail.burdenCapApplied ? "text-amber-600" : "text-slate-400"}`}>
+                        ※ 세부담상한 {fmtWon(detail.burdenCap)}원 (직전연도 재산세+종부세 본세 ×{" "}
+                        {detailMode === "2026" ? "150%" : "200%"}) — {detail.burdenCapApplied ? "적용" : "미적용"}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="bg-gradient-to-br from-brand-navy to-[#0f172a] px-6 py-5 flex items-center justify-between text-white">
@@ -397,7 +411,7 @@ export default function HoldingTaxCalculator() {
               <li><b className="text-text-primary">2026 개편안 핵심:</b> 1세대1주택 기본공제 12억 → 거주 14억/비거주 9억, 공정시장가액비율 60→70(~80)%, 세율 인상, 세액공제 거주 중심 전환·금액한도(‘27 800만·‘28 600만).</li>
               <li>재산세는 이번 개편안 대상이 아니며 현행 기준으로 계산합니다(1세대1주택 공정시장가액비율 43~45% 특례 반영).</li>
               <li>다주택·공동명의·상속주택·일시적 2주택 등 특례는 단순화되어 있어 실제와 차이가 클 수 있습니다.</li>
-              <li><b className="text-text-primary">세부담상한은 연도별 연쇄 적용:</b> ‘26년은 입력한 직전연도 보유세×150%, ‘27년은 ‘26년 계산액×200%, ‘28년은 ‘27년 계산액×200% 기준입니다(공시가격 동결 가정). 직전연도 보유세를 입력하지 않으면 ‘26년 상한은 미적용됩니다.</li>
+              <li><b className="text-text-primary">세부담상한:</b> ‘재산세 본세+종부세 본세’ 합계를 직전연도와 비교해 초과분을 <b className="text-text-primary">종부세에서</b> 차감합니다(도시지역분·교육세·농특세 제외). ‘26년은 입력한 직전연도 본세 합계×150%, ‘27년은 ‘26년 계산액×200%, ‘28년은 ‘27년 계산액×200%로 연쇄 적용됩니다(공시가격 동결 가정). 재산세 자체의 상한(전년 대비 105~130%)은 별도 제도로 본 계산기에 반영되지 않습니다.</li>
               <li>본 결과는 <b className="text-text-primary">국회 통과 전 정부안</b> 기준의 개략적 예상치입니다. 정확한 세액은 반드시 세무 전문가와 상담하세요.</li>
             </ul>
           </div>
