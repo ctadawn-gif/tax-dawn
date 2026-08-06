@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
-import ShareButton from "@/components/ShareButton";
+import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
@@ -292,6 +292,12 @@ export default function VehicleCalculator() {
           </p>
         </div>
 
+        <CalculatorShareBar
+          title="업무용승용차 비용 계산기"
+          description="매입·리스·렌트를 한눈에 비교. 운행일지 작성 여부에 따른 경비 인정 한도까지 확인."
+          slug="vehicle"
+        />
+
         {/* 설정 바 */}
         <div className="no-print bg-white rounded-2xl px-5 md:px-8 py-5 border border-ui-border shadow-sm flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
           <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-auto">
@@ -385,14 +391,7 @@ export default function VehicleCalculator() {
           <PrintHeader title="업무용승용차 비용 비교 결과 (매입 / 리스 / 렌트)" />
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h3>
-            <div className="flex items-center gap-2">
-              <ShareButton
-                title="업무용승용차 비용 계산기"
-                description="매입·리스·렌트를 한눈에 비교. 운행일지 작성 여부에 따른 경비 인정 한도까지 확인."
-                imageUrl="/api/kakao-image?c=vehicle"
-              />
-              <PrintButton />
-            </div>
+            <PrintButton />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <ResultCard title="매입 결과" icon={<BuyIcon />} res={buyRes} entity={ent} cmpD1={buyCmp?.d1 ?? null} />

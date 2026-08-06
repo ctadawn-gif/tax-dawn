@@ -14,7 +14,7 @@ import {
   type IndustryRate,
 } from "@/lib/industryRates";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
-import ShareButton from "@/components/ShareButton";
+import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
@@ -303,6 +303,12 @@ export default function IncomeTaxCalculator() {
             <p className="text-lg text-text-secondary font-medium">소득 유형과 공제 항목을 입력하면 예상 세액을 바로 확인할 수 있습니다</p>
           </div>
 
+          <CalculatorShareBar
+            title="종합소득세 계산기"
+            description="프리랜서·개인사업자 종합소득세, 업종별 경비율까지 자동 반영해 3분이면 확인."
+            slug="income-tax"
+          />
+
           {/* 소득 유형 선택 */}
           <div className="no-print bg-white rounded-2xl p-4 md:px-8 md:py-5 border border-ui-border shadow-sm flex justify-center items-center mb-12">
             <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-[600px]">
@@ -500,14 +506,7 @@ export default function IncomeTaxCalculator() {
             <PrintHeader title="종합소득세 예상세액 계산 결과" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
-              <div className="flex items-center gap-2">
-                <ShareButton
-                  title="종합소득세 계산기"
-                  description="프리랜서·개인사업자 종합소득세, 업종별 경비율까지 자동 반영해 3분이면 확인."
-                  imageUrl="/api/kakao-image?c=income-tax"
-                />
-                <PrintButton />
-              </div>
+              <PrintButton />
             </div>
                 <div className="mx-6 md:mx-8 mt-2 mb-0 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-[12px] text-amber-700 leading-relaxed"><svg className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>본 계산 결과는 참고용이며, 실제 세액과 다를 수 있습니다. 세무회계 새벽은 본 계산기의 결과에 대해 법적 책임을 지지 않습니다.</span></div>
 
