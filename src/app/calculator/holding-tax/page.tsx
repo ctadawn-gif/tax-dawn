@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  calculateHoldingTax,
+  calculateHoldingTaxAll,
   type HoldingTaxInput,
   type YearMode,
   type Household,
@@ -35,28 +35,24 @@ export default function HoldingTaxCalculator() {
 
   const n = (v: number | string) => (v === "" ? 0 : Number(v));
 
-  const buildInput = (mode: YearMode): HoldingTaxInput => ({
-    yearMode: mode,
-    publicPrice: n(price),
-    household,
-    houseCount: household === "single" ? 1 : houseCount,
-    reinforced: household === "multi" && (houseCount === 3 || isAdjusted),
-    isResident: household === "single" ? isResident : true,
-    residentHousePrice: n(residentPrice),
-    age: n(age),
-    holdYears: n(hold),
-    resideYears: household === "single" ? (isResident ? n(reside) : 0) : 0,
-    prevYearHoldingTax: n(prevTax),
-  });
-
-  const results = useMemo(
-    () => Object.fromEntries(MODES.map((m) => [m, calculateHoldingTax(buildInput(m))])) as Record<
-      YearMode,
-      ReturnType<typeof calculateHoldingTax>
-    >,
+  // 세부담상한은 연쇄 적용: '26은 입력한 직전연도 보유세×150%,
+  // '27·'28은 앞 연도 계산 결과×200% (calculateHoldingTaxAll 내부 처리)
+  const results = useMemo(() => {
+    const base: Omit<HoldingTaxInput, "yearMode"> = {
+      publicPrice: n(price),
+      household,
+      houseCount: household === "single" ? 1 : houseCount,
+      reinforced: household === "multi" && (houseCount === 3 || isAdjusted),
+      isResident: household === "single" ? isResident : true,
+      residentHousePrice: n(residentPrice),
+      age: n(age),
+      holdYears: n(hold),
+      resideYears: household === "single" ? (isResident ? n(reside) : 0) : 0,
+      prevYearHoldingTax: n(prevTax),
+    };
+    return calculateHoldingTaxAll(base);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [household, price, houseCount, residentPrice, isAdjusted, isResident, age, hold, reside, prevTax]
-  );
+  }, [household, price, houseCount, residentPrice, isAdjusted, isResident, age, hold, reside, prevTax]);
 
   const detail = results[detailMode];
   const hasInput = n(price) > 0;
@@ -210,8 +206,12 @@ export default function HoldingTaxCalculator() {
 
                 {/* 직전연도 보유세 */}
                 <div>
-                  <label className="block text-[14px] font-bold text-text-secondary mb-2">직전연도 보유세 <span className="text-slate-400 font-normal">· 선택 (세부담상한 계산)</span></label>
+                  <label className="block text-[14px] font-bold text-text-secondary mb-2">직전연도('25년 납부) 보유세 <span className="text-slate-400 font-normal">· 선택 (세부담상한)</span></label>
                   <div className="relative"><input type="text" inputMode="numeric" value={formatNumberInput(prevTax)} onChange={(e) => setPrevTax(parseNumberInput(e.target.value))} placeholder="0" className={inputCls} /><Suffix t="만원" /></div>
+                  <p className="mt-1.5 text-[12px] text-text-secondary leading-relaxed">
+                    ‘26년 상한(150%)에 적용됩니다. ‘27·‘28년 상한(200%)은{" "}
+                    <b className="text-text-primary">앞 연도 계산 결과 기준으로 자동 연쇄 적용</b>됩니다.
+                  </p>
                 </div>
               </div>
             </div>
@@ -396,7 +396,8 @@ export default function HoldingTaxCalculator() {
               <li><b className="text-text-primary">보유세 = 재산세 + 종합부동산세</b>(농어촌특별세 포함). 종부세는 인별 공시가격 합산 기준입니다.</li>
               <li><b className="text-text-primary">2026 개편안 핵심:</b> 1세대1주택 기본공제 12억 → 거주 14억/비거주 9억, 공정시장가액비율 60→70(~80)%, 세율 인상, 세액공제 거주 중심 전환·금액한도(‘27 800만·‘28 600만).</li>
               <li>재산세는 이번 개편안 대상이 아니며 현행 기준으로 계산합니다(1세대1주택 공정시장가액비율 43~45% 특례 반영).</li>
-              <li>다주택·공동명의·상속주택·일시적 2주택 등 특례는 단순화되어 있어 실제와 차이가 클 수 있습니다. 세부담상한(전년 대비 ‘26 150%→‘27~ 200%)은 직전연도 보유세를 입력해야 반영됩니다.</li>
+              <li>다주택·공동명의·상속주택·일시적 2주택 등 특례는 단순화되어 있어 실제와 차이가 클 수 있습니다.</li>
+              <li><b className="text-text-primary">세부담상한은 연도별 연쇄 적용:</b> ‘26년은 입력한 직전연도 보유세×150%, ‘27년은 ‘26년 계산액×200%, ‘28년은 ‘27년 계산액×200% 기준입니다(공시가격 동결 가정). 직전연도 보유세를 입력하지 않으면 ‘26년 상한은 미적용됩니다.</li>
               <li>본 결과는 <b className="text-text-primary">국회 통과 전 정부안</b> 기준의 개략적 예상치입니다. 정확한 세액은 반드시 세무 전문가와 상담하세요.</li>
             </ul>
           </div>

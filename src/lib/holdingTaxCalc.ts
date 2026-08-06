@@ -278,3 +278,31 @@ export function calculateHoldingTax(input: HoldingTaxInput): HoldingTaxResult {
     holdingTaxTotal: propertyTaxTotal + jongbuTotal,
   };
 }
+
+/**
+ * 연도 3모드 일괄 계산 — 세부담상한 "연쇄" 적용
+ *
+ * 세부담상한의 기준은 각 연도의 "직전연도 상한 적용 후 세액"이다(공시가격 동결 가정).
+ *   '26 상한 = 사용자가 입력한 직전연도('25 납부) 보유세 × 150%
+ *   '27 상한 = '26년 계산 결과(상한 적용 후) × 200%
+ *   '28 상한 = '27년 계산 결과 × 200%
+ * 단일 입력값을 세 모드에 그대로 꽂으면 '27·'28 상한이 실제보다 낮게 걸리므로
+ * (예: 입력 300만 → '27 상한이 600만으로 계산되는 오류) 반드시 이 함수를 쓸 것.
+ * prevYearHoldingTax(=입력값)는 '26 모드에만 직접 쓰이고, 이후는 앞 연도 결과로 대체된다.
+ */
+export function calculateHoldingTaxAll(
+  base: Omit<HoldingTaxInput, "yearMode">
+): Record<YearMode, HoldingTaxResult> {
+  const r26 = calculateHoldingTax({ ...base, yearMode: "2026" });
+  const r27 = calculateHoldingTax({
+    ...base,
+    yearMode: "2027",
+    prevYearHoldingTax: r26.holdingTaxTotal,
+  });
+  const r28 = calculateHoldingTax({
+    ...base,
+    yearMode: "2028",
+    prevYearHoldingTax: r27.holdingTaxTotal,
+  });
+  return { "2026": r26, "2027": r27, "2028": r28 };
+}
