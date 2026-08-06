@@ -99,6 +99,19 @@ export default function HoldingTaxCalculator() {
             <p><b>2026 세제개편안(정부안) 기준</b>입니다. 국회 통과 전이라 확정 시 세율·공제 등이 달라질 수 있으며, 결과는 <b>참고용</b>입니다. ‘27·‘28 수치는 개편안이 그대로 시행된다는 가정입니다.</p>
           </div>
 
+          {/* 계산기 공유 (결과가 아니라 계산기 링크를 공유) */}
+          <div className="no-print max-w-[700px] mx-auto mb-4 flex items-center justify-between gap-3 rounded-xl border border-ui-border bg-ui-surface px-4 py-3">
+            <span className="text-[13px] text-text-secondary leading-snug">
+              이 계산기가 <b className="text-text-primary">필요한 분께 공유</b>해보세요
+            </span>
+            <ShareButton
+              title="보유세 계산기 (재산세+종부세)"
+              description="2026 세제개편안 반영 — 현행·'27·'28년 보유세를 한 번에 비교해보세요."
+              imageUrl="/api/kakao-image?c=holding-tax"
+              buttonLabel="계산해보기"
+            />
+          </div>
+
           {/* 입력 */}
           <div className="no-print max-w-[700px] mx-auto mb-10">
             <div className="bg-white rounded-3xl p-6 md:p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)]">
@@ -231,14 +244,7 @@ export default function HoldingTaxCalculator() {
             <PrintHeader title="보유세 예상 계산 결과 (2026 개편안·정부안)" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">연도별 보유세 비교</h4>
-              <div className="flex items-center gap-2">
-                <ShareButton
-                  title="보유세 계산기 (재산세+종부세)"
-                  description="2026 세제개편안 반영 — 현행·'27·'28년 보유세를 한 번에 비교해보세요."
-                  imageUrl="/api/kakao-image?c=holding-tax"
-                />
-                <PrintButton />
-              </div>
+              <PrintButton />
             </div>
             <div className="mx-6 md:mx-8 mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-[12px] text-amber-700 leading-relaxed"><span>⚠️</span><span>2026 세제개편안(정부안) 기준·국회 통과 전이라 확정 시 변동 가능. 참고용이며 세무회계 새벽은 결과에 법적 책임을 지지 않습니다.</span></div>
 
