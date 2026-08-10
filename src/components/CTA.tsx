@@ -178,7 +178,7 @@ export default function CTA() {
           <p className="text-[13px] text-amber-800 leading-[1.6] tracking-tight">
             상속·증여·양도세 및 기타 세무 컨설팅 상담은 유료로 진행됩니다.
             <br />
-            무료 상담은 1차 번호 남겨주시면 세무사가 문자로 먼저 연락드립니다.
+            상담은 1차 번호 남겨주시면 세무사가 문자로 먼저 연락드립니다.
           </p>
         </div>
 
@@ -187,7 +187,7 @@ export default function CTA() {
           href="/contact"
           className="no-underline mt-8 flex items-center justify-center w-full h-14 bg-brand-blue text-white rounded-[14px] text-[16px] font-bold shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-transform tracking-tight"
         >
-          무료 상담 신청하기
+          상담 신청하기
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -309,7 +309,7 @@ export default function CTA() {
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
               />
             </svg>
-            무료 상담 신청하기
+            상담 신청하기
           </a>
           <p className="text-[12.5px] text-text-secondary mb-10 leading-relaxed max-w-[520px]">
             번호를 남겨주시면 구체적인 사안 파악을 위해 세무사가 먼저 문자를 보내드립니다.<br />

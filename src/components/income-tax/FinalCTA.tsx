@@ -150,7 +150,7 @@ export default function FinalCTA() {
           </div>
 
           <div className="text-[13px] text-slate-400 space-y-1">
-            <p>※ 종합소득세 신고대행 문의 상담은 무료입니다.</p>
+            <p>※ 종합소득세 신고대행 관련 문의를 남겨주시면 안내해 드립니다.</p>
             <p>※ 신고 기간에는 문의가 많아 카카오톡·문자로 남겨주시면 신속히 답변드립니다.</p>
           </div>
         </div>

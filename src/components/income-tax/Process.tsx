@@ -6,7 +6,7 @@ type Step = {
 
 const STEPS: Step[] = [
   {
-    title: "무료상담",
+    title: "상담 문의",
     body:
       "카카오톡·전화·이메일 중 편한 방법으로 문의주시면, 신고 유형과 대략적인 수수료를 안내드립니다.",
   },
@@ -43,7 +43,7 @@ type MobileStep = {
 
 const MOBILE_STEPS: MobileStep[] = [
   {
-    title: "무료상담",
+    title: "상담 문의",
     lines: ["카카오톡·전화·이메일로 문의.", "신고 유형과 수수료를 안내드립니다."],
   },
   {

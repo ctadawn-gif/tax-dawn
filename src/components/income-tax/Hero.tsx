@@ -131,7 +131,7 @@ export default function Hero() {
             href="#inquiry-form"
             className="no-underline w-full bg-brand-blue text-white rounded-2xl py-4 text-[16px] font-bold flex items-center justify-center shadow-[0_8px_16px_rgba(0,98,223,0.2)] active:scale-[0.98] transition-transform"
           >
-            무료상담 신청하기
+            상담 신청하기
           </a>
           <a
             href={TALK_URL}
@@ -187,7 +187,7 @@ export default function Hero() {
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
               />
             </svg>
-            무료상담 신청하기
+            상담 신청하기
           </a>
           <a
             href={TALK_URL}
@@ -203,7 +203,7 @@ export default function Hero() {
         </div>
 
         <div className="mt-8 text-[14px] text-text-secondary space-y-1.5">
-          <p>※ 종합소득세 신고대행 문의 상담은 무료입니다.</p>
+          <p>※ 종합소득세 신고대행 관련 문의를 남겨주시면 안내해 드립니다.</p>
           <p>
             ※ 신고 기간에는 문의가 많아{" "}
             <a

@@ -97,7 +97,7 @@ export default function InheritGiftCalculator() {
       <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
         <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">세무회계 새벽</Link>
         <Link href="/contact" className="no-underline px-3 py-1.5 rounded-lg bg-brand-blue text-white text-[12px] font-bold tracking-tight">
-          무료 상담하기 →
+          상담하기 →
         </Link>
       </header>
 
@@ -444,7 +444,7 @@ export default function InheritGiftCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">계산기로 간단하게 확인해보셨다면, 정확한 절세 방법은 세무사와 상담하세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">무료 상담 신청하기</Link>
+              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 사례 보기</a>
             </div>
           </div>

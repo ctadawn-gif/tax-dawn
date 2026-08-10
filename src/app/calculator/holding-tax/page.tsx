@@ -71,7 +71,7 @@ export default function HoldingTaxCalculator() {
 
       <header className="md:hidden sticky top-0 z-50 flex items-center justify-between h-[48px] px-5 bg-white border-b border-slate-100">
         <Link href="/" className="no-underline text-[14px] font-medium text-slate-800 tracking-tight">세무회계 새벽</Link>
-        <Link href="/contact" className="no-underline px-3 py-1.5 rounded-lg bg-brand-blue text-white text-[12px] font-bold tracking-tight">무료 상담하기 →</Link>
+        <Link href="/contact" className="no-underline px-3 py-1.5 rounded-lg bg-brand-blue text-white text-[12px] font-bold tracking-tight">상담하기 →</Link>
       </header>
 
       <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
@@ -419,7 +419,7 @@ export default function HoldingTaxCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">종부세·보유세 절세, 공동명의·세액공제 판단이 궁금하시면 편하게 연락주세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">무료 상담 신청하기</Link>
+              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 보기</a>
             </div>
           </div>

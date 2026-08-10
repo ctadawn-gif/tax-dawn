@@ -7,9 +7,9 @@ import ContactForm from "@/components/income-tax/ContactForm";
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
 
 export const metadata: Metadata = {
-  title: "무료 상담 신청",
+  title: "상담 신청",
   description:
-    "종합소득세, 부가세, 상속·증여세, 양도세, 자금조달 등 세무 업무 전반에 대해 무료 상담을 신청하세요. 대표세무사 2인이 직접 답변드립니다.",
+    "종합소득세, 부가세, 상속·증여세, 양도세, 자금조달 등 세무 업무 전반에 대해 상담을 신청하세요. 대표세무사 2인이 직접 답변드립니다.",
 };
 
 export default function ContactPage() {
@@ -21,7 +21,7 @@ export default function ContactPage() {
         {/* ── Mobile Hero ─────────────────────────── */}
         <section className="md:hidden bg-gradient-to-b from-blue-50/80 via-white to-white pt-12 pb-10 px-5 flex flex-col items-start w-full">
           <div className="inline-flex items-center justify-center bg-blue-50 text-brand-blue rounded-full px-3 py-1.5 text-[13px] font-semibold mb-4 tracking-tight">
-            무료 상담 신청
+            상담 신청
           </div>
           <h1 className="text-[26px] font-extrabold text-slate-900 leading-[1.35] tracking-tight mb-3">
             세무 관련 어떤 문의든
@@ -181,7 +181,7 @@ export default function ContactPage() {
             <p className="text-[14px] font-medium text-amber-800 leading-[1.6] tracking-tight">
               상속·증여·양도세 및 기타 세무 컨설팅 상담은 유료로 진행됩니다.
               <br />
-              무료 상담은 1차 번호 남겨주시면 세무사가 문자로 먼저 연락드립니다.
+              상담은 1차 번호 남겨주시면 세무사가 문자로 먼저 연락드립니다.
             </p>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function ContactPage() {
         {/* ── Desktop Hero (기존 유지) ─────────────────────────── */}
         <section className="hidden md:block pt-24 pb-14 px-5 text-center max-w-[780px] mx-auto">
           <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-5">
-            무료 상담 신청
+            상담 신청
           </span>
           <h1 className="text-[44px] font-extrabold tracking-tight text-text-primary mb-4 leading-tight">
             세무 관련 어떤 문의든 편하게 남겨주세요
