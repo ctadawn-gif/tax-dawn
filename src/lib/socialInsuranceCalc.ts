@@ -4,8 +4,9 @@ import { calcMonthlyIncomeTaxFromTable } from "./incomeTaxTable";
 
 // === 국민연금 ===
 const NPS_RATE = 0.095;
-const NPS_MIN = 400000;
-const NPS_MAX = 6370000;
+// 기준소득월액 상·하한 (2026.7.1~2027.6.30, 보건복지부 고시 — A값 변동률 3.4% 반영)
+const NPS_MIN = 410000;
+const NPS_MAX = 6590000;
 
 // === 건강보험 ===
 const HI_RATE = 0.0719;

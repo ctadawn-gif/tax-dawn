@@ -11,6 +11,7 @@ import {
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 
@@ -439,6 +440,8 @@ export default function InheritGiftCalculator() {
               <li>정확한 세액 산출 및 절세 전략 수립을 위해서는 반드시 세무 전문가와 상담하시기 바랍니다.</li>
             </ul>
           </div>
+
+          <RelatedPosts k="inherit-gift" />
 
           {/* CTA */}
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">

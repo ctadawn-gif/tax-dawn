@@ -1,6 +1,10 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/income-tax/ContactForm";
+import { getVatSeason } from "@/lib/season";
+
+// 다음 신고기(1기 7월 / 2기 1월)와 마감일을 날짜로 자동 계산 (하루 1회 갱신)
+export const revalidate = 86400;
 
 const FEES = [
   { type: "일반과세자", price: "11만원" },
@@ -15,6 +19,7 @@ const INCLUDED = [
 ];
 
 export default function VatPage() {
+  const vat = getVatSeason();
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -23,7 +28,7 @@ export default function VatPage() {
         <section className="relative overflow-hidden border-b border-ui-border bg-gradient-to-b from-blue-50/50 to-white">
           <div className="max-w-[900px] mx-auto px-5 py-16 lg:py-24 text-center">
             <div className="inline-flex items-center gap-2 bg-blue-50 text-brand-blue rounded-full px-3.5 py-1.5 text-[13px] font-bold mb-5 border border-blue-100">
-              2026년 1기 확정신고 · 접수 중
+              {vat.period} · {vat.isOpen ? "접수 중" : "사전 접수 중"}
             </div>
             <h1 className="text-[30px] lg:text-[46px] font-extrabold text-text-primary tracking-tight leading-[1.2]">
               부가가치세 신고,
@@ -31,9 +36,18 @@ export default function VatPage() {
               세무사가 직접 접수합니다
             </h1>
             <p className="mt-5 text-[16px] lg:text-[18px] text-text-secondary leading-relaxed">
-              복잡한 매입·매출, <b className="text-text-primary">대표세무사 2인이 크로스체크</b>로 정확하게.
-              <br className="hidden sm:block" />
-              신고기한 <b className="text-text-primary">7월 25일</b> — 이름·연락처만 남기면 24시간 내 연락드립니다.
+              <span className="sm:hidden">
+                <b className="text-text-primary">대표세무사 2인</b>이 크로스체크합니다.
+                <br />
+                신고기한은 <b className="text-text-primary">{vat.label}</b>.
+                <br />
+                연락처만 남기면 24시간 내 연락.
+              </span>
+              <span className="hidden sm:inline">
+                복잡한 매입·매출, <b className="text-text-primary">대표세무사 2인이 크로스체크</b>로 정확하게.
+                <br />
+                신고기한 <b className="text-text-primary">{vat.label}</b> — 이름·연락처만 남기면 24시간 내 연락드립니다.
+              </span>
             </p>
 
             {/* 요금 카드 */}

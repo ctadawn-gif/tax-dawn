@@ -11,6 +11,7 @@ import {
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const fmtWon = (manwon: number) => Math.round(manwon * 10000).toLocaleString("ko-KR");
 const MODES: YearMode[] = ["2026", "2027", "2028"];
@@ -37,7 +38,7 @@ export default function HoldingTaxCalculator() {
   const n = (v: number | string) => (v === "" ? 0 : Number(v));
 
   // 세부담상한은 연쇄 적용: '26은 입력한 직전연도 보유세×150%,
-  // '27·'28은 앞 연도 계산 결과×200% (calculateHoldingTaxAll 내부 처리)
+  // '27·'28은 앞 연도 계산 결과×150% (calculateHoldingTaxAll 내부 처리)
   const results = useMemo(() => {
     const base: Omit<HoldingTaxInput, "yearMode"> = {
       publicPrice: n(price),
@@ -96,7 +97,7 @@ export default function HoldingTaxCalculator() {
           {/* 정부안 고지 */}
           <div className="no-print max-w-[700px] mx-auto mb-6 flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 p-3.5 text-[13px] text-amber-800 leading-relaxed">
             <span className="text-[15px]">⚠️</span>
-            <p><b>2026 세제개편안(정부안) 기준</b>입니다. 국회 통과 전이라 확정 시 세율·공제 등이 달라질 수 있으며, 결과는 <b>참고용</b>입니다. ‘27·‘28 수치는 개편안이 그대로 시행된다는 가정입니다.</p>
+            <p><b>2026 세제개편안(9/1 국무회의 수정 정부안) 기준</b>입니다. 국회 통과 전이라 확정 시 세율·공제 등이 달라질 수 있으며, 결과는 <b>참고용</b>입니다. ‘27·‘28 수치는 개편안이 그대로 시행된다는 가정입니다.</p>
           </div>
 
           <CalculatorShareBar
@@ -192,7 +193,7 @@ export default function HoldingTaxCalculator() {
                           <button key={l} onClick={() => setIsResident(k)} className={`flex-1 py-2.5 rounded-lg text-[14px] font-bold transition-all ${isResident === k ? "bg-white text-text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]" : "text-text-secondary"}`}>{l}</button>
                         ))}
                       </div>
-                      <p className="mt-1.5 text-[12px] text-text-secondary">개편 후 기본공제: 거주 14억 / 비거주 9억 (현행 12억)</p>
+                      <p className="mt-1.5 text-[12px] text-text-secondary">개편 후 기본공제: 거주 14억 / 비거주 12억 (현행 12억)</p>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                       <div>
@@ -224,7 +225,7 @@ export default function HoldingTaxCalculator() {
                   <div className="relative"><input type="text" inputMode="numeric" value={formatNumberInput(prevTax)} onChange={(e) => setPrevTax(parseNumberInput(e.target.value))} placeholder="0" className={inputCls} /><Suffix t="만원" /></div>
                   <p className="mt-1.5 text-[12px] text-text-secondary leading-relaxed">
                     <b className="text-text-primary">본세 합계 기준</b>(도시지역분·지방교육세·농특세 제외)이며 ‘26년 상한(150%)에 쓰입니다. ‘27·‘28년
-                    상한(200%)은 <b className="text-text-primary">앞 연도 계산 결과로 자동 연쇄 적용</b>됩니다.
+                    상한(150%)은 <b className="text-text-primary">앞 연도 계산 결과로 자동 연쇄 적용</b>됩니다.
                   </p>
                 </div>
               </div>
@@ -285,8 +286,8 @@ export default function HoldingTaxCalculator() {
                     <Row l="종부세 합계" v={detail.jongbuTotal} bold />
                     {detail.burdenCap > 0 && (
                       <p className={`mt-2 text-[11px] font-bold ${detail.burdenCapApplied ? "text-amber-600" : "text-slate-400"}`}>
-                        ※ 세부담상한 {fmtWon(detail.burdenCap)}원 (직전연도 재산세+종부세 본세 ×{" "}
-                        {detailMode === "2026" ? "150%" : "200%"}) — {detail.burdenCapApplied ? "적용" : "미적용"}
+                        ※ 세부담상한 {fmtWon(detail.burdenCap)}원 (직전연도 재산세+종부세 본세 × 150%) —{" "}
+                        {detail.burdenCapApplied ? "적용" : "미적용"}
                       </p>
                     )}
                   </div>
@@ -344,8 +345,8 @@ export default function HoldingTaxCalculator() {
                 {
                   tag: "증세 ↑", tone: "red",
                   t: "공시 15억 · 1주택 비거주",
-                  rows: [["현행", "371만"], ["'28년~", "494만 (+123만)"]],
-                  d: "같은 15억 주택도 안 살면 공제가 9억으로 줄고 거주공제가 사라져, 거주 대비 연 140만원 차이가 납니다.",
+                  rows: [["현행", "371만"], ["'28년~", "408만 (+37만)"]],
+                  d: "공제는 12억 그대로지만 공정시장가액비율 인상·보유공제 폐지로 늘어, 거주 대비 연 54만원 차이가 납니다.",
                 },
               ].map((c) => (
                 <div key={c.t} className="rounded-2xl border border-ui-border bg-white p-5 flex flex-col">
@@ -407,13 +408,16 @@ export default function HoldingTaxCalculator() {
             <h5 className="text-sm font-bold text-text-primary mb-3">알아두세요 (참고사항)</h5>
             <ul className="space-y-2 text-[13px] text-text-secondary leading-relaxed pl-5 list-disc">
               <li><b className="text-text-primary">보유세 = 재산세 + 종합부동산세</b>(농어촌특별세 포함). 종부세는 인별 공시가격 합산 기준입니다.</li>
-              <li><b className="text-text-primary">2026 개편안 핵심:</b> 1세대1주택 기본공제 12억 → 거주 14억/비거주 9억, 공정시장가액비율 60→70(~80)%, 세율 인상, 세액공제 거주 중심 전환·금액한도(‘27 800만·‘28 600만).</li>
+              <li><b className="text-text-primary">2026 개편안 핵심:</b> 1세대1주택 기본공제 12억 → 거주 14억(비거주는 12억 유지), 공정시장가액비율 60→70(~80)%, 세율 인상, 세액공제 거주 중심 전환·금액한도(‘27 800만·‘28 600만).</li>
+              <li><b className="text-text-primary">9/1 국무회의 수정 반영:</b> 원안의 비거주 공제 9억 축소·세부담상한 200% 상향은 철회되어 각각 12억·150%로 계산합니다. 비거주 부부 공동명의는 1인당 6억(합계 12억)입니다.</li>
               <li>재산세는 이번 개편안 대상이 아니며 현행 기준으로 계산합니다(1세대1주택 공정시장가액비율 43~45% 특례 반영).</li>
               <li>다주택·공동명의·상속주택·일시적 2주택 등 특례는 단순화되어 있어 실제와 차이가 클 수 있습니다.</li>
-              <li><b className="text-text-primary">세부담상한:</b> ‘재산세 본세+종부세 본세’ 합계를 직전연도와 비교해 초과분을 <b className="text-text-primary">종부세에서</b> 차감합니다(도시지역분·교육세·농특세 제외). ‘26년은 입력한 직전연도 본세 합계×150%, ‘27년은 ‘26년 계산액×200%, ‘28년은 ‘27년 계산액×200%로 연쇄 적용됩니다(공시가격 동결 가정). 재산세 자체의 상한(전년 대비 105~130%)은 별도 제도로 본 계산기에 반영되지 않습니다.</li>
+              <li><b className="text-text-primary">세부담상한:</b> ‘재산세 본세+종부세 본세’ 합계를 직전연도와 비교해 초과분을 <b className="text-text-primary">종부세에서</b> 차감합니다(도시지역분·교육세·농특세 제외). ‘26년은 입력한 직전연도 본세 합계×150%, ‘27년은 ‘26년 계산액×150%, ‘28년은 ‘27년 계산액×150%로 연쇄 적용됩니다(공시가격 동결 가정). 재산세 자체의 상한(전년 대비 105~130%)은 별도 제도로 본 계산기에 반영되지 않습니다.</li>
               <li>본 결과는 <b className="text-text-primary">국회 통과 전 정부안</b> 기준의 개략적 예상치입니다. 정확한 세액은 반드시 세무 전문가와 상담하세요.</li>
             </ul>
           </div>
+
+          <RelatedPosts k="holding-tax" />
 
           {/* CTA */}
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">

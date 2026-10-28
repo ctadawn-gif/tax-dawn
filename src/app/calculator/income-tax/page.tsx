@@ -16,6 +16,7 @@ import {
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 
@@ -651,14 +652,14 @@ export default function IncomeTaxCalculator() {
             </div>
           </div>
 
-          {/* 신고대행 랜딩 CTA (시즌 한정) */}
+          {/* 신고대행 랜딩 CTA */}
           <a
             href="/income-tax"
             className="group block mb-8 bg-gradient-to-r from-brand-blue to-blue-600 rounded-2xl p-6 md:p-8 shadow-[0_10px_40px_-10px_rgba(0,82,255,0.35)] hover:shadow-[0_15px_50px_-10px_rgba(0,82,255,0.5)] hover:-translate-y-0.5 transition-all no-underline"
           >
             <div className="flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-6">
               <div className="shrink-0 inline-flex items-center gap-2 bg-white/20 backdrop-blur px-3 py-1.5 rounded-full text-white text-[12px] font-bold tracking-wide">
-                🔥 신고기간 한정
+                ✅ 세무사 2인 크로스체크
               </div>
               <div className="flex-1">
                 <h3 className="text-[20px] md:text-[24px] font-extrabold text-white leading-tight mb-1.5">
@@ -701,6 +702,8 @@ export default function IncomeTaxCalculator() {
               <li>종합소득세 신고 시에는 가산세 등 다양한 변수가 적용될 수 있으므로, 정확한 신고를 위해 세무 전문가와 상담하는 것을 권장합니다.</li>
             </ul>
           </div>
+
+          <RelatedPosts k="income-tax" />
 
           {/* CTA */}
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">

@@ -50,8 +50,11 @@ const cases: Case[] = [
   { name: "C1 30억 거주 '27 ", mode: "2027", price: 30, resident: true, age: 70, hold: 10, reside: 10, expJongbu: 200.3, expHolding: 961.7 },
   { name: "C1 30억 거주 '28 ", mode: "2028", price: 30, resident: true, age: 70, hold: 10, reside: 10, expJongbu: 281.3, expHolding: 1042.7 },
   { name: "C2 30억 보유만 현행", mode: "2026", price: 30, resident: false, age: 70, hold: 10, reside: 0, expJongbu: 154.9, expHolding: 916.3 },
-  { name: "C2 30억 보유만 '27 ", mode: "2027", price: 30, resident: false, age: 70, hold: 10, reside: 0, expJongbu: 614.6, expHolding: 1376.0 },
-  { name: "C2 30억 보유만 '28 ", mode: "2028", price: 30, resident: false, age: 70, hold: 10, reside: 0, expJongbu: 1019.1, expHolding: 1780.5 },
+  // C2 '27·'28 — 정부 문답(614.6/1019.1)은 원안(비거주 공제 9억) 기준. 9/1 수정안(12억) 손계산값으로 교체:
+  //   '27 과표 (30−12)억×70%=12.6억 → 산출 1,230 − 재산세공제 226.8 = 1,003.2 × (1−60%) = 401.3 ×1.2 = 481.5
+  //   '28 산출 1,260 − 226.8 = 1,033.2 × (1−40%) = 619.9 ×1.2 = 743.9  (재산세 합계 761.4 동일)
+  { name: "C2 30억 보유만 '27 ", mode: "2027", price: 30, resident: false, age: 70, hold: 10, reside: 0, expJongbu: 481.5, expHolding: 1242.9 },
+  { name: "C2 30억 보유만 '28 ", mode: "2028", price: 30, resident: false, age: 70, hold: 10, reside: 0, expJongbu: 743.9, expHolding: 1505.3 },
   { name: "C3 50억 거주 현행", mode: "2026", price: 50, resident: true, age: 70, hold: 10, reside: 10, expJongbu: 468.9, expHolding: 1788.3 },
   { name: "C3 50억 거주 '27 ", mode: "2027", price: 50, resident: true, age: 70, hold: 10, reside: 10, expJongbu: 1942.1, expHolding: 3261.5 },
   { name: "C3 50억 거주 '28 ", mode: "2028", price: 50, resident: true, age: 70, hold: 10, reside: 10, expJongbu: 3295.7, expHolding: 4615.1 },
@@ -78,7 +81,9 @@ console.log(`통과: ${pass}/${cases.length}`);
 
 /* ── 연쇄(세부담상한) 검증 — 압구정한양2차 공시 58.09억 · 70세 · 10년 거주 ──
    기준: 사용자 제공 정밀 시트(원 단위). 상한 비교는 재산세 본세+종부세 본세 기준.
-   '27에서 상한 차감 9,043,148원 발생, '28은 상한 미적용. 허용오차 ±2만원(만원 반올림). */
+   (원안 200% 시절 정밀 시트와 '27 차감 904.3만까지 일치 확인 → 9/1 수정안 상한 150%로 기대값 재산출)
+   '26 본세 983+510.1=1,493.1 ×150% = 2,240 → '27 종부 본세 1,257 ×1.2 = 1,508.4
+   '27 본세 2,240 ×150% = 3,360 → '28 종부 본세 2,377 ×1.2 = 2,852.4. 허용오차 ±2만원. */
 const apg = calculateHoldingTaxAll({
   publicPrice: 580900,
   household: "single",
@@ -93,8 +98,8 @@ const apg = calculateHoldingTaxAll({
 });
 const apgExp: [YearMode, number, number, boolean][] = [
   ["2026", 612.1, 2157.2, false],
-  ["2027", 2403.3, 3948.4, true],
-  ["2028", 5212.0, 6757.2, false],
+  ["2027", 1508.4, 3054.0, true],
+  ["2028", 2852.4, 4398.0, true],
 ];
 let apgPass = 0;
 console.log("\n압구정 연쇄 사례      | 종부(계산/정답)      | 보유(계산/정답)      | 상한");

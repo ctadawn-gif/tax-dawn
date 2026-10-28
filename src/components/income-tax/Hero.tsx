@@ -4,11 +4,19 @@ import { useState, useEffect } from "react";
 
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
 
-function useDaysUntilDeadline() {
+export interface HeroSeason {
+  deadlineISO: string;
+  label: string; // "5월 31일(월)"
+  fullLabel: string; // "2027년 5월 31일(월)"
+  year: number;
+  isOpen: boolean; // 5월 신고기간 중
+}
+
+function useDaysUntilDeadline(deadlineISO: string) {
   const [days, setDays] = useState<number | null>(null);
 
   useEffect(() => {
-    const deadline = new Date("2026-06-01T23:59:59+09:00");
+    const deadline = new Date(deadlineISO);
     const update = () => {
       const now = new Date();
       const diff = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -17,13 +25,15 @@ function useDaysUntilDeadline() {
     update();
     const timer = setInterval(update, 1000 * 60 * 60);
     return () => clearInterval(timer);
-  }, []);
+  }, [deadlineISO]);
 
   return days;
 }
 
-export default function Hero() {
-  const days = useDaysUntilDeadline();
+export default function Hero({ season }: { season: HeroSeason }) {
+  const days = useDaysUntilDeadline(season.deadlineISO);
+  // 신고기간(5월) 중엔 빨간 D-day, 그 외엔 다음 시즌 사전 접수 안내
+  const urgent = season.isOpen;
 
   return (
     <>
@@ -34,9 +44,15 @@ export default function Hero() {
 
         <div className="relative z-10 px-6 pt-3">
           {/* D-day 뱃지 */}
-          <div className="inline-flex items-center bg-red-50 text-red-500 px-3 py-1.5 rounded-full text-[13px] font-bold mb-4 tracking-tight">
-            🔥 {days !== null ? `D-${days}` : "D-day"} · 6월 1일(월) 신고 마감
-          </div>
+          {urgent ? (
+            <div className="inline-flex items-center bg-red-50 text-red-500 px-3 py-1.5 rounded-full text-[13px] font-bold mb-4 tracking-tight">
+              🔥 {days !== null ? `D-${days}` : "D-day"} · {season.label} 신고 마감
+            </div>
+          ) : (
+            <div className="inline-flex items-center bg-blue-50 text-brand-blue px-3 py-1.5 rounded-full text-[13px] font-bold mb-4 tracking-tight">
+              📅 {season.year}년 5월 신고 · 사전 접수 중
+            </div>
+          )}
 
           {/* 헤드라인 */}
           <h1 className="text-[28px] font-extrabold leading-[1.35] tracking-[-0.03em] mb-3 text-[#191F28]">
@@ -146,10 +162,17 @@ export default function Hero() {
 
       {/* ── Desktop Hero (기존 디자인 유지) ─────────────────────────── */}
       <section className="hidden md:block pt-32 pb-32 px-5 text-center max-w-[900px] mx-auto relative">
-        <div className="inline-flex items-center gap-1.5 bg-red-50 border border-red-100 text-red-600 px-3 py-1 rounded-full text-[14px] font-bold mb-8 shadow-sm animate-pulse">
-          <span>🔥</span>
-          {days !== null ? `D-${days}` : "D-day"} · 2026년 6월 1일 신고 마감
-        </div>
+        {urgent ? (
+          <div className="inline-flex items-center gap-1.5 bg-red-50 border border-red-100 text-red-600 px-3 py-1 rounded-full text-[14px] font-bold mb-8 shadow-sm animate-pulse">
+            <span>🔥</span>
+            {days !== null ? `D-${days}` : "D-day"} · {season.fullLabel} 신고 마감
+          </div>
+        ) : (
+          <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-brand-blue px-3 py-1 rounded-full text-[14px] font-bold mb-8 shadow-sm">
+            <span>📅</span>
+            {season.year}년 5월 종합소득세 · 사전 접수 중 (마감 {season.label})
+          </div>
+        )}
 
         <h1 className="text-[56px] font-extrabold leading-[1.2] tracking-tight mb-6 text-text-primary">
           AI 자동신고가 아닌,

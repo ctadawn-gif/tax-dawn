@@ -3,7 +3,8 @@ const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafu
 export default function IncomeTaxAnnouncementBar() {
   return (
     <div className="bg-brand-navy text-white text-center py-2 px-4 text-[13px] font-medium tracking-tight relative z-20">
-      📱 문자 · 카카오톡으로 문의주시면 가장 빠르게 답변드립니다
+      <span className="md:hidden">문자·톡톡이 가장 빠릅니다</span>
+      <span className="hidden md:inline">📱 문자 · 카카오톡으로 문의주시면 가장 빠르게 답변드립니다</span>
       <a
         href={TALK_URL}
         target="_blank"

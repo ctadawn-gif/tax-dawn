@@ -1,14 +1,18 @@
 import Link from "next/link";
+import { getAnnouncement } from "@/lib/season";
 
+// 시즌별 문구는 src/lib/season.ts getAnnouncement 에서 날짜로 자동 전환
 export default function AnnouncementBar() {
+  const a = getAnnouncement();
   return (
     <div className="no-print bg-brand-navy text-white text-center py-2 px-4 text-[13px] font-medium tracking-tight relative z-20">
-      2026 세제개편안 반영 — 보유세(재산세+종부세) 계산기 신규 오픈
+      {a.text}
+      {a.pcExtra && <span className="hidden md:inline text-white/60">{a.pcExtra}</span>}
       <Link
-        href="/calculator/holding-tax"
+        href={a.href}
         className="text-blue-300 ml-2 no-underline hover:text-blue-200 transition-colors"
       >
-        자세히 보기 →
+        {a.cta}
       </Link>
     </div>
   );

@@ -9,6 +9,21 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    title: "보유세(재산세+종부세) 계산기",
+    href: "/calculator/holding-tax",
+    laws: [
+      "2026년 세제개편안 (2026.8.3 발표 → 9.1 국무회의 수정·확정, 국회 심사 중)",
+      "종합부동산세법 제8조(과세표준), 제9조(세율·세액공제), 제10조(세부담 상한)",
+      "지방세법 제111조(재산세 세율), 제111조의2(1세대1주택 특례)",
+    ],
+    changes: [
+      { label: "비거주 1주택 공제", desc: "원안 9억 축소 철회 → 12억 유지 (실거주는 14억 상향)", tag: "변경" },
+      { label: "세부담 상한", desc: "원안 200% 상향 철회 → 150% 유지 ('27·'28 연쇄 적용)", tag: "변경" },
+      { label: "공정시장가액비율", desc: "종부세 60% → '27 70% → '28 70~80% (강화그룹 80%)" },
+      { label: "세액공제 개편", desc: "고령자+거주기간 중심, 금액한도 '27 800만원·'28 600만원" },
+    ],
+  },
+  {
     title: "종합소득세 계산기",
     href: "/calculator/income-tax",
     laws: [
@@ -92,7 +107,7 @@ const updates = [
       { label: "국민연금 요율 인상", desc: "9% → 9.5% (2026년~)", tag: "변경" },
       { label: "건강보험 요율 인상", desc: "7.09% → 7.19% (2026년~)", tag: "변경" },
       { label: "장기요양보험", desc: "건강보험료의 약 13.14% 적용" },
-      { label: "국민연금 상하한", desc: "기준소득월액 상한 637만원, 하한 40만원 (2025.7~2026.6)" },
+      { label: "국민연금 상하한", desc: "기준소득월액 상한 659만원, 하한 41만원 (2026.7~2027.6)", tag: "변경" },
       { label: "산재보험", desc: "업종별 요율 반영 (10개 업종), 평균 1.47% (2026년 동결)" },
       { label: "비과세 급여", desc: "식대 20만원, 자가운전보조금 20만원, 출산·보육수당 20만원 보수월액 제외 처리" },
       { label: "근로소득 간이세액표", desc: "2026.2.27. 개정 공식 표 lookup (588행), 8~20세 자녀세액공제 자동 차감", tag: "변경" },
@@ -125,7 +140,7 @@ export default function UpdatesPage() {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
             </svg>
-            마지막 업데이트: 2026년 4월
+            마지막 업데이트: 2026년 10월
           </div>
           <h1 className="text-[26px] font-extrabold text-slate-900 leading-[1.3] tracking-tight mb-3">
             계산기 업데이트 내역
@@ -137,7 +152,7 @@ export default function UpdatesPage() {
           </p>
         </section>
 
-        {/* 업데이트 카드 6개 */}
+        {/* 업데이트 카드 */}
         <section className="bg-white px-5 pb-8 flex flex-col gap-4 w-full">
           {updates.map((item, i) => {
             const hasChange = item.changes.some((c) => "tag" in c && c.tag);
@@ -242,7 +257,7 @@ export default function UpdatesPage() {
       <section className="hidden md:block pt-16 pb-12 px-6 text-center max-w-3xl mx-auto relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 border border-blue-100 rounded-full mb-6">
           <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-          <span className="text-sm font-bold text-brand-blue">마지막 업데이트: 2026년 4월</span>
+          <span className="text-sm font-bold text-brand-blue">마지막 업데이트: 2026년 10월</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-6 leading-tight">
           계산기 업데이트 내역

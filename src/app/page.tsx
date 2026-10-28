@@ -8,6 +8,10 @@ import CTA from "@/components/CTA";
 import Location from "@/components/Location";
 import Footer from "@/components/Footer";
 import FadeInOnScroll from "@/components/FadeInOnScroll";
+import BlogSection from "@/components/blog/BlogSection";
+
+// 블로그 섹션(네이버 RSS)을 1시간마다 갱신
+export const revalidate = 3600;
 
 export default function Home() {
   return (
@@ -26,6 +30,9 @@ export default function Home() {
         </FadeInOnScroll>
         <FadeInOnScroll delay={100}>
           <Testimonials />
+        </FadeInOnScroll>
+        <FadeInOnScroll delay={100}>
+          <BlogSection />
         </FadeInOnScroll>
         <FadeInOnScroll delay={100}>
           <CTA />

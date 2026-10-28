@@ -12,6 +12,7 @@ import {
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const fmt = (v: number) => v.toLocaleString("ko-KR");
 
@@ -390,13 +391,15 @@ export default function InsuranceCalculator() {
             <ul className="space-y-2 text-[13px] text-text-secondary leading-relaxed pl-5 list-disc">
               <li>본 계산기는 개략적인 예상 보험료를 산출하기 위한 참고용 도구이며, 실제 부과 금액과 차이가 발생할 수 있습니다.</li>
               <li><strong className="text-text-primary font-bold">비과세 급여</strong>: 식대(월 20만원), 자가운전보조금(월 20만원), 출산·보육수당(자녀 1인당 월 20만원) 등은 4대보험 보수월액에서 제외됩니다. 각 비과세 한도를 초과하는 금액은 과세 대상입니다.</li>
-              <li><strong className="text-text-primary font-bold">국민연금 상하한액</strong>: 기준소득월액 상한액(637만원)과 하한액(40만원)이 적용됩니다. (2025.7.1~2026.6.30 기준)</li>
+              <li><strong className="text-text-primary font-bold">국민연금 상하한액</strong>: 기준소득월액 상한액(659만원)과 하한액(41만원)이 적용됩니다. (2026.7.1~2027.6.30 기준)</li>
               <li><strong className="text-text-primary font-bold">산재보험</strong>: 업종별 요율이 상이하며 사업주가 전액 부담합니다. 본 계산기의 업종 분류는 간략화된 것이므로, 정확한 요율은 근로복지공단에서 확인하시기 바랍니다.</li>
               <li><strong className="text-text-primary font-bold">국민연금 요율 변경</strong>: 2026년부터 국민연금 요율이 기존 9%에서 9.5%로 인상되었습니다.</li>
               <li><strong className="text-text-primary font-bold">소득세 원천징수</strong>: 국세청 <strong>근로소득 간이세액표 (2026.2.27. 개정, 소득세법 시행령 별표 2)</strong> 기준 100%로 계산됩니다. 실제 원천징수는 80%·100%·120% 중 선택 가능하며, 연말정산 시 최종 정산됩니다. 8세~20세 자녀가 있는 경우 자녀세액공제(1명 20,830원/2명 45,830원/3명+ 추가 33,330원)가 추가 차감됩니다.</li>
               <li>정확한 4대보험료 산출 및 세무/노무 관련 상담은 반드시 전문가와 상담하시기 바랍니다.</li>
             </ul>
           </div>
+
+          <RelatedPosts k="insurance" />
 
           {/* CTA */}
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">

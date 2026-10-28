@@ -5,6 +5,7 @@ import Link from "next/link";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 const num = (v: string | number) =>
@@ -431,6 +432,8 @@ export default function VehicleCalculator() {
             <li>실제 신고 시 개별 계약 조건과 보유 기간에 따라 달라질 수 있습니다</li>
           </ul>
         </div>
+
+        <RelatedPosts k="vehicle" />
 
         {/* CTA */}
         <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center mb-8">

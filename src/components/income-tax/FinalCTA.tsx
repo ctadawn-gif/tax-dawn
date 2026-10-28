@@ -1,6 +1,6 @@
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
 
-export default function FinalCTA() {
+export default function FinalCTA({ deadlineLabel }: { deadlineLabel: string }) {
   return (
     <>
       <div id="contact" className="scroll-mt-16" />
@@ -19,9 +19,9 @@ export default function FinalCTA() {
               받아보세요.
             </h2>
             <p className="text-[15px] font-medium text-blue-200 leading-[1.5] tracking-tight">
-              신고기간은 6월 1일(월)까지.
+              신고기간은 {deadlineLabel}까지.
               <br />
-              문의는 모두 무료입니다.
+              문자·톡톡이 가장 빠릅니다.
             </p>
           </div>
 
@@ -102,9 +102,9 @@ export default function FinalCTA() {
             받아보세요.
           </h2>
           <p className="text-[18px] md:text-[20px] text-blue-200 font-medium mb-12 leading-relaxed">
-            신고기간은 6월 1일(월)까지입니다.
+            신고기간은 {deadlineLabel}까지입니다.
             <br />
-            문의는 무료이며, 문자나 카카오톡으로 남겨주시면 가장 빠릅니다.
+            문자나 카카오톡으로 남겨주시면 가장 빠릅니다.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">

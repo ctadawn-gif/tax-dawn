@@ -13,13 +13,18 @@ import FAQ from "@/components/income-tax/FAQ";
 import IncomeTaxTestimonials from "@/components/income-tax/IncomeTaxTestimonials";
 import ContactForm from "@/components/income-tax/ContactForm";
 import FinalCTA from "@/components/income-tax/FinalCTA";
+import { getIncomeTaxSeason } from "@/lib/season";
+
+// 마감일·시즌 문구를 날짜 기준으로 자동 갱신 (하루 1회)
+export const revalidate = 86400;
+
+const season = getIncomeTaxSeason();
 
 export const metadata: Metadata = {
-  title: "2026년 종합소득세 신고대행 · 세무사 2인 크로스체크",
-  description:
-    "AI 자동신고 말고, 대표세무사 2인이 직접 검토합니다. 매년 500건 이상 정확한 신고. 6월 1일 마감.",
+  title: `${season.year}년 종합소득세 신고대행 · 세무사 2인 크로스체크`,
+  description: `AI 자동신고 말고, 대표세무사 2인이 직접 검토합니다. 매년 500건 이상 정확한 신고. ${season.label} 마감.`,
   openGraph: {
-    title: "2026년 종합소득세 신고대행 | 세무회계 새벽",
+    title: `${season.year}년 종합소득세 신고대행 | 세무회계 새벽`,
     description:
       "AI 자동신고 말고, 대표세무사 2인이 직접 검토합니다. 매년 500건 이상 정확한 신고.",
     type: "website",
@@ -29,12 +34,21 @@ export const metadata: Metadata = {
 };
 
 export default function IncomeTaxPage() {
+  const s = getIncomeTaxSeason();
   return (
     <>
       <IncomeTaxAnnouncementBar />
       <Navbar />
       <main>
-        <Hero />
+        <Hero
+          season={{
+            deadlineISO: s.deadline.toISOString(),
+            label: s.label,
+            fullLabel: s.fullLabel,
+            year: s.year,
+            isOpen: s.isOpen,
+          }}
+        />
         <Differentiators />
         <TrustBadges />
         <FeeTable />
@@ -44,7 +58,7 @@ export default function IncomeTaxPage() {
         <FAQ />
         <IncomeTaxTestimonials />
         <ContactForm />
-        <FinalCTA />
+        <FinalCTA deadlineLabel={s.label} />
       </main>
       <Footer />
     </>

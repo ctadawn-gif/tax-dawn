@@ -1,40 +1,45 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { getNavPromo, type NavPromo } from "@/lib/season";
 
-const navLinks = [
+const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "계산기", href: "/#calculators" },
   { label: "자료실", href: "/resources" },
   { label: "상담 안내", href: "/#contact" },
   { label: "오시는 길", href: "/#location" },
-  { label: "블로그", href: "https://blog.naver.com/tax_dawn", external: true },
+  { label: "블로그", href: "/blog" },
 ];
+
+const noopSubscribe = () => () => {};
 
 const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
 
-// 시즌 프로모션 배너 — 현재 부가가치세 신고접수(7월) 노출 중.
-// 시즌 종료 시 false 로 내리고, 다음 시즌엔 아래 배지·문구·링크(/vat 등)를 함께 수정하세요.
-const SHOW_SEASONAL_PROMO = true;
+// 시즌 프로모션 버튼 — 날짜에 따라 자동 전환 (src/lib/season.ts getNavPromo)
+//   4.15~6.1 종소세 / 6.15~7.26·12.16~1.26 부가세 / 10.15~12.15 종부세 계산기 / 그 외 숨김
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // 정적 페이지라 빌드 시점이 아닌 "지금" 날짜로 정하려고 클라이언트에서 계산 (서버 렌더는 숨김)
+  const promoKey = useSyncExternalStore(noopSubscribe, () => JSON.stringify(getNavPromo()), () => "null");
+  const promo = JSON.parse(promoKey) as NavPromo | null;
 
   return (
-    <nav className="flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto w-full bg-white relative z-20">
+    <nav className="flex justify-between items-center gap-4 px-6 lg:px-10 xl:px-20 py-5 max-w-[1440px] mx-auto w-full bg-white relative z-20">
       <Link href="/" className="no-underline">
-        <img src="/logo.png" alt="세무회계 새벽" className="h-12 md:h-14 w-auto" />
+        <img src="/logo.png" alt="세무회계 새벽" className="h-12 md:h-14 w-auto shrink-0" />
       </Link>
 
-      <ul className="hidden lg:flex gap-8 list-none m-0 p-0">
+      <ul className="hidden lg:flex gap-6 xl:gap-8 list-none m-0 p-0">
         {navLinks.map((link) => (
           <li key={link.label}>
             <a
               href={link.href}
               target={link.external ? "_blank" : undefined}
               rel={link.external ? "noopener noreferrer" : undefined}
-              className="text-text-secondary text-sm font-medium hover:text-brand-blue transition-colors"
+              className="text-text-secondary text-sm font-medium hover:text-brand-blue transition-colors whitespace-nowrap"
             >
               {link.label}
             </a>
@@ -42,10 +47,10 @@ export default function Navbar() {
         ))}
       </ul>
 
-      <div className="hidden lg:flex items-center gap-2">
-        {SHOW_SEASONAL_PROMO && (
+      <div className="hidden lg:flex items-center gap-2 shrink-0 whitespace-nowrap">
+        {promo && (
           <Link
-            href="/vat"
+            href={promo.href}
             className="relative px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 hover:-translate-y-0.5 transition-transform flex items-center gap-1.5 no-underline animate-glow-pulse"
           >
             {/* 알림 핑 닷 */}
@@ -54,9 +59,9 @@ export default function Navbar() {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
             </span>
             <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
-              7월
+              {promo.badge}
             </span>
-            부가가치세 신고접수
+            {promo.label}
           </Link>
         )}
         <Link
@@ -72,7 +77,7 @@ export default function Navbar() {
           href={TALK_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2"
+          className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 hidden xl:flex items-center gap-2"
         >
           <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>
           톡톡 문의하기
@@ -107,9 +112,9 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          {SHOW_SEASONAL_PROMO && (
+          {promo && (
             <Link
-              href="/vat"
+              href={promo.href}
               onClick={() => setMenuOpen(false)}
               className="relative px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-1.5 no-underline"
             >
@@ -118,9 +123,9 @@ export default function Navbar() {
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
               </span>
               <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
-                7월
+                {promo.badge}
               </span>
-              부가가치세 신고접수
+              {promo.label}
             </Link>
           )}
           <Link
