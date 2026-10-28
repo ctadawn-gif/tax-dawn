@@ -20,6 +20,8 @@ export interface ScheduleMeta {
   monthlyPrincipal: number;
   lenderName?: string;
   borrowerName?: string;
+  repayDay?: number;
+  interestDay?: number;
 }
 
 export default function RepaymentSchedule({

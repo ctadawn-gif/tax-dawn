@@ -888,6 +888,8 @@ export default function LoanAgreementPage() {
                 monthlyPrincipal: mAmt,
                 lenderName: nameA,
                 borrowerName: nameB,
+                repayDay: Number(repayDay) || 0,
+                interestDay: Number(intDay) || 0,
               }}
               onPrint={() => window.print()}
               onEditTerms={() => setTab("contract")}
