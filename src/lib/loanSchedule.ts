@@ -66,8 +66,15 @@ export interface ScheduleResult {
   /** 연도별 세전 이자 — 채권자(갑) 금융소득 종합과세(2천만원) 판단용 */
   byYear: { year: number; interest: number }[];
   warnings: string[];
-  /** 만기 회차에서 일시 상환된 원금 (분할상환 미완납분). 0이면 기간 내 완납 */
+  /** 만기 회차 원금 상환액 (분할상환에서 만기 행이 있을 때). 0이면 만기 전 완납 */
   balloonAtMaturity: number;
+  /** 만기 회차 상환액 중 '월 상환액 1회분'을 넘는 초과분 — 0이면 월 상환액으로 만기에 딱 맞게 끝남 */
+  balloonExcess: number;
+  /** 분할상환 원금 납부 슬롯 수 (매월 상환일 + 만기). 권장 월상환액 = 원금 ÷ 슬롯 */
+  installmentSlots: number;
+  /** 만기 전 일반 회차 수·합계 (만기 행 제외) */
+  scheduledInstallments: number;
+  installmentTotal: number;
 }
 
 /* ────────────── 날짜 헬퍼 (UTC 기준 — 타임존 영향 제거) ────────────── */
@@ -148,6 +155,10 @@ export function buildSchedule(input: ScheduleInput): ScheduleResult {
     byYear: [],
     warnings: [],
     balloonAtMaturity: 0,
+    balloonExcess: 0,
+    installmentSlots: 0,
+    scheduledInstallments: 0,
+    installmentTotal: 0,
   };
   const P = Math.floor(input.principal || 0);
   const r = input.annualRate > 0 ? input.annualRate : 0;
@@ -158,14 +169,17 @@ export function buildSchedule(input: ScheduleInput): ScheduleResult {
 
   const clampDay = (d: number, fallback: number) => (d >= 1 && d <= 31 ? Math.floor(d) : fallback);
   const loanDay = new Date(start).getUTCDate();
-  const installment = input.repayType === "installment" && input.monthlyPrincipal > 0;
+  const installmentMode = input.repayType === "installment";
+  const installment = installmentMode && input.monthlyPrincipal > 0;
   const repayDay = clampDay(input.repayDay, loanDay);
   // 이자 지급일 미입력 시: 분할상환이면 상환일과 같은 날, 일시상환이면 차용일과 같은 날
   const interestDay = clampDay(input.interestDay, installment ? repayDay : loanDay);
 
   // 이벤트 날짜 수집
   const interestDates = r > 0 ? new Set(monthlyDates(start, end, interestDay)) : new Set<number>();
-  const principalDates = installment ? new Set(monthlyDates(start, end, repayDay)) : new Set<number>();
+  // 상환일 집합은 금액 미입력(0)이어도 만들어 슬롯 수를 알 수 있게 한다 (금액 0이면 원금 행은 생기지 않음)
+  const principalDates = installmentMode ? new Set(monthlyDates(start, end, repayDay)) : new Set<number>();
+  const installmentSlots = installmentMode ? principalDates.size + 1 : 0; // +1 = 만기
   const allDates = [...new Set([...interestDates, ...principalDates, end])].sort((a, b) => a - b);
 
   const rows: ScheduleRow[] = [];
@@ -245,14 +259,20 @@ export function buildSchedule(input: ScheduleInput): ScheduleResult {
 
   const last = rows[rows.length - 1];
   const balloonAtMaturity = installment && last?.isMaturity ? last.principal : 0;
+  const balloonExcess = Math.max(0, balloonAtMaturity - Math.floor(input.monthlyPrincipal));
+  const regular = rows.filter((x) => x.principal > 0 && !x.isMaturity);
+  const scheduledInstallments = installment ? regular.length : 0;
+  const installmentTotal = installment ? regular.reduce((a, x) => a + x.principal, 0) : 0;
 
   const warnings: string[] = [];
-  if (installment && balloonAtMaturity > 0)
-    warnings.push(`월 상환액으로는 만기까지 다 갚지 못해 변제기일에 ${balloonAtMaturity.toLocaleString("ko-KR")}원을 일시 상환하는 것으로 잡았습니다.`);
+  if (installment && balloonExcess > 0)
+    warnings.push(
+      `월 상환액으로는 만기까지 다 갚지 못해 만기(${last.no}회차)에 ${balloonAtMaturity.toLocaleString("ko-KR")}원을 일시 상환하는 것으로 잡았습니다.`
+    );
   if (r > 0 && byYear.some((y) => y.interest > 20_000_000))
     warnings.push("한 해 이자가 2,000만원을 넘는 연도가 있습니다. 채권자(갑)는 다른 금융소득과 합산해 종합과세 대상이 될 수 있습니다.");
 
-  return { rows, totals, byYear, warnings, balloonAtMaturity };
+  return { rows, totals, byYear, warnings, balloonAtMaturity, balloonExcess, installmentSlots, scheduledInstallments, installmentTotal };
 }
 
 /** 스케줄표 CSV (엑셀에서 바로 열림 — UTF-8 BOM) */

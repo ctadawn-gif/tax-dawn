@@ -119,5 +119,19 @@ const base: ScheduleInput = {
   ok("6-2월 31일 거부", buildSchedule({ ...base, loanDate: "2026-02-31" }).rows.length === 0);
 }
 
+// 7. 만기 회차와 상환일이 겹치는 경우 — 3억·10년·월 100만: 119회 + 만기(120회차) 181,000,000
+{
+  const inp: ScheduleInput = { principal: 300_000_000, annualRate: 0, loanDate: "2026-10-25", dueDate: "2036-10-25", repayType: "installment", monthlyPrincipal: 1_000_000, repayDay: 25, interestDay: 0 };
+  const s = buildSchedule(inp);
+  const last = s.rows[s.rows.length - 1];
+  ok("7-120회차(만기) 181,000,000", s.rows.length === 120 && last.isMaturity && last.principal === 181_000_000, `${s.rows.length} ${last.principal}`);
+  ok("7-일반 회차 119회 × 100만 = 119,000,000", s.scheduledInstallments === 119 && s.installmentTotal === 119_000_000, `${s.scheduledInstallments} ${s.installmentTotal}`);
+  ok("7-초과분 180,000,000·슬롯 120·경고 1", s.balloonExcess === 180_000_000 && s.installmentSlots === 120 && s.warnings.length === 1, `${s.balloonExcess} ${s.installmentSlots} ${s.warnings[0]}`);
+  const s2 = buildSchedule({ ...inp, monthlyPrincipal: 2_500_000 });
+  const l2 = s2.rows[s2.rows.length - 1];
+  ok("7-250만이면 120회차 2,500,000으로 완납·초과분 0·경고 없음", s2.rows.length === 120 && l2.principal === 2_500_000 && l2.balance === 0 && s2.balloonExcess === 0 && s2.warnings.length === 0, `${l2.principal} ${s2.balloonExcess} ${s2.warnings.length}`);
+  ok("7-권장 월상환액 = 원금 ÷ 슬롯 = 2,500,000", Math.ceil(inp.principal / s.installmentSlots) === 2_500_000);
+}
+
 console.log(`\n통과 ${pass} / 실패 ${fail}`);
 process.exit(fail ? 1 : 0);
