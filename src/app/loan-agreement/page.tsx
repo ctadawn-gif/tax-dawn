@@ -512,8 +512,21 @@ export default function LoanAgreementPage() {
                   {r > 0 && (
                     <div className="pt-2 border-t border-ui-border text-[12px] text-text-secondary leading-relaxed">
                       <Ph>이자를 받으면</Ph> <Ph>빌려준 사람(갑)에게</Ph>{" "}
-                      <b className="text-text-primary whitespace-nowrap">연간 이자소득세 약 {won(calc.lenderTax)}원</b>{" "}
-                      <Ph>(27.5% 원천징수)이 생깁니다.</Ph> <br />
+                      {installmentActive && calc.gift.firstYear ? (
+                        // 매월 분할상환: 스케줄표 1년차 회차들의 (소득세 + 지방소득세) 합 — 위 "첫해 기준" 줄과 같은 기준
+                        <>
+                          <b className="text-text-primary whitespace-nowrap">
+                            첫해 이자소득세 약 {won(calc.gift.firstYear.tax)}원
+                          </b>{" "}
+                          <Ph>(27.5% 원천징수,</Ph> <Ph>매달 원금을 갚아</Ph> <Ph>이자가 줄어든 기준)이 생깁니다.</Ph>
+                        </>
+                      ) : (
+                        <>
+                          <b className="text-text-primary whitespace-nowrap">연간 이자소득세 약 {won(calc.lenderTax)}원</b>{" "}
+                          <Ph>(27.5% 원천징수)이 생깁니다.</Ph>
+                        </>
+                      )}{" "}
+                      <br />
                       👉 보통 <b className="text-text-primary whitespace-nowrap">최소 안전 이자율</b>에 <Ph>맞추는 것이</Ph>{" "}
                       <Ph>증여세·이자소득세</Ph> <Ph>균형점입니다.</Ph>
                       {installmentActive && (

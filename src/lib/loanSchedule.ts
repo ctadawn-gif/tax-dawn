@@ -316,6 +316,7 @@ export interface GiftYear {
   startBalance: number; // 그해 시작 잔액
   adequate: number; // 적정이자 = 시작 잔액 × 4.6% (마지막 해가 1년 미만이면 일수 비례)
   actual: number; // 그해 지급 이자(세전) 합
+  tax: number; // 그해 원천징수 합 (소득세 + 지방소득세, 회차별 10원 절사 그대로 합산)
   diff: number; // 증여 의제 차액
   safe: boolean; // 차액 < 1,000만원
   /** Σ(잔액 × 일수 ÷ 365) — 이자율 역산용 */
@@ -371,12 +372,17 @@ export function giftCheck(
     }
     const factor = full ? 1 : (to - from) / DAY_MS / DAYS_PER_YEAR;
     const adequate = Math.round(startBalance * GIFT_ADEQUATE_RATE * factor);
-    const actual = res.rows.reduce((a, x) => {
+    let actual = 0;
+    let tax = 0;
+    for (const x of res.rows) {
       const t = parse(x.date)!;
-      return t > from && t <= to ? a + x.interest : a;
-    }, 0);
+      if (t > from && t <= to) {
+        actual += x.interest;
+        tax += x.incomeTax + x.localTax;
+      }
+    }
     const diff = adequate - actual;
-    years.push({ no: k, from: fmt(from), to: fmt(to), startBalance, adequate, actual, diff, safe: diff < GIFT_THRESHOLD, balanceYears });
+    years.push({ no: k, from: fmt(from), to: fmt(to), startBalance, adequate, actual, tax, diff, safe: diff < GIFT_THRESHOLD, balanceYears });
   }
 
   const firstYear = years[0] ?? null;

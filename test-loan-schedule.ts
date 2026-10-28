@@ -140,6 +140,7 @@ const base: ScheduleInput = {
   ok("8-1.3%·100만: 첫해 실제 이자 3,828,483", g1.firstYear?.actual === 3_828_483, `${g1.firstYear?.actual}`);
   ok("8-1.3%·100만: 차액 9,971,517 ✅", g1.firstYear?.diff === 9_971_517 && g1.firstYear.safe, `${g1.firstYear?.diff}`);
   ok("8-1.3%·100만: 최소 안전 이자율 1.30%", g1.firstYearMinSafeRate === 0.013, `${g1.firstYearMinSafeRate}`);
+  ok("8-1.3%·100만: 첫해 이자소득세(원천징수 합) 1,052,700", g1.firstYear?.tax === 1_052_700, `${g1.firstYear?.tax}`);
   ok("8-연도별: 1년차 9,971,517 · 2년차 9,565,402 · 3년차 9,179,518", g1.years[1]?.diff === 9_565_402 && g1.years[2]?.diff === 9_179_518, `${g1.years.slice(0, 3).map((y) => y.diff).join(" ")}`);
   ok("8-10년치·마지막 해도 1년", g1.years.length === 10 && g1.years[9].to === "2036-10-25", `${g1.years.length} ${g1.years[9]?.to}`);
   const b2 = { ...base, annualRate: 0.0127 };
