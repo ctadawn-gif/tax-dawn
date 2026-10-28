@@ -122,8 +122,8 @@ export default function LoanAgreementPage() {
   const [idB, setIdB] = useState("");
   const [telB, setTelB] = useState("");
   const [addrB, setAddrB] = useState("");
-  // 작성일 (하이드레이션 안전하게 클라이언트에서 오늘 날짜 채움)
-  const [writeDate, setWriteDate] = useState("");
+  // 작성일 — 기본값 오늘, 입력란에서 수정 가능. null = 아직 초기화 전(하이드레이션 안전하게 클라이언트에서 채움)
+  const [writeDate, setWriteDate] = useState<string | null>(null);
   useEffect(() => {
     const t = new Date();
     const p = (n: number) => String(n).padStart(2, "0");
@@ -619,6 +619,14 @@ export default function LoanAgreementPage() {
                 당사자 인적사항{" "}
                 <span className="text-slate-400 font-medium text-[13px]">(선택 — 비우면 손글씨)</span>
               </h2>
+              {/* 작성일: 오늘이 기본값. 미리 써두거나 뒤늦게 쓰는 경우 직접 수정 */}
+              {writeDate !== null && (
+                <div className="mb-4">
+                  <Field label="작성일 (계약서에 찍히는 날짜)" hint="기본값 오늘 · 비우면 손글씨">
+                    <DateInput value={writeDate} onChange={setWriteDate} />
+                  </Field>
+                </div>
+              )}
               <div className="mb-4 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-100 p-2.5">
                 <span className="text-[14px]">🔒</span>
                 <p className="text-[12px] text-amber-800 leading-snug">
@@ -799,7 +807,7 @@ export default function LoanAgreementPage() {
 
                 {/* 작성일 */}
                 <p className="text-center font-semibold mb-5">
-                  <Fill value={dateKo(writeDate)} w="160px" />
+                  <Fill value={dateKo(writeDate ?? "")} w="160px" />
                 </p>
 
                 {/* 서명란 */}
