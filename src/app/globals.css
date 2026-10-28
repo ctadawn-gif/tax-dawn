@@ -136,4 +136,22 @@ body {
   .print-a4[data-dense] table { margin-bottom: 8pt !important; }
   .print-a4[data-dense] th,
   .print-a4[data-dense] td { padding: 3.5pt 8pt !important; }
+
+  /* ── 상환 스케줄표 인쇄 (차용증 페이지, data-print="schedule" 일 때만) ──
+     기본 인쇄는 계약서만, 스케줄표 버튼으로 인쇄하면 표만 나온다. */
+  .print-schedule { display: none !important; }
+  [data-print="schedule"] .print-contract { display: none !important; }
+  [data-print="schedule"] .print-schedule { display: block !important; margin-top: 0 !important; }
+  /* 표는 화면에서 md 이상에서만 보이는데(hidden md:block), A4 인쇄폭(≈703px)은 md 미만이라 강제 표시 */
+  .print-schedule .print-table { display: block !important; border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
+  .print-schedule .print-table > div { overflow: visible !important; }
+  .print-schedule table { font-size: 9pt !important; break-inside: auto; }
+  .print-schedule thead { display: table-header-group; }
+  .print-schedule tfoot { display: table-row-group; } /* 합계는 마지막에 한 번만 (기본값이면 매 쪽 반복) */
+  .print-schedule tr { break-inside: avoid; }
+  .print-schedule th,
+  .print-schedule td { padding: 3.5pt 5pt !important; }
+  .print-schedule .print-summary { grid-template-columns: repeat(4, 1fr) !important; gap: 6pt !important; margin-bottom: 10pt !important; }
+  .print-schedule .print-summary > div { padding: 7pt 9pt !important; border-radius: 6pt !important; }
+  .print-schedule .print-notes { font-size: 8.5pt !important; margin-top: 10pt !important; break-inside: avoid; }
 }

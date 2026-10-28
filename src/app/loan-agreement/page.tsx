@@ -19,6 +19,8 @@ import {
   GIFT_THRESHOLD,
   INTEREST_FREE_LIMIT,
 } from "@/lib/loanCalc";
+import { buildSchedule } from "@/lib/loanSchedule";
+import RepaymentSchedule from "@/components/loan/RepaymentSchedule";
 
 // 관련 블로그 글 — 실제 링크·썸네일을 받으면 교체.
 // thumb: /public/blog/ 에 넣은 이미지 경로(예: "/blog/loan-1.jpg") 또는 이미지 URL. 비우면 자리표시.
@@ -105,6 +107,12 @@ export default function LoanAgreementPage() {
   const [extra, setExtra] = useState("");
   // 면책 동의 모달 (첫 진입 시 표시)
   const [agreed, setAgreed] = useState(false);
+  // 인쇄 대상: 계약서 / 상환 스케줄표 (globals.css [data-print] 규칙으로 분기)
+  const [printTarget, setPrintTarget] = useState<"contract" | "schedule">("contract");
+  const printTargetRef = useRef(printTarget);
+  useEffect(() => {
+    printTargetRef.current = printTarget;
+  }, [printTarget]);
   // 인적사항(선택)
   const [nameA, setNameA] = useState("");
   const [idA, setIdA] = useState("");
@@ -126,10 +134,11 @@ export default function LoanAgreementPage() {
   useEffect(() => {
     const orig = document.title;
     const before = () => {
-      document.title = "금전소비대차계약서";
+      document.title = printTargetRef.current === "schedule" ? "상환스케줄표" : "금전소비대차계약서";
     };
     const after = () => {
       document.title = orig;
+      setPrintTarget("contract");
     };
     window.addEventListener("beforeprint", before);
     window.addEventListener("afterprint", after);
@@ -138,6 +147,13 @@ export default function LoanAgreementPage() {
       window.removeEventListener("afterprint", after);
     };
   }, []);
+
+  // 스케줄표 인쇄: 상태가 DOM에 반영된 다음 프레임에 인쇄창 호출
+  useEffect(() => {
+    if (printTarget !== "schedule") return;
+    const id = requestAnimationFrame(() => window.print());
+    return () => cancelAnimationFrame(id);
+  }, [printTarget]);
 
   const amt = Number(amount) || 0;
   const r = (parseFloat(rate) || 0) / 100;
@@ -152,11 +168,21 @@ export default function LoanAgreementPage() {
     const months = monthsBetween(loanDate, dueDate);
     const repay = checkRepayment(amt, mAmt, months);
     const gauge = Math.min(100, GIFT_THRESHOLD ? (benefit / GIFT_THRESHOLD) * 100 : 0);
-    return { korean, benefit, safe, minR, lenderTax, months, repay, gauge };
-  }, [amt, r, mAmt, loanDate, dueDate]);
+    const schedule = buildSchedule({
+      principal: amt,
+      annualRate: r,
+      loanDate,
+      dueDate,
+      repayType,
+      monthlyPrincipal: mAmt,
+      repayDay: Number(repayDay) || 0,
+      interestDay: Number(intDay) || 0,
+    });
+    return { korean, benefit, safe, minR, lenderTax, months, repay, gauge, schedule };
+  }, [amt, r, mAmt, loanDate, dueDate, repayType, repayDay, intDay]);
 
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-white relative" data-print={printTarget}>
       <Navbar />
 
       {/* 면책 고지 모달 (첫 진입) */}
@@ -634,7 +660,7 @@ export default function LoanAgreementPage() {
           </section>
 
           {/* ───────────── 실시간 미리보기 ───────────── */}
-          <section className="lg:sticky lg:top-6">
+          <section className="print-contract lg:sticky lg:top-6">
             <div className="no-print mb-3">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-bold text-text-secondary">실시간 미리보기</span>
@@ -820,6 +846,24 @@ export default function LoanAgreementPage() {
             </div>
           </section>
         </div>
+
+        {/* ───────────── 상환 스케줄표 (이자가 있거나 분할상환일 때) ───────────── */}
+        {amt > 0 && loanDate && dueDate && (r > 0 || (repayType === "installment" && mAmt > 0)) && (
+          <RepaymentSchedule
+            result={calc.schedule}
+            meta={{
+              principal: amt,
+              annualRate: r,
+              loanDate,
+              dueDate,
+              repayType,
+              monthlyPrincipal: mAmt,
+              lenderName: nameA,
+              borrowerName: nameB,
+            }}
+            onPrint={() => setPrintTarget("schedule")}
+          />
+        )}
 
         {/* ───────────── 관련 블로그(썸네일 카드) + 상담 ───────────── */}
         <section className="no-print mt-12">
