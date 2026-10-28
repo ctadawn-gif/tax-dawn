@@ -3,7 +3,7 @@
 // 차용증 상환 스케줄표 탭 — 핵심 숫자 4개 → 세금 계산 예시 → 회차표 → 당사자별 할 일 → 계산 기준
 // (화면 + 엑셀 다운로드 + 별도 인쇄. 인쇄 규칙은 globals.css .print-schedule)
 import { useState } from "react";
-import { scheduleToCsv, type ScheduleResult, type RepayType, type ScheduleRow } from "@/lib/loanSchedule";
+import { scheduleToCsv, type ScheduleResult, type RepayType, type ScheduleRow, type GiftYear } from "@/lib/loanSchedule";
 import { downloadScheduleXlsx } from "@/lib/loanScheduleXlsx";
 import { ratePct } from "@/lib/loanCalc";
 
@@ -29,11 +29,14 @@ export default function RepaymentSchedule({
   meta,
   onPrint,
   onEditTerms,
+  giftYears = [],
 }: {
   result: ScheduleResult;
   meta: ScheduleMeta;
   onPrint: () => void;
   onEditTerms: () => void;
+  /** 연도별 증여 의제 차액 (상증법 §41조의4) */
+  giftYears?: GiftYear[];
 }) {
   const { rows, totals, byYear, warnings } = result;
   const hasInterest = meta.annualRate > 0;
@@ -350,6 +353,12 @@ export default function RepaymentSchedule({
                 )}
               </li>
               <li>세후로 받은 이자도 종합과세 시 기납부세액으로 정산됩니다</li>
+              {giftYears.length > 0 && (
+                <li>
+                  연도별 증여 의제 차액: <GiftYearsInline years={giftYears} />
+                  <span className="block mt-0.5 text-slate-400">(각 해 시작 잔액 × 4.6% − 그해 이자 · 1,000만원 이상이면 빨간색)</span>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -359,7 +368,8 @@ export default function RepaymentSchedule({
       <div className="mt-4 print-notes text-[12px] text-slate-500 leading-relaxed">
         <p>
           <b className="text-slate-600">계산 기준</b> · 이자 = 상환 후 잔액 × 연 이자율 × 일수 ÷ 365 (달마다 28~31일이라 회차별 이자가 조금씩 다름) · 지급일이
-          그 달에 없으면 말일 · 세액은 10원 미만 절사 · 중도상환·연체·이자율 변경 미반영 · 참고용
+          그 달에 없으면 말일 · 세액은 10원 미만 절사 · 중도상환·연체·이자율 변경 미반영 · 참고용 · 증여세 안전 체크는 상증법 제41조의4(대출일 기준 ·
+          1년마다 그해 잔액으로 재계산)에 따라 계산한 참고용 값입니다.
         </p>
       </div>
     </div>
@@ -367,6 +377,31 @@ export default function RepaymentSchedule({
 }
 
 /* ───────── 작은 부품 ───────── */
+
+/** 연도별 증여 의제 차액 — 앞 5년·마지막 해·과세(1천만원 이상) 연도는 항상 보이고 사이는 … 로 생략 */
+function GiftYearsInline({ years }: { years: GiftYear[] }) {
+  const keep = new Set<number>();
+  years.forEach((y, i) => {
+    if (i < 5 || i === years.length - 1 || !y.safe) keep.add(i);
+  });
+  const idx = [...keep].sort((a, b) => a - b);
+  return (
+    <span className="tabular-nums">
+      {idx.map((i, k) => {
+        const y = years[i];
+        const gap = k > 0 && i - idx[k - 1] > 1;
+        return (
+          <span key={y.no}>
+            {k > 0 && (gap ? " … " : " · ")}
+            <span className={y.safe ? "text-text-primary" : "text-red-600 font-bold"}>
+              {y.no}년차 {won(y.diff)}
+            </span>
+          </span>
+        );
+      })}
+    </span>
+  );
+}
 
 function Kpi({
   label,

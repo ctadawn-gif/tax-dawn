@@ -1,5 +1,5 @@
 // 상환 스케줄 검증 — 실행: node test-loan-schedule.ts
-import { buildSchedule, withholding, type ScheduleInput } from "./src/lib/loanSchedule.ts";
+import { buildSchedule, withholding, giftCheck, type ScheduleInput } from "./src/lib/loanSchedule.ts";
 
 let pass = 0;
 let fail = 0;
@@ -131,6 +131,30 @@ const base: ScheduleInput = {
   const l2 = s2.rows[s2.rows.length - 1];
   ok("7-250만이면 120회차 2,500,000으로 완납·초과분 0·경고 없음", s2.rows.length === 120 && l2.principal === 2_500_000 && l2.balance === 0 && s2.balloonExcess === 0 && s2.warnings.length === 0, `${l2.principal} ${s2.balloonExcess} ${s2.warnings.length}`);
   ok("7-권장 월상환액 = 원금 ÷ 슬롯 = 2,500,000", Math.ceil(inp.principal / s.installmentSlots) === 2_500_000);
+}
+
+// 8. 증여세 안전 체크(분할상환 첫해 기준) — 검산값: 3억 · 2026.10.25~2036.10.25 · 이자 25일 · 상환 25일
+{
+  const base: ScheduleInput = { principal: 300_000_000, annualRate: 0.013, loanDate: "2026-10-25", dueDate: "2036-10-25", repayType: "installment", monthlyPrincipal: 1_000_000, repayDay: 25, interestDay: 25 };
+  const g1 = giftCheck(buildSchedule(base), base);
+  ok("8-1.3%·100만: 첫해 실제 이자 3,828,483", g1.firstYear?.actual === 3_828_483, `${g1.firstYear?.actual}`);
+  ok("8-1.3%·100만: 차액 9,971,517 ✅", g1.firstYear?.diff === 9_971_517 && g1.firstYear.safe, `${g1.firstYear?.diff}`);
+  ok("8-1.3%·100만: 최소 안전 이자율 1.30%", g1.firstYearMinSafeRate === 0.013, `${g1.firstYearMinSafeRate}`);
+  ok("8-연도별: 1년차 9,971,517 · 2년차 9,565,402 · 3년차 9,179,518", g1.years[1]?.diff === 9_565_402 && g1.years[2]?.diff === 9_179_518, `${g1.years.slice(0, 3).map((y) => y.diff).join(" ")}`);
+  ok("8-10년치·마지막 해도 1년", g1.years.length === 10 && g1.years[9].to === "2036-10-25", `${g1.years.length} ${g1.years[9]?.to}`);
+  const b2 = { ...base, annualRate: 0.0127 };
+  const g2 = giftCheck(buildSchedule(b2), b2);
+  ok("8-1.27%·100만: 차액 10,059,867 ⚠️", g2.firstYear?.diff === 10_059_867 && !g2.firstYear.safe, `${g2.firstYear?.diff}`);
+  const b3 = { ...base, monthlyPrincipal: 2_500_000 };
+  const g3 = giftCheck(buildSchedule(b3), b3);
+  ok("8-1.3%·250만: 차액 10,078,795 ⚠️ · 최소 1.33%", g3.firstYear?.diff === 10_078_795 && !g3.firstYear.safe && g3.firstYearMinSafeRate === 0.0133, `${g3.firstYear?.diff} ${g3.firstYearMinSafeRate}`);
+  const b4 = { ...base, annualRate: 0 };
+  const g4 = giftCheck(buildSchedule(b4), b4);
+  ok("8-0%·100만: 차액 13,800,000 ⚠️ · 최소 1.30%", g4.firstYear?.diff === 13_800_000 && !g4.firstYear.safe && g4.firstYearMinSafeRate === 0.013, `${g4.firstYear?.diff} ${g4.firstYearMinSafeRate}`);
+  // 만기 일시상환이면 기존 giftBenefit(원금 × (4.6% − r))과 같은 결과여야 함
+  const b5: ScheduleInput = { ...base, repayType: "lump", monthlyPrincipal: 0, repayDay: 0 };
+  const g5 = giftCheck(buildSchedule(b5), b5);
+  ok("8-일시상환: 첫해 차액 = 9,900,000 (원금 × 3.3%, ±12원)", Math.abs((g5.firstYear?.diff ?? 0) - 9_900_000) <= 12, `${g5.firstYear?.diff}`);
 }
 
 console.log(`\n통과 ${pass} / 실패 ${fail}`);

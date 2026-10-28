@@ -299,3 +299,90 @@ export function scheduleToCsv(res: ScheduleResult): string {
   lines.push(["합계", "", "", t.days, "", t.principal, t.interest, t.incomeTax, t.localTax, t.netInterest, t.payment, "", ""].join(","));
   return "﻿" + [head.join(","), ...lines].join("\r\n");
 }
+
+/* ───────────── 증여세 안전 체크 — 상증법 §41조의4 (대출일 기준 1년 단위, 그해 시작 잔액으로 재계산) ─────────────
+   차액_k = (k년차 시작 잔액 × 4.6% × 기간) − k년차에 지급한 이자(세전).  차액 < 1,000만원이면 과세 제외.
+   만기 일시상환이면 잔액이 일정해 loanCalc.giftBenefit 과 같고, 분할상환이면 잔액이 줄어 실제 이자가 작아져 차액이 커진다.
+   첫해 최소 안전 이자율 = (원금 × 4.6% − 1,000만원) ÷ Σ(잔액 × 일수 ÷ 365)  — 0.01% 단위 올림 */
+
+const GIFT_ADEQUATE_RATE = 0.046;
+const GIFT_THRESHOLD = 10_000_000;
+
+export interface GiftYear {
+  no: number; // 1년차, 2년차 …
+  from: string; // 기간 시작(미포함)
+  to: string; // 기간 끝(포함)
+  startBalance: number; // 그해 시작 잔액
+  adequate: number; // 적정이자 = 시작 잔액 × 4.6% (마지막 해가 1년 미만이면 일수 비례)
+  actual: number; // 그해 지급 이자(세전) 합
+  diff: number; // 증여 의제 차액
+  safe: boolean; // 차액 < 1,000만원
+  /** Σ(잔액 × 일수 ÷ 365) — 이자율 역산용 */
+  balanceYears: number;
+}
+
+export interface GiftCheck {
+  years: GiftYear[];
+  firstYear: GiftYear | null;
+  /** 첫해 차액이 1,000만원 미만이 되는 최소 이자율 (0.01% 단위 올림, 0이면 무이자 가능) */
+  firstYearMinSafeRate: number;
+}
+
+function addYearsUTC(t: number, k: number): number {
+  const d = new Date(t);
+  const y = d.getUTCFullYear() + k;
+  const m = d.getUTCMonth();
+  return Date.UTC(y, m, Math.min(d.getUTCDate(), daysInMonth(y, m)));
+}
+
+export function giftCheck(
+  res: ScheduleResult,
+  input: Pick<ScheduleInput, "principal" | "annualRate" | "loanDate" | "dueDate">
+): GiftCheck {
+  const empty: GiftCheck = { years: [], firstYear: null, firstYearMinSafeRate: 0 };
+  const start = parse(input.loanDate);
+  const end = parse(input.dueDate);
+  const P = Math.floor(input.principal || 0);
+  if (P <= 0 || start == null || end == null || end <= start || res.rows.length === 0) return empty;
+
+  // 잔액 타임라인: [prev, row.date) 구간 동안 잔액 = row.balanceBefore
+  const intervals = res.rows.map((x, i) => ({
+    from: i === 0 ? start : parse(res.rows[i - 1].date)!,
+    to: parse(x.date)!,
+    balance: x.balanceBefore,
+  }));
+
+  const years: GiftYear[] = [];
+  for (let k = 1; k <= 200; k++) {
+    const from = addYearsUTC(start, k - 1);
+    if (from >= end) break;
+    const fullTo = addYearsUTC(start, k);
+    const to = Math.min(fullTo, end);
+    const full = to === fullTo;
+
+    let balanceYears = 0;
+    let startBalance = k === 1 ? P : 0;
+    for (const iv of intervals) {
+      const a = Math.max(iv.from, from);
+      const b = Math.min(iv.to, to);
+      if (b > a) balanceYears += (iv.balance * ((b - a) / DAY_MS)) / DAYS_PER_YEAR;
+      if (k > 1 && iv.from <= from && from < iv.to) startBalance = iv.balance;
+    }
+    const factor = full ? 1 : (to - from) / DAY_MS / DAYS_PER_YEAR;
+    const adequate = Math.round(startBalance * GIFT_ADEQUATE_RATE * factor);
+    const actual = res.rows.reduce((a, x) => {
+      const t = parse(x.date)!;
+      return t > from && t <= to ? a + x.interest : a;
+    }, 0);
+    const diff = adequate - actual;
+    years.push({ no: k, from: fmt(from), to: fmt(to), startBalance, adequate, actual, diff, safe: diff < GIFT_THRESHOLD, balanceYears });
+  }
+
+  const firstYear = years[0] ?? null;
+  let firstYearMinSafeRate = 0;
+  if (firstYear && firstYear.balanceYears > 0) {
+    const raw = (firstYear.adequate - GIFT_THRESHOLD) / firstYear.balanceYears;
+    firstYearMinSafeRate = raw <= 0 ? 0 : Math.min(GIFT_ADEQUATE_RATE, Math.ceil(raw * 10000 - 1e-9) / 10000);
+  }
+  return { years, firstYear, firstYearMinSafeRate };
+}

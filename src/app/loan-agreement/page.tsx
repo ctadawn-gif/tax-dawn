@@ -19,7 +19,7 @@ import {
   GIFT_THRESHOLD,
   INTEREST_FREE_LIMIT,
 } from "@/lib/loanCalc";
-import { buildSchedule } from "@/lib/loanSchedule";
+import { buildSchedule, giftCheck } from "@/lib/loanSchedule";
 import RepaymentSchedule from "@/components/loan/RepaymentSchedule";
 
 // 관련 블로그 글 — 실제 링크·썸네일을 받으면 교체.
@@ -153,6 +153,8 @@ export default function LoanAgreementPage() {
   const amt = Number(amount) || 0;
   const r = (parseFloat(rate) || 0) / 100;
   const mAmt = Number(monthly) || 0;
+  // 매월 분할상환 + 월 상환 원금 입력 — 이때만 "분할상환 첫해 기준" 증여세 체크를 추가로 보여줌
+  const installmentActive = repayType === "installment" && mAmt > 0;
 
   const calc = useMemo(() => {
     const korean = amt > 0 ? numberToKoreanFormal(amt) : "";
@@ -176,7 +178,9 @@ export default function LoanAgreementPage() {
     // 권장 월상환액 = 원금 ÷ 납부 슬롯(매월 상환일 + 만기) — 스케줄표와 같은 기준
     const recommendedMonthly = schedule.installmentSlots > 0 ? Math.ceil(amt / schedule.installmentSlots) : repay.recommendedMonthly;
     const lastRow = schedule.rows[schedule.rows.length - 1] ?? null;
-    return { korean, benefit, safe, minR, lenderTax, months, repay, gauge, schedule, recommendedMonthly, lastRow };
+    // 증여세 안전 체크 (상증법 §41조의4 — 대출일 기준 1년 단위, 그해 잔액·실제 지급 이자로 재계산)
+    const gift = giftCheck(schedule, { principal: amt, annualRate: r, loanDate, dueDate });
+    return { korean, benefit, safe, minR, lenderTax, months, repay, gauge, schedule, recommendedMonthly, lastRow, gift };
   }, [amt, r, mAmt, loanDate, dueDate, repayType, repayDay, intDay]);
   // 스케줄표 탭 활성 조건: 금액·기간 + (이자 또는 분할상환)
   const scheduleReady = calc.schedule.rows.length > 0 && (r > 0 || (repayType === "installment" && mAmt > 0));
@@ -421,7 +425,9 @@ export default function LoanAgreementPage() {
                     <div className="flex items-center justify-between text-[12px] mb-1">
                       <span className="text-text-secondary">
                         연간 증여 의제 차액{" "}
-                        <span className="text-slate-400">(적정이자 − 실제이자)</span>
+                        <span className="text-slate-400">
+                          {installmentActive ? "(만기 일시상환 기준)" : "(적정이자 − 실제이자)"}
+                        </span>
                       </span>
                       <span className="font-bold text-text-primary">{won(calc.benefit)}원</span>
                     </div>
@@ -446,6 +452,58 @@ export default function LoanAgreementPage() {
                     </div>
                   </div>
 
+                  {/* 매월 분할상환 첫해 기준 — 원금을 갚으면 실제 이자가 줄어 첫해 차액이 커짐 */}
+                  {installmentActive &&
+                    (calc.gift.firstYear ? (
+                      <div className="rounded-lg border border-blue-100 bg-white p-3 space-y-2">
+                        <div className="text-[12px] font-extrabold text-text-primary">
+                          매월 분할상환 첫해 기준{" "}
+                          <span className="font-medium text-slate-400">(원금을 갚아 실제 이자가 줄어듦)</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[12px]">
+                          <span className="text-text-secondary">첫해 실제 이자</span>
+                          <span className="font-bold text-text-primary">{won(calc.gift.firstYear.actual)}원</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[12px]">
+                          <span className="text-text-secondary">증여 의제 차액</span>
+                          <span className={`font-bold ${calc.gift.firstYear.safe ? "text-text-primary" : "text-red-600"}`}>
+                            {won(calc.gift.firstYear.diff)}원
+                          </span>
+                        </div>
+                        {calc.gift.firstYear.safe ? (
+                          <p className="text-[12px] font-bold text-emerald-600">✅ 안전 — 1,000만원 미만</p>
+                        ) : (
+                          <p className="text-[12px] font-bold text-red-600">⚠️ 1,000만원 이상 — 이자율을 올리세요</p>
+                        )}
+                        <div className="flex items-center justify-between gap-2 text-[12px]">
+                          <span className="text-text-secondary">분할상환 최소 안전 이자율</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-extrabold text-brand-blue">
+                              {calc.gift.firstYearMinSafeRate > 0
+                                ? `연 ${(calc.gift.firstYearMinSafeRate * 100).toFixed(2)}%`
+                                : "0% (무이자 가능)"}
+                            </span>
+                            {calc.gift.firstYearMinSafeRate > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => setRate(ratePct(calc.gift.firstYearMinSafeRate))}
+                                className="text-[11px] font-bold px-2 py-1 rounded-md bg-brand-blue text-white hover:bg-blue-700 transition-colors"
+                              >
+                                적용
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-slate-400 leading-relaxed">
+                          2년차부터는 그해 남은 원금으로 다시 계산되어 차액이 줄어듭니다.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-[12px] text-slate-400">
+                        차용일·변제 기일을 입력하면 분할상환 첫해 기준으로도 점검합니다.
+                      </p>
+                    ))}
+
                   {/* 이자소득세 트레이드오프 */}
                   {r > 0 && (
                     <div className="pt-2 border-t border-ui-border text-[12px] text-text-secondary leading-relaxed">
@@ -454,6 +512,11 @@ export default function LoanAgreementPage() {
                       (27.5% 원천징수)이 생깁니다. <br />
                       👉 보통 <b className="text-text-primary">최소 안전 이자율</b>에 맞추는 것이 증여세·이자소득세
                       균형점입니다.
+                      {installmentActive && (
+                        <>
+                          {" "}매월 분할상환이면 <b className="text-text-primary">분할상환 최소 안전 이자율</b>을 기준으로 하세요.
+                        </>
+                      )}
                     </div>
                   )}
 
@@ -554,7 +617,8 @@ export default function LoanAgreementPage() {
                               <span className="font-bold text-text-primary">{won(calc.schedule.installmentTotal)}원</span>
                             </div>
                             {calc.schedule.balloonExcess === 0 ? (
-                              calc.schedule.balloonAtMaturity > 0 ? (
+                              <>
+                              {calc.schedule.balloonAtMaturity > 0 ? (
                                 <p className="text-[13px] font-bold text-emerald-600">
                                   ✅ 만기({calc.lastRow?.no}회차)에 {won(calc.schedule.balloonAtMaturity)}원 상환으로 완납
                                 </p>
@@ -563,13 +627,28 @@ export default function LoanAgreementPage() {
                                   ✅ {calc.lastRow?.no}회차({calc.lastRow ? dateKo(calc.lastRow.date) : ""})에 완납 (마지막 회차{" "}
                                   {won(calc.lastRow?.principal ?? 0)}원)
                                 </p>
-                              )
+                              )}
+                              {calc.gift.firstYear && (
+                                <GiftFirstYearLine
+                                  diff={calc.gift.firstYear.diff}
+                                  safe={calc.gift.firstYear.safe}
+                                  minRate={calc.gift.firstYearMinSafeRate}
+                                />
+                              )}
+                              </>
                             ) : (
                               <>
                                 <p className="text-[13px] font-bold text-amber-600">
                                   ⚠️ 만기({calc.lastRow?.no}회차)에 {won(calc.schedule.balloonAtMaturity)}원 일시 상환이 필요합니다
                                 </p>
                                 <RecommendRow value={calc.recommendedMonthly} onApply={() => setMonthly(calc.recommendedMonthly)} />
+                                {calc.gift.firstYear && (
+                                  <GiftFirstYearLine
+                                    diff={calc.gift.firstYear.diff}
+                                    safe={calc.gift.firstYear.safe}
+                                    minRate={calc.gift.firstYearMinSafeRate}
+                                  />
+                                )}
                                 <label className="flex items-start gap-2 pt-1 cursor-pointer">
                                   <input
                                     type="checkbox"
@@ -893,6 +972,7 @@ export default function LoanAgreementPage() {
               }}
               onPrint={() => window.print()}
               onEditTerms={() => setTab("contract")}
+              giftYears={calc.gift.years}
             />
           ) : (
             <div className="no-print rounded-2xl border border-dashed border-ui-border bg-ui-surface/60 p-8 md:p-12 text-center">
@@ -949,6 +1029,16 @@ export default function LoanAgreementPage() {
 
       <Footer />
     </div>
+  );
+}
+
+/** 상환계획 점검: 증여세 안전 체크(첫해) 한 줄 */
+function GiftFirstYearLine({ diff, safe, minRate }: { diff: number; safe: boolean; minRate: number }) {
+  return (
+    <p className={`text-[12px] font-bold ${safe ? "text-emerald-600" : "text-red-600"}`}>
+      증여세 안전 체크(첫해) : 차액 {won(diff)}원{" "}
+      {safe ? "✅" : `⚠️ 이자율을 연 ${(minRate * 100).toFixed(2)}% 이상으로`}
+    </p>
   );
 }
 
