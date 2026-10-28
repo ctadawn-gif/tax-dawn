@@ -113,4 +113,27 @@ body {
 
   /* 강제 페이지 분리가 필요한 경우 */
   .print-break-before { break-before: page; }
+
+  /* ── A4 서식 모드 (차용증 등) ──
+     위의 1024px 강제 폭은 계산기용. 서식은 그 폭을 A4에 축소해 넣으면 글자가 작아지므로
+     .print-a4 가 있는 페이지는 A4 실폭(186mm)으로 인쇄하고 글자·여백을 pt 단위로 맞춘다. */
+  html:has(.print-a4),
+  html:has(.print-a4) body {
+    min-width: 0 !important;
+    width: auto !important;
+  }
+  .print-a4-root { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+  .print-a4-frame { border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
+  .print-a4 { padding: 0 !important; font-size: 10.5pt !important; line-height: 1.5 !important; }
+  .print-a4 h2 { font-size: 20pt !important; margin-bottom: 14pt !important; }
+  .print-a4 h3 { font-size: 11pt !important; margin-bottom: 3pt !important; }
+  .print-a4 table { margin-bottom: 10pt !important; break-inside: avoid; }
+  .print-a4 th,
+  .print-a4 td { padding: 5pt 8pt !important; }
+  .print-a4[data-dense] { font-size: 10pt !important; line-height: 1.45 !important; }
+  .print-a4[data-dense] h2 { font-size: 18pt !important; margin-bottom: 8pt !important; }
+  .print-a4[data-dense] p { margin-bottom: 8pt !important; }
+  .print-a4[data-dense] table { margin-bottom: 8pt !important; }
+  .print-a4[data-dense] th,
+  .print-a4[data-dense] td { padding: 3.5pt 8pt !important; }
 }

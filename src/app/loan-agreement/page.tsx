@@ -20,8 +20,6 @@ import {
   INTEREST_FREE_LIMIT,
 } from "@/lib/loanCalc";
 
-const BLOG_URL = "https://blog.naver.com/tax_dawn";
-
 // 관련 블로그 글 — 실제 링크·썸네일을 받으면 교체.
 // thumb: /public/blog/ 에 넣은 이미지 경로(예: "/blog/loan-1.jpg") 또는 이미지 URL. 비우면 자리표시.
 const BLOG_POSTS: { title: string; desc: string; thumb: string; url: string }[] = [
@@ -60,7 +58,7 @@ function Fill({ value, w = "120px" }: { value?: string | number | null; w?: stri
   if (value !== "" && value != null) return <>{value}</>;
   return (
     <span
-      style={{ display: "inline-block", minWidth: w, borderBottom: "1px solid #94a3b8" }}
+      style={{ display: "inline-block", minWidth: `min(${w}, 100%)`, borderBottom: "1px solid #94a3b8" }}
     >
       &nbsp;
     </span>
@@ -192,7 +190,7 @@ export default function LoanAgreementPage() {
         </div>
       )}
 
-      <main className="max-w-[1280px] mx-auto px-5 lg:px-10 py-8 lg:py-12">
+      <main className="print-a4-root max-w-[1280px] mx-auto px-5 lg:px-10 py-8 lg:py-12">
         {/* 헤더 */}
         <header className="no-print mb-8">
           <div className="inline-flex items-center gap-2 bg-blue-50 text-brand-blue rounded-full px-3 py-1.5 text-[13px] font-semibold mb-3">
@@ -657,8 +655,12 @@ export default function LoanAgreementPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-ui-border shadow-sm overflow-hidden">
-              <article className="bg-white p-7 lg:p-9 text-[13px] leading-relaxed text-slate-900 print-keep">
+            <div className="print-a4-frame rounded-2xl border border-ui-border shadow-sm overflow-hidden">
+              {/* data-dense: 이자·분할상환·특약으로 내용이 길어지면 인쇄 시 한 장에 들어가도록 살짝 압축 */}
+              <article
+                data-dense={r > 0 || repayType === "installment" || extra ? "" : undefined}
+                className="print-a4 bg-white p-7 lg:p-9 text-[13px] leading-relaxed text-slate-900 print-keep"
+              >
                 <h2 className="text-center text-[20px] font-extrabold tracking-tight mb-5">
                   금전소비대차 계약서
                 </h2>
@@ -754,18 +756,23 @@ export default function LoanAgreementPage() {
                   { t: "채권자 (갑)", name: nameA, id: idA, tel: telA, addr: addrA },
                   { t: "채무자 (을)", name: nameB, id: idB, tel: telB, addr: addrB },
                 ].map((p) => (
-                  <table key={p.t} className="w-full border-collapse mb-3">
+                  <table key={p.t} className="w-full border-collapse mb-3 table-fixed">
+                    <colgroup>
+                      {/* 라벨 폭은 em 단위 — 화면(13px)·인쇄(10.5pt) 글자 크기에 맞춰 함께 늘어남 */}
+                      <col className="w-[8.8em]" />
+                      <col />
+                      <col className="w-[5em]" />
+                      <col className="w-[30%]" />
+                    </colgroup>
                     <tbody>
                       <tr>
-                        <th className="border border-slate-300 bg-slate-50 p-2 text-left w-[110px] font-semibold">
+                        <th className="border border-slate-300 bg-slate-50 p-2 text-left font-semibold">
                           {p.t} 성명
                         </th>
-                        <td className="border border-slate-300 p-2">
+                        <td className="border border-slate-300 p-2" colSpan={2}>
                           <Fill value={p.name} w="120px" />
                         </td>
-                        <td className="border border-slate-300 p-2 w-[110px] text-center text-slate-500">
-                          (서명 또는 인)
-                        </td>
+                        <td className="border border-slate-300 p-2 text-right text-slate-500">(서명 또는 인)</td>
                       </tr>
                       <tr>
                         <th className="border border-slate-300 bg-slate-50 p-2 text-left font-semibold">
@@ -774,25 +781,27 @@ export default function LoanAgreementPage() {
                         <td className="border border-slate-300 p-2">
                           <Fill value={p.id} w="120px" />
                         </td>
-                        <td className="border border-slate-300 bg-slate-50 p-2 text-center font-semibold">
+                        <th className="border border-slate-300 bg-slate-50 p-2 text-center font-semibold">
                           연락처
+                        </th>
+                        <td className="border border-slate-300 p-2">
+                          <Fill value={p.tel} w="120px" />
                         </td>
                       </tr>
                       <tr>
                         <th className="border border-slate-300 bg-slate-50 p-2 text-left font-semibold">
                           주소
                         </th>
-                        <td className="border border-slate-300 p-2" colSpan={2}>
+                        <td className="border border-slate-300 p-2" colSpan={3}>
                           <Fill value={p.addr} w="280px" />
-                          {p.tel && <span className="float-right text-slate-700">☎ {p.tel}</span>}
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 ))}
 
-                {/* 안내문구 */}
-                <div className="mt-5 pt-3 border-t border-slate-200 text-[11px] text-slate-500 space-y-1.5 leading-relaxed">
+                {/* 안내문구 — 화면 전용 (인쇄본에는 계약 내용만) */}
+                <div className="no-print mt-5 pt-3 border-t border-slate-200 text-[11px] text-slate-500 space-y-1.5 leading-relaxed">
                   <p>
                     ※ 본 양식은 가족 간 금전 대차 시 차용으로 인정받기 위한 실무 요건(차용 금액·이자율·상환
                     일정·당사자 서명)을 반영하여 작성되었습니다.
@@ -826,20 +835,18 @@ export default function LoanAgreementPage() {
             ))}
           </div>
 
-          <a
-            href={BLOG_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 block rounded-2xl border border-ui-border bg-ui-surface p-5 hover:border-brand-blue transition-colors group"
+          <Link
+            href="/contact"
+            className="mt-5 block rounded-2xl border border-ui-border bg-ui-surface p-5 hover:border-brand-blue transition-colors group no-underline"
           >
             <div className="text-[15px] font-extrabold text-text-primary mb-1 group-hover:text-brand-blue">
-              내 상황은 좀 복잡한데? · 1:1 상담 안내 →
+              내 상황은 좀 복잡한데? · 1:1 상담 문의 →
             </div>
             <p className="text-[13px] text-text-secondary leading-relaxed">
-              자금출처 소명, 큰 금액 차용, 무이자 한도 초과 등은 세무사 상담이 안전합니다. 상담 방법은 블로그에서
-              안내드립니다.
+              자금출처 소명, 큰 금액 차용, 무이자 한도 초과 등은 세무사 상담이 안전합니다. 상담 문의를 남겨주시면
+              세무사가 직접 연락드립니다.
             </p>
-          </a>
+          </Link>
         </section>
 
         <p className="no-print mt-6 text-[12px] text-slate-400 leading-relaxed">
