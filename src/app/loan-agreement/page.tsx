@@ -617,12 +617,12 @@ export default function LoanAgreementPage() {
                   5
                 </span>
                 당사자 인적사항{" "}
-                <span className="text-slate-400 font-medium text-[13px]">(선택 — 비우면 손글씨)</span>
+                <span className="text-slate-400 font-medium text-[13px]">(선택)</span>
               </h2>
               {/* 작성일: 오늘이 기본값. 미리 써두거나 뒤늦게 쓰는 경우 직접 수정 */}
               {writeDate !== null && (
                 <div className="mb-4">
-                  <Field label="작성일 (계약서에 찍히는 날짜)" hint="기본값 오늘 · 비우면 손글씨">
+                  <Field label="작성일 (계약서에 찍히는 날짜)" hint="기본값 오늘">
                     <DateInput value={writeDate} onChange={setWriteDate} />
                   </Field>
                 </div>
@@ -677,7 +677,7 @@ export default function LoanAgreementPage() {
                     <input
                       value={p.id}
                       onChange={(e) => p.sid(e.target.value)}
-                      placeholder="주민등록번호 (권장: 손글씨)"
+                      placeholder="주민등록번호 (인쇄 후 직접 기재 권장)"
                       className={inputCls}
                     />
                     <input
