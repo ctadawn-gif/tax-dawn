@@ -144,7 +144,12 @@ body {
   [data-print="schedule"] .print-schedule { display: block !important; margin-top: 0 !important; }
   /* 표는 화면에서 md 이상에서만 보이는데(hidden md:block), A4 인쇄폭(≈703px)은 md 미만이라 강제 표시 */
   .print-schedule .print-table { display: block !important; border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
-  .print-schedule .print-table > div { overflow: visible !important; }
+  .print-schedule .print-table > div { overflow: visible !important; max-height: none !important; }
+  .print-schedule thead { position: static !important; }
+  .print-schedule .print-example,
+  .print-schedule .print-todo { break-inside: avoid; margin-top: 8pt !important; }
+  .print-schedule .print-todo { font-size: 8.5pt !important; }
+  .print-schedule .print-example { font-size: 9pt !important; padding: 7pt 9pt !important; }
   .print-schedule table { font-size: 9pt !important; break-inside: auto; }
   .print-schedule thead { display: table-header-group; }
   .print-schedule tfoot { display: table-row-group; } /* 합계는 마지막에 한 번만 (기본값이면 매 쪽 반복) */

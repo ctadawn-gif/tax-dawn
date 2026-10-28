@@ -107,12 +107,12 @@ export default function LoanAgreementPage() {
   const [extra, setExtra] = useState("");
   // 면책 동의 모달 (첫 진입 시 표시)
   const [agreed, setAgreed] = useState(false);
-  // 인쇄 대상: 계약서 / 상환 스케줄표 (globals.css [data-print] 규칙으로 분기)
-  const [printTarget, setPrintTarget] = useState<"contract" | "schedule">("contract");
-  const printTargetRef = useRef(printTarget);
+  // 탭: 차용증 작성 / 상환 스케줄표. 인쇄(Ctrl+P 포함)는 현재 탭 기준 (globals.css [data-print] 규칙)
+  const [tab, setTab] = useState<"contract" | "schedule">("contract");
+  const tabRef = useRef(tab);
   useEffect(() => {
-    printTargetRef.current = printTarget;
-  }, [printTarget]);
+    tabRef.current = tab;
+  }, [tab]);
   // 인적사항(선택)
   const [nameA, setNameA] = useState("");
   const [idA, setIdA] = useState("");
@@ -134,11 +134,10 @@ export default function LoanAgreementPage() {
   useEffect(() => {
     const orig = document.title;
     const before = () => {
-      document.title = printTargetRef.current === "schedule" ? "상환스케줄표" : "금전소비대차계약서";
+      document.title = tabRef.current === "schedule" ? "상환스케줄표" : "금전소비대차계약서";
     };
     const after = () => {
       document.title = orig;
-      setPrintTarget("contract");
     };
     window.addEventListener("beforeprint", before);
     window.addEventListener("afterprint", after);
@@ -147,13 +146,6 @@ export default function LoanAgreementPage() {
       window.removeEventListener("afterprint", after);
     };
   }, []);
-
-  // 스케줄표 인쇄: 상태가 DOM에 반영된 다음 프레임에 인쇄창 호출
-  useEffect(() => {
-    if (printTarget !== "schedule") return;
-    const id = requestAnimationFrame(() => window.print());
-    return () => cancelAnimationFrame(id);
-  }, [printTarget]);
 
   const amt = Number(amount) || 0;
   const r = (parseFloat(rate) || 0) / 100;
@@ -180,9 +172,11 @@ export default function LoanAgreementPage() {
     });
     return { korean, benefit, safe, minR, lenderTax, months, repay, gauge, schedule };
   }, [amt, r, mAmt, loanDate, dueDate, repayType, repayDay, intDay]);
+  // 스케줄표 탭 활성 조건: 금액·기간 + (이자 또는 분할상환)
+  const scheduleReady = calc.schedule.rows.length > 0 && (r > 0 || (repayType === "installment" && mAmt > 0));
 
   return (
-    <div className="min-h-screen bg-white relative" data-print={printTarget}>
+    <div className="min-h-screen bg-white relative" data-print={tab}>
       <Navbar />
 
       {/* 면책 고지 모달 (첫 진입) */}
@@ -236,6 +230,37 @@ export default function LoanAgreementPage() {
           </p>
         </header>
 
+        {/* 탭: 차용증 작성 ↔ 상환 스케줄표 */}
+        <div className="no-print mb-6 flex p-1 rounded-xl bg-ui-surface border border-ui-border md:inline-flex">
+          {(
+            [
+              ["contract", "차용증 작성"],
+              ["schedule", "상환 스케줄표"],
+            ] as const
+          ).map(([k, l]) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setTab(k)}
+              className={`flex-1 md:flex-none md:px-6 py-2.5 rounded-lg text-[14px] font-bold transition-all flex items-center justify-center gap-2 ${
+                tab === k ? "bg-white text-text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]" : "text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              {l}
+              {k === "schedule" && (
+                <span
+                  className={`text-[11px] font-extrabold rounded-full px-2 py-0.5 ${
+                    scheduleReady ? "bg-brand-blue text-white" : "bg-slate-200 text-slate-500"
+                  }`}
+                >
+                  {scheduleReady ? `${calc.schedule.rows.length}회` : "선택"}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <div className={tab === "contract" ? "" : "hidden"}>
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-10 items-start">
           {/* ───────────── 입력 폼 ───────────── */}
           <section className="no-print space-y-6">
@@ -847,23 +872,44 @@ export default function LoanAgreementPage() {
           </section>
         </div>
 
-        {/* ───────────── 상환 스케줄표 (이자가 있거나 분할상환일 때) ───────────── */}
-        {amt > 0 && loanDate && dueDate && (r > 0 || (repayType === "installment" && mAmt > 0)) && (
-          <RepaymentSchedule
-            result={calc.schedule}
-            meta={{
-              principal: amt,
-              annualRate: r,
-              loanDate,
-              dueDate,
-              repayType,
-              monthlyPrincipal: mAmt,
-              lenderName: nameA,
-              borrowerName: nameB,
-            }}
-            onPrint={() => setPrintTarget("schedule")}
-          />
-        )}
+        </div>
+
+        {/* ───────────── 상환 스케줄표 탭 ───────────── */}
+        <div className={tab === "schedule" ? "" : "hidden"}>
+          {scheduleReady ? (
+            <RepaymentSchedule
+              result={calc.schedule}
+              meta={{
+                principal: amt,
+                annualRate: r,
+                loanDate,
+                dueDate,
+                repayType,
+                monthlyPrincipal: mAmt,
+                lenderName: nameA,
+                borrowerName: nameB,
+              }}
+              onPrint={() => window.print()}
+              onEditTerms={() => setTab("contract")}
+            />
+          ) : (
+            <div className="no-print rounded-2xl border border-dashed border-ui-border bg-ui-surface/60 p-8 md:p-12 text-center">
+              <div className="text-[18px] md:text-[20px] font-extrabold text-text-primary mb-2">조건을 먼저 입력해 주세요</div>
+              <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
+                차용 금액 · 차용일 · 변제기일을 넣고,
+                <br />
+                이자율을 정하거나 매월 분할상환을 고르면 표가 만들어집니다.
+              </p>
+              <button
+                type="button"
+                onClick={() => setTab("contract")}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-blue text-white text-[14px] font-bold hover:bg-blue-700 transition-colors"
+              >
+                차용증 작성으로 →
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* ───────────── 관련 블로그(썸네일 카드) + 상담 ───────────── */}
         <section className="no-print mt-12">

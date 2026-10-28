@@ -92,6 +92,7 @@ export async function downloadScheduleXlsx(res: ScheduleResult, meta: ScheduleMe
     ["총 이자(세전)", t.interest],
     ["총 소득세(25%)", t.incomeTax],
     ["총 지방소득세(소득세의 10%)", t.localTax],
+    ["원천징수 합계(27.5%)", t.incomeTax + t.localTax],
     ["총 이자(세후)", t.netInterest],
     ["채무자 총 송금액", t.payment],
     ["", ""],
@@ -102,7 +103,7 @@ export async function downloadScheduleXlsx(res: ScheduleResult, meta: ScheduleMe
   ];
   const ws2 = XLSX.utils.aoa_to_sheet(info, { cellDates: true });
   for (const addr of ["B4", "B5"]) if (ws2[addr]?.t === "d") ws2[addr].z = DATE;
-  for (const addr of ["B2", "B10", "B11", "B12", "B13", "B14", "B15"]) if (ws2[addr]?.t === "n") ws2[addr].z = MONEY;
+  for (const addr of ["B2", "B10", "B11", "B12", "B13", "B14", "B15", "B16"]) if (ws2[addr]?.t === "n") ws2[addr].z = MONEY;
   ws2["!cols"] = [{ wch: 26 }, { wch: 90 }];
 
   const wb = XLSX.utils.book_new();
