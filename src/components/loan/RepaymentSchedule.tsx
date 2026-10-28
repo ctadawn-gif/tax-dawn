@@ -3,7 +3,7 @@
 // 차용증 상환 스케줄표 탭 — 핵심 숫자 4개 → 세금 계산 예시 → 회차표 → 당사자별 할 일 → 계산 기준
 // (화면 + 엑셀 다운로드 + 별도 인쇄. 인쇄 규칙은 globals.css .print-schedule)
 import { useState } from "react";
-import { scheduleToCsv, type ScheduleResult, type RepayType, type ScheduleRow, type GiftYear } from "@/lib/loanSchedule";
+import { scheduleToCsv, type ScheduleResult, type RepayType, type ScheduleRow, type GiftYear, type GiftCheck, yearRangeLabel } from "@/lib/loanSchedule";
 import { downloadScheduleXlsx } from "@/lib/loanScheduleXlsx";
 import { ratePct } from "@/lib/loanCalc";
 
@@ -29,16 +29,17 @@ export default function RepaymentSchedule({
   meta,
   onPrint,
   onEditTerms,
-  giftYears = [],
+  gift,
 }: {
   result: ScheduleResult;
   meta: ScheduleMeta;
   onPrint: () => void;
   onEditTerms: () => void;
-  /** 연도별 증여 의제 차액 (상증법 §41조의4) */
-  giftYears?: GiftYear[];
+  /** 증여세 안전 체크 결과 (상증법 §41조의4) — 화면 카드·엑셀에 같은 값 사용 */
+  gift?: GiftCheck;
 }) {
   const { rows, totals, byYear, warnings } = result;
+  const giftYears = gift?.years ?? [];
   const hasInterest = meta.annualRate > 0;
   const taxTotal = totals.incomeTax + totals.localTax;
   const firstInterest = rows.find((x) => x.interest > 0);
@@ -48,7 +49,7 @@ export default function RepaymentSchedule({
   const download = async () => {
     setBusy(true);
     try {
-      await downloadScheduleXlsx(result, meta);
+      await downloadScheduleXlsx(result, meta, gift);
     } catch {
       // 엑셀 모듈을 못 받아오면 CSV로 대체 (엑셀에서 열림)
       const blob = new Blob([scheduleToCsv(result)], { type: "text/csv;charset=utf-8" });
@@ -166,10 +167,25 @@ export default function RepaymentSchedule({
             label={`이자소득세 ${WITHHOLDING_LABEL}`}
             value={taxTotal}
             tone="red"
-            sub={`소득세 25% ${won(totals.incomeTax)} + 지방소득세 2.5% ${won(totals.localTax)}`}
+            sub={
+              <>
+                소득세 25% {won(totals.incomeTax)}
+                <br />+ 지방소득세 2.5% {won(totals.localTax)}
+              </>
+            }
           />
           <Kpi label="갑 실수령 이자 (세후)" value={totals.netInterest} sub="총 이자 − 세금" />
-          <Kpi label="을 총 송금액" value={totals.payment} tone="dark" sub={`원금 ${won(totals.principal)} + 세후 이자 ${won(totals.netInterest)}`} />
+          <Kpi
+            label="을 총 송금액"
+            value={totals.payment}
+            tone="dark"
+            sub={
+              <>
+                원금 {won(totals.principal)}
+                <br />+ 세후 이자 {won(totals.netInterest)}
+              </>
+            }
+          />
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 print-summary">
@@ -198,8 +214,9 @@ export default function RepaymentSchedule({
             <span className="text-brand-blue">송금 {won(firstInterest.payment)}원</span>
           </div>
           <p className="mt-2 text-[12px] text-text-secondary leading-relaxed">
-            {WITHHOLDING_LABEL} = 소득세 25% + 지방소득세 2.5%(소득세의 10%). 각각 10원 미만 절사. 채무자(을)가 떼서 국세청에 내고, 채권자(갑)는
-            세후 금액만 받습니다.
+            <Ph>{WITHHOLDING_LABEL} = 소득세 25%</Ph> <Ph>+ 지방소득세 2.5%(소득세의 10%).</Ph> <Ph>각각 10원 미만 절사.</Ph>
+            <br />
+            <Ph>채무자(을)가 떼서 국세청에 내고,</Ph> <Ph>채권자(갑)는 세후 금액만 받습니다.</Ph>
           </p>
         </div>
       )}
@@ -329,20 +346,23 @@ export default function RepaymentSchedule({
         <div className="mt-5 grid md:grid-cols-2 gap-3 print-todo">
           <div className="rounded-2xl border border-ui-border bg-white p-4 md:p-5">
             <div className="text-[13px] font-extrabold text-text-primary mb-2">채무자(을)가 할 일</div>
-            <ul className="text-[12.5px] text-text-secondary leading-relaxed space-y-1.5 pl-4 list-disc">
+            <ul className="text-[12.5px] text-text-secondary leading-relaxed space-y-1.5 pl-4 list-disc text-pretty">
               <li>
                 이자 줄 때 <b className="text-text-primary">{WITHHOLDING_LABEL}를 떼고</b> 세후 금액을 송금
               </li>
               <li>
-                뗀 세금은 <b className="text-text-primary">다음 달 10일까지</b> 홈택스에서 원천세 신고·납부 (표의 납부기한 열)
+                뗀 세금은 <b className="text-text-primary">다음 달 10일까지</b> <Ph>홈택스에서 원천세 신고·납부</Ph>{" "}
+                <Ph>(표의 납부기한 열)</Ph>
               </li>
               <li>이듬해 2월 말까지 이자소득 지급명세서 제출</li>
-              <li>이자가 1천원 미만이어도 뗍니다 (이자소득은 소액부징수 제외, 소득세법 §86)</li>
+              <li>
+                <Ph>이자가 1천원 미만이어도 뗍니다</Ph> <Ph>(이자소득은 소액부징수 제외,</Ph> <Ph>소득세법 §86)</Ph>
+              </li>
             </ul>
           </div>
           <div className="rounded-2xl border border-ui-border bg-white p-4 md:p-5">
             <div className="text-[13px] font-extrabold text-text-primary mb-2">채권자(갑)가 알아둘 것</div>
-            <ul className="text-[12.5px] text-text-secondary leading-relaxed space-y-1.5 pl-4 list-disc">
+            <ul className="text-[12.5px] text-text-secondary leading-relaxed space-y-1.5 pl-4 list-disc text-pretty">
               <li>받는 돈은 세후 이자 — 세금은 을이 대신 내는 구조</li>
               <li>
                 한 해 이자가 다른 금융소득과 합쳐 <b className="text-text-primary">2,000만원을 넘으면</b> 종합소득세 신고 대상
@@ -352,20 +372,19 @@ export default function RepaymentSchedule({
                   </span>
                 )}
               </li>
-              <li>세후로 받은 이자도 종합과세 시 기납부세액으로 정산됩니다</li>
-              {giftYears.length > 0 && (
-                <li>
-                  연도별 증여 의제 차액: <GiftYearsInline years={giftYears} />
-                  <span className="block mt-0.5 text-slate-400">(각 해 시작 잔액 × 4.6% − 그해 이자 · 1,000만원 이상이면 빨간색)</span>
-                </li>
-              )}
+              <li>
+                세후로 받은 이자도 종합과세 시 <Ph>기납부세액으로 정산됩니다</Ph>
+              </li>
             </ul>
           </div>
         </div>
       )}
 
+      {/* ── 증여세 안전 체크 (빌린 사람 을에게 과세 — 이자율과 무관하게 항상) ── */}
+      {giftYears.length > 0 && <GiftCard years={giftYears} />}
+
       {/* ── 계산 기준 ── */}
-      <div className="mt-4 print-notes text-[12px] text-slate-500 leading-relaxed">
+      <div className="mt-4 print-notes text-[12px] text-slate-500 leading-relaxed text-pretty">
         <p>
           <b className="text-slate-600">계산 기준</b> · 이자 = 상환 후 잔액 × 연 이자율 × 일수 ÷ 365 (달마다 28~31일이라 회차별 이자가 조금씩 다름) · 지급일이
           그 달에 없으면 말일 · 세액은 10원 미만 절사 · 중도상환·연체·이자율 변경 미반영 · 참고용 · 증여세 안전 체크는 상증법 제41조의4(대출일 기준 ·
@@ -378,28 +397,60 @@ export default function RepaymentSchedule({
 
 /* ───────── 작은 부품 ───────── */
 
-/** 연도별 증여 의제 차액 — 앞 5년·마지막 해·과세(1천만원 이상) 연도는 항상 보이고 사이는 … 로 생략 */
-function GiftYearsInline({ years }: { years: GiftYear[] }) {
-  const keep = new Set<number>();
-  years.forEach((y, i) => {
-    if (i < 5 || i === years.length - 1 || !y.safe) keep.add(i);
-  });
-  const idx = [...keep].sort((a, b) => a - b);
+/** 구절 묶음 — 줄이 바뀌어도 구절 사이에서만 끊기게 */
+function Ph({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <span className={`whitespace-nowrap ${className}`}>{children}</span>;
+}
+
+/**
+ * 증여세 안전 체크 카드 — 상증법 §41조의4: 빌린 사람(을)의 증여재산.
+ * 대출일부터 1년마다 (그해 시작 잔액 × 4.6%) − (그해 낸 이자) < 1,000만원이면 과세 제외.
+ * 10년차까지 칸으로 보여주고, 그 뒤는 최대 차액 한 줄로 요약.
+ */
+function GiftCard({ years }: { years: GiftYear[] }) {
+  const unsafe = years.filter((y) => !y.safe);
+  const shown = years.slice(0, 10);
+  const rest = years.slice(10);
+  const restMax = rest.reduce<GiftYear | null>((m, y) => (!m || y.diff > m.diff ? y : m), null);
   return (
-    <span className="tabular-nums">
-      {idx.map((i, k) => {
-        const y = years[i];
-        const gap = k > 0 && i - idx[k - 1] > 1;
-        return (
-          <span key={y.no}>
-            {k > 0 && (gap ? " … " : " · ")}
-            <span className={y.safe ? "text-text-primary" : "text-red-600 font-bold"}>
-              {y.no}년차 {won(y.diff)}
-            </span>
-          </span>
-        );
-      })}
-    </span>
+    <div className="mt-3 rounded-2xl border border-ui-border bg-white p-4 md:p-5 print-todo">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 mb-1.5">
+        <div className="text-[13px] font-extrabold text-text-primary">
+          증여세 안전 체크 <span className="font-medium text-slate-400">· 빌린 사람(을)에게 과세</span>
+        </div>
+        <span
+          className={`text-[11px] font-extrabold rounded-full px-2.5 py-1 ${
+            unsafe.length ? "bg-red-50 text-red-600" : "bg-emerald-50 text-emerald-700"
+          }`}
+        >
+          {unsafe.length
+            ? `${yearRangeLabel(unsafe.map((y) => y.no))} 1,000만원 이상 ⚠️`
+            : `${years.length}년 모두 1,000만원 미만 ✅`}
+        </span>
+      </div>
+      <p className="text-[12px] text-text-secondary leading-relaxed mb-3">
+        <Ph>해마다 그해 시작 잔액 × 4.6%와</Ph> <Ph>그해 낸 이자의 차이가</Ph> <Ph>1,000만원 미만이면</Ph>{" "}
+        <Ph>증여로 보지 않습니다.</Ph> <Ph className="text-slate-400">(상증법 §41조의4)</Ph>
+      </p>
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+        {shown.map((y) => (
+          <div
+            key={y.no}
+            className={`rounded-lg border px-2.5 py-1.5 ${y.safe ? "border-ui-border bg-ui-surface" : "border-red-200 bg-red-50"}`}
+          >
+            <div className="text-[10.5px] font-bold text-slate-400">{y.no}년차</div>
+            <div className={`text-[13px] font-extrabold tabular-nums ${y.safe ? "text-text-primary" : "text-red-600"}`}>
+              {won(y.diff)}
+            </div>
+          </div>
+        ))}
+      </div>
+      {restMax && (
+        <p className={`mt-2 text-[12px] font-bold ${rest.some((y) => !y.safe) ? "text-red-600" : "text-text-secondary"}`}>
+          11~{years.length}년차 최대 {won(restMax.diff)}원 ({restMax.no}년차) {rest.some((y) => !y.safe) ? "⚠️" : "✅"}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -412,7 +463,7 @@ function Kpi({
 }: {
   label: string;
   value: number;
-  sub?: string;
+  sub?: React.ReactNode;
   unit?: string;
   tone?: "plain" | "red" | "dark";
 }) {

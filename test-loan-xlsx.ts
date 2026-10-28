@@ -3,7 +3,7 @@ import os from "node:os";
 import fs from "node:fs";
 import path from "node:path";
 import ExcelJS from "exceljs";
-import { buildSchedule } from "./src/lib/loanSchedule.ts";
+import { buildSchedule, giftCheck } from "./src/lib/loanSchedule.ts";
 import { buildScheduleWorkbook } from "./src/lib/loanScheduleXlsx.ts";
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), "loan-xlsx-"));
@@ -17,7 +17,7 @@ const meta = {
 };
 const res = buildSchedule({ ...meta, repayDay: 10, interestDay: 25 });
 const file = path.join(dir, "schedule.xlsx");
-await (await buildScheduleWorkbook(res, meta)).xlsx.writeFile(file);
+await (await buildScheduleWorkbook(res, meta, giftCheck(res, meta))).xlsx.writeFile(file);
 ok("파일 생성", fs.existsSync(file) && fs.statSync(file).size > 10_000, `${fs.statSync(file).size} bytes`);
 
 const wb = new ExcelJS.Workbook();
@@ -59,14 +59,23 @@ const noteRows = [...Array(60)].map((_, i) => texts(`A${i + 1}`)).filter((v) => 
 ok("※ 주석 6개 이상·작은 회색 글씨", noteRows.length >= 6 && ws2.getCell(`A${[...Array(60)].findIndex((_, i) => texts(`A${i + 1}`).startsWith("※ ")) + 1}`).font?.size === 9, `${noteRows.length}`);
 ok("시트2 B열 폭 작게(≤ 24)", (ws2.getColumn(2).width ?? 99) <= 24, `${ws2.getColumn(2).width}`);
 
+const giftHead = [...Array(60)].findIndex((_, i) => texts(`A${i + 1}`) === "증여세 안전 체크 (연도별 차액)") + 1;
+ok("시트2 증여세 표 머리글", giftHead > 0, `row ${giftHead}`);
+const verdictRow = [...Array(60)].findIndex((_, i) => texts(`A${i + 1}`) === "판정") + 1;
+ok("시트2 판정 행 (3년 모두 안전)", verdictRow > giftHead && texts(`B${verdictRow}`) === "전 기간 1,000만원 미만 ✅", texts(`B${verdictRow}`));
+ok("시트2 1년차 차액 금액 서식", typeof ws2.getCell(`B${giftHead + 1}`).value === "number" && ws2.getCell(`B${giftHead + 1}`).numFmt === "#,##0", `${ws2.getCell(`B${giftHead + 1}`).value}`);
+
 // 무이자 분할 — 8열 버전
 const meta0 = { ...meta, annualRate: 0, dueDate: "2028-03-05", monthlyPrincipal: 2_000_000, interestDay: 0 };
 const file0 = path.join(dir, "schedule0.xlsx");
-await (await buildScheduleWorkbook(buildSchedule({ ...meta0, repayDay: 31, interestDay: 0 }), meta0)).xlsx.writeFile(file0);
+const res0 = buildSchedule({ ...meta0, repayDay: 31, interestDay: 0 });
+await (await buildScheduleWorkbook(res0, meta0, giftCheck(res0, meta0))).xlsx.writeFile(file0);
 const wb0 = new ExcelJS.Workbook();
 await wb0.xlsx.readFile(file0);
 const h0 = wb0.getWorksheet("상환스케줄")!.getRow(4);
 ok("무이자: 8열 (세금 열 없음)", h0.cellCount === 8 && !h0.values.toString().includes("소득세"), `${h0.cellCount}`);
+const ws02 = wb0.getWorksheet("차용조건")!;
+ok("무이자: 시트2에도 증여세 표", [...Array(60)].some((_, i) => String(ws02.getCell(`A${i + 1}`).value ?? "") === "증여세 안전 체크 (연도별 차액)"));
 
 process.chdir(os.tmpdir());
 fs.rmSync(dir, { recursive: true, force: true });

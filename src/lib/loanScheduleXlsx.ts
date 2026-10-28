@@ -4,11 +4,10 @@
 //                   → 회차 행(줄무늬·만기 강조·금액 서식) → 합계(SUM 수식) · 납부 체크는 드롭다운(✓)
 // 시트2 "차용조건":  [계약 조건] [정산 요약] [연도별 이자] 작은 표 3개 + 아래에 ※ 주석
 import type ExcelJSNS from "exceljs";
-import type { ScheduleResult } from "./loanSchedule";
+import type { GiftCheck, ScheduleResult } from "./loanSchedule";
 import type { ScheduleMeta } from "@/components/loan/RepaymentSchedule";
 
 type Workbook = ExcelJSNS.Workbook;
-type Worksheet = ExcelJSNS.Worksheet;
 type Cell = ExcelJSNS.Cell;
 type Borders = Partial<ExcelJSNS.Borders>;
 
@@ -32,6 +31,17 @@ function toDate(s: string): Date {
   return new Date(Date.UTC(y, m - 1, d));
 }
 const pct = (r: number) => (r * 100).toFixed(2).replace(/\.?0+$/, "");
+/** [1,2,3,5] → "1~3·5년차" (loanSchedule.yearRangeLabel과 동일 — 이 파일은 타입만 import) */
+function rangeLabel(nos: number[]): string {
+  const parts: string[] = [];
+  for (let i = 0; i < nos.length; ) {
+    let j = i;
+    while (j + 1 < nos.length && nos[j + 1] === nos[j] + 1) j++;
+    parts.push(j > i ? `${nos[i]}~${nos[j]}` : `${nos[i]}`);
+    i = j + 1;
+  }
+  return `${parts.join("·")}년차`;
+}
 
 function styleHeader(c: Cell) {
   c.font = { bold: true, color: { argb: WHITE }, size: 10 };
@@ -221,7 +231,13 @@ function buildScheduleSheet(wb: Workbook, res: ScheduleResult, meta: ScheduleMet
 }
 
 /* ───────────────────── 시트2 ───────────────────── */
-function buildTermsSheet(wb: Workbook, res: ScheduleResult, meta: ScheduleMeta, s1: { totalRow: number; cols: Record<string, string> }) {
+function buildTermsSheet(
+  wb: Workbook,
+  res: ScheduleResult,
+  meta: ScheduleMeta,
+  s1: { totalRow: number; cols: Record<string, string> },
+  g?: GiftCheck
+) {
   const hasInterest = meta.annualRate > 0;
   const t = res.totals;
   const ws = wb.addWorksheet("차용조건", { properties: { defaultRowHeight: 18 } });
@@ -299,6 +315,23 @@ function buildTermsSheet(wb: Workbook, res: ScheduleResult, meta: ScheduleMeta, 
         ]
   );
 
+  // 증여세 안전 체크 — 상증법 §41조의4 (빌린 사람 을에게 과세, 대출일부터 1년 단위). 값은 화면과 같은 giftCheck 결과를 받아 씀
+  if (g && g.years.length > 0) {
+    const unsafe = g.years.filter((y) => !y.safe);
+    table("증여세 안전 체크 (연도별 차액)", [
+      ...g.years.map((y) => ({ l: `${y.no}년차 (~${y.to.replace(/-/g, ".")})`, v: y.diff, fmt: MONEY, red: !y.safe }) as Item),
+      {
+        l: "판정",
+        v: unsafe.length ? `${rangeLabel(unsafe.map((y) => y.no))} 1,000만원 이상 ⚠️` : "전 기간 1,000만원 미만 ✅",
+        bold: true,
+        red: unsafe.length > 0,
+      },
+      ...(g.firstYearMinSafeRate > 0
+        ? [{ l: "첫해 최소 안전 이자율", v: `연 ${(g.firstYearMinSafeRate * 100).toFixed(2)}%` } as Item]
+        : []),
+    ]);
+  }
+
   if (hasInterest && res.byYear.length > 0) {
     table(
       "연도별 이자 (세전)",
@@ -318,6 +351,7 @@ function buildTermsSheet(wb: Workbook, res: ScheduleResult, meta: ScheduleMeta, 
           "채권자(갑)는 한 해 이자가 다른 금융소득과 합쳐 2,000만원을 넘으면 종합소득세 신고 대상입니다.",
         ]
       : []),
+    "증여세 안전 체크: 빌린 사람(을)에게 과세됩니다(상증법 제41조의4). 대출일부터 1년마다 '그해 시작 잔액 × 4.6%'와 '그해 실제 이자'의 차액이 1,000만원 미만이면 과세 제외. 참고용.",
     "정산 요약의 금액은 '상환스케줄' 시트 합계를 참조하므로, 시트1 금액을 고치면 함께 바뀝니다.",
     "본 자료는 참고용이며 중도상환·연체·이자율 변경은 반영되지 않습니다. 세무회계 새벽 · www.dawntax.com",
   ];
@@ -334,19 +368,19 @@ function buildTermsSheet(wb: Workbook, res: ScheduleResult, meta: ScheduleMeta, 
 
 /* ───────────────────── 공개 API ───────────────────── */
 
-export async function buildScheduleWorkbook(res: ScheduleResult, meta: ScheduleMeta): Promise<Workbook> {
+export async function buildScheduleWorkbook(res: ScheduleResult, meta: ScheduleMeta, gift?: GiftCheck): Promise<Workbook> {
   const ExcelJS = (await import("exceljs")).default;
   const wb = new ExcelJS.Workbook();
   wb.creator = "세무회계 새벽 (dawntax.com)";
   wb.created = new Date();
   const s1 = buildScheduleSheet(wb, res, meta);
-  buildTermsSheet(wb, res, meta, s1);
+  buildTermsSheet(wb, res, meta, s1, gift);
   return wb;
 }
 
 /** 브라우저: 파일 다운로드 */
-export async function downloadScheduleXlsx(res: ScheduleResult, meta: ScheduleMeta): Promise<void> {
-  const wb = await buildScheduleWorkbook(res, meta);
+export async function downloadScheduleXlsx(res: ScheduleResult, meta: ScheduleMeta, gift?: GiftCheck): Promise<void> {
+  const wb = await buildScheduleWorkbook(res, meta, gift);
   const buf = await wb.xlsx.writeBuffer();
   const blob = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
   const a = document.createElement("a");

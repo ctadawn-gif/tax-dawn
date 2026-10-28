@@ -267,7 +267,8 @@ export function buildSchedule(input: ScheduleInput): ScheduleResult {
   const warnings: string[] = [];
   if (installment && balloonExcess > 0)
     warnings.push(
-      `월 상환액으로는 만기까지 다 갚지 못해 만기(${last.no}회차)에 ${balloonAtMaturity.toLocaleString("ko-KR")}원을 일시 상환하는 것으로 잡았습니다.`
+      // 괄호 뒤 조사("…회차)에")가 줄바꿈으로 떨어지지 않게 괄호 없이 표기
+      `월 상환액만으로는 다 갚지 못해, 만기 ${last.no}회차에 ${balloonAtMaturity.toLocaleString("ko-KR")}원을 일시 상환하는 것으로 잡았습니다.`
     );
   if (r > 0 && byYear.some((y) => y.interest > 20_000_000))
     warnings.push("한 해 이자가 2,000만원을 넘는 연도가 있습니다. 채권자(갑)는 다른 금융소득과 합산해 종합과세 대상이 될 수 있습니다.");
@@ -385,4 +386,16 @@ export function giftCheck(
     firstYearMinSafeRate = raw <= 0 ? 0 : Math.min(GIFT_ADEQUATE_RATE, Math.ceil(raw * 10000 - 1e-9) / 10000);
   }
   return { years, firstYear, firstYearMinSafeRate };
+}
+
+/** 연차 목록을 범위로 — [1,2,3,5] → "1~3·5년차" */
+export function yearRangeLabel(nos: number[]): string {
+  const parts: string[] = [];
+  for (let i = 0; i < nos.length; ) {
+    let j = i;
+    while (j + 1 < nos.length && nos[j + 1] === nos[j] + 1) j++;
+    parts.push(j > i ? `${nos[i]}~${nos[j]}` : `${nos[i]}`);
+    i = j + 1;
+  }
+  return parts.length ? `${parts.join("·")}년차` : "";
 }
