@@ -45,6 +45,8 @@ export default function AcquisitionTaxCalculator() {
   const [isAdjusted, setIsAdjusted] = useState(false);
   const [areaOver85, setAreaOver85] = useState(false);
   const [isFirstHome, setIsFirstHome] = useState(false);
+  const [standardPriceOver3, setStandardPriceOver3] = useState(false);
+  const [donorSingleHome, setDonorSingleHome] = useState(false);
 
   const n = (v: number | string) => (v === "" ? 0 : Number(v));
 
@@ -58,11 +60,14 @@ export default function AcquisitionTaxCalculator() {
         isAdjustedArea: isAdjusted,
         areaOver85,
         isFirstHome,
+        standardPriceOver3,
+        donorSingleHomeToFamily: donorSingleHome,
       }),
-    [propertyType, acqType, price, houseCount, isAdjusted, areaOver85, isFirstHome]
+    [propertyType, acqType, price, houseCount, isAdjusted, areaOver85, isFirstHome, standardPriceOver3, donorSingleHome]
   );
 
   const showHouseOptions = propertyType === "house" && acqType === "purchase";
+  const showHouseNonPurchase = propertyType === "house" && acqType !== "purchase";
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -215,6 +220,66 @@ export default function AcquisitionTaxCalculator() {
                     </div>
                   </>
                 )}
+
+                {/* 주택 증여·상속 옵션 — 85㎡ 초과(농특세), 증여는 조정대상지역 12% 중과 판단 */}
+                {showHouseNonPurchase && (
+                  <>
+                    <div className="w-full h-px bg-ui-border" />
+                    <div className="space-y-4">
+                      <label className="flex items-center justify-between cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="text-[15px] font-bold text-text-primary">전용면적 85㎡ 초과</span>
+                          <span className="text-[12px] text-text-secondary">농어촌특별세 0.2% (중과 시 1.0%)</span>
+                        </div>
+                        <button onClick={() => setAreaOver85(!areaOver85)} className={`relative inline-block w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 shrink-0 ml-3 ${areaOver85 ? "bg-brand-blue" : "bg-slate-300"}`}>
+                          <div className={`absolute w-5 h-5 rounded-full bg-white top-[2px] shadow transition-all duration-200 ${areaOver85 ? "left-[22px]" : "left-[2px]"}`} />
+                        </button>
+                      </label>
+                      {acqType === "gift" && (
+                        <>
+                          <div className="w-full h-px bg-slate-100" />
+                      <label className="flex items-center justify-between cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="text-[15px] font-bold text-text-primary">조정대상지역 주택</span>
+                          <span className="text-[12px] text-text-secondary">증여 중과 판단 (지방세법 §13의2②)</span>
+                        </div>
+                        <button onClick={() => setIsAdjusted(!isAdjusted)} className={`relative inline-block w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 shrink-0 ml-3 ${isAdjusted ? "bg-brand-blue" : "bg-slate-300"}`}>
+                          <div className={`absolute w-5 h-5 rounded-full bg-white top-[2px] shadow transition-all duration-200 ${isAdjusted ? "left-[22px]" : "left-[2px]"}`} />
+                        </button>
+                      </label>
+                          {isAdjusted && (
+                            <>
+                              <div className="w-full h-px bg-slate-100" />
+                      <label className="flex items-center justify-between cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="text-[15px] font-bold text-text-primary">공시가격(시가표준액) 3억 원 이상</span>
+                          <span className="text-[12px] text-text-secondary">조정대상지역 + 3억 이상이면 12% 중과</span>
+                        </div>
+                        <button onClick={() => setStandardPriceOver3(!standardPriceOver3)} className={`relative inline-block w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 shrink-0 ml-3 ${standardPriceOver3 ? "bg-brand-blue" : "bg-slate-300"}`}>
+                          <div className={`absolute w-5 h-5 rounded-full bg-white top-[2px] shadow transition-all duration-200 ${standardPriceOver3 ? "left-[22px]" : "left-[2px]"}`} />
+                        </button>
+                      </label>
+                              {standardPriceOver3 && (
+                                <>
+                                  <div className="w-full h-px bg-slate-100" />
+                      <label className="flex items-center justify-between cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="text-[15px] font-bold text-text-primary">1세대 1주택자가 배우자·자녀 등에게 증여</span>
+                          <span className="text-[12px] text-text-secondary">중과 제외 → 3.5% (§13의2② 단서)</span>
+                        </div>
+                        <button onClick={() => setDonorSingleHome(!donorSingleHome)} className={`relative inline-block w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 shrink-0 ml-3 ${donorSingleHome ? "bg-brand-blue" : "bg-slate-300"}`}>
+                          <div className={`absolute w-5 h-5 rounded-full bg-white top-[2px] shadow transition-all duration-200 ${donorSingleHome ? "left-[22px]" : "left-[2px]"}`} />
+                        </button>
+                      </label>
+                                </>
+                              )}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -324,6 +389,8 @@ export default function AcquisitionTaxCalculator() {
               <li><strong className="text-text-primary font-bold">조정대상지역:</strong> 조정대상지역은 수시로 변경될 수 있으므로, 취득 시점의 지정 현황을 반드시 확인하시기 바랍니다. (일시적 2주택 예외 규정 있음)</li>
               <li><strong className="text-text-primary font-bold">생애최초 감면:</strong> 취득가액 12억원 이하 주택을 생애최초로 구입하는 경우 최대 200만원 한도 내에서 취득세가 감면됩니다. 3개월 내 전입 및 3년 거주 요건이 있습니다.</li>
               <li><strong className="text-text-primary font-bold">농지 세율:</strong> 농지는 매매 3%, 상속 2.3%로 일반 토지(매매 4%, 상속 2.8%)보다 낮은 세율이 적용됩니다. 자경농민 감면(50%) 등 추가 감면은 본 계산기에 반영되어 있지 않습니다.</li>
+              <li><strong className="text-text-primary font-bold">증여 취득세:</strong> 3.5%. 조정대상지역의 공시가격 3억 원 이상 주택은 12% 중과되며, 1세대 1주택자가 배우자·직계존비속에게 증여하는 경우는 제외됩니다(지방세법 §13의2②). 과세표준은 시가인정액(매매사례가액 등)이 원칙입니다.</li>
+              <li><strong className="text-text-primary font-bold">지방교육세:</strong> (취득세 표준세율 − 2%) × 20%. 주택 유상거래(1~3%)는 세율의 10%, 중과(8·12%)는 0.4%. 예) 증여 0.3%, 상속 0.16%.</li>
               <li>농어촌특별세는 전용면적 85㎡ 초과 주택에 부과되나, 읍·면 지역 등 일부 조건에 따라 비과세 될 수 있습니다.</li>
               <li>정확한 세액 산출 및 감면 요건 확인은 반드시 신고 전 세무 전문가와 상담하시기 바랍니다.</li>
             </ul>

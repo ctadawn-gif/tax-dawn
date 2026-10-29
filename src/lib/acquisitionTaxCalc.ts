@@ -28,6 +28,10 @@ export interface AcquisitionTaxInput {
   isAdjustedArea: boolean;
   areaOver85: boolean;
   isFirstHome: boolean;
+  /** (주택 증여) 시가표준액(공시가격) 3억원 이상 — 조정대상지역이면 12% 중과 대상 (지방세법 §13의2②, 시행령 §28의6①) */
+  standardPriceOver3?: boolean;
+  /** (주택 증여) 1세대 1주택자가 소유 주택을 배우자·직계존비속에게 증여 — 중과 제외 (§13의2② 단서) */
+  donorSingleHomeToFamily?: boolean;
 }
 
 export interface AcquisitionTaxResult {
@@ -66,15 +70,14 @@ function calcHouseAcquisitionRate(
   return 12;
 }
 
-// 지방교육세율
-function calcLocalEduRate(acquisitionRate: number, propertyType: PropertyType): number {
-  if (propertyType === "house") {
-    if (acquisitionRate >= 8) return 0.4;
-    return Math.round(acquisitionRate * 10) / 100;
-  }
-  // 비주택: 취득세율의 20% (농지 3% → 0.6%, 일반 4% → 0.4% 등)
-  // 지방세법 시행령에 따라 비주택은 0.4% 고정이 일반적
-  return 0.4;
+// 지방교육세율 (지방세법 §151①1) — (표준세율 − 2%) × 20%
+//   · 주택 유상거래 1~3% 특례: 해당 세율 × 50% × 20% = 세율 × 10%
+//   · 중과(8%·12%): 0.4%
+//   예) 증여 3.5% → 0.3%, 상속 2.8% → 0.16%, 농지 매매 3% → 0.2%, 농지 상속 2.3% → 0.06%, 비주택 매매 4% → 0.4%
+function calcLocalEduRate(acquisitionRate: number, propertyType: PropertyType, acquisitionType: AcquisitionType): number {
+  if (propertyType === "house" && acquisitionRate >= 8) return 0.4;
+  if (propertyType === "house" && acquisitionType === "purchase") return Math.round(acquisitionRate * 10) / 100;
+  return Math.round(Math.max(0, acquisitionRate - 2) * 0.2 * 100) / 100;
 }
 
 // 농특세율
@@ -131,8 +134,14 @@ export function calculateAcquisitionTax(input: AcquisitionTaxInput): Acquisition
     acquisitionTaxRate = 2.8;
     rateDescription = "주택 상속 (2.8%)";
   } else if (propertyType === "house" && acquisitionType === "gift") {
-    acquisitionTaxRate = 3.5;
-    rateDescription = "주택 증여 (3.5%)";
+    // 조정대상지역 + 시가표준액 3억 이상 → 12% 중과. 단, 1세대1주택자가 배우자·직계존비속에게 증여하면 제외
+    if (isAdjustedArea && input.standardPriceOver3 && !input.donorSingleHomeToFamily) {
+      acquisitionTaxRate = 12;
+      rateDescription = "조정대상지역 3억 이상 주택 증여 중과 (12%)";
+    } else {
+      acquisitionTaxRate = 3.5;
+      rateDescription = "주택 증여 (3.5%)";
+    }
   } else if (propertyType === "farmland") {
     // 농지 (지방세법 제11조)
     if (acquisitionType === "purchase") {
@@ -171,7 +180,7 @@ export function calculateAcquisitionTax(input: AcquisitionTaxInput): Acquisition
     }
   }
 
-  const localEduTaxRate = calcLocalEduRate(acquisitionTaxRate, propertyType);
+  const localEduTaxRate = calcLocalEduRate(acquisitionTaxRate, propertyType, acquisitionType);
   const ruralSpecialTaxRate = calcRuralSpecialRate(acquisitionTaxRate, propertyType, areaOver85);
   const totalRate = Math.round((acquisitionTaxRate + localEduTaxRate + ruralSpecialTaxRate) * 100) / 100;
 

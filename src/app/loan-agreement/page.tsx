@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -85,6 +86,20 @@ function Field({
       {children}
     </label>
   );
+}
+
+/** ?amount=300000000 이 있으면 차용 금액을 한 번 채움 (증여세 계산기 → 차용증 연결) */
+function PrefillAmount({ onAmount }: { onAmount: (v: number) => void }) {
+  const params = useSearchParams();
+  const raw = params.get("amount");
+  const done = useRef(false);
+  useEffect(() => {
+    if (done.current || !raw) return;
+    const v = Number(raw.replace(/[^0-9]/g, ""));
+    if (v > 0) onAmount(v);
+    done.current = true;
+  }, [raw, onAmount]);
+  return null;
 }
 
 export default function LoanAgreementPage() {
@@ -188,6 +203,9 @@ export default function LoanAgreementPage() {
   return (
     <div className="min-h-screen bg-white relative" data-print={tab}>
       <Navbar />
+      <Suspense fallback={null}>
+        <PrefillAmount onAmount={setAmount} />
+      </Suspense>
 
       {/* 면책 고지 모달 (첫 진입) */}
       {!agreed && (
