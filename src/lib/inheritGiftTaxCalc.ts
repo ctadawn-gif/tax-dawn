@@ -45,6 +45,10 @@ export interface InheritanceTaxInput {
   priorGiftsToHeir: number;   // 10년 내 상속인 사전증여 (만원)
   priorGiftsToSpouse: number; // 10년 내 배우자 사전증여 (만원)
   generationSkip: boolean;    // 세대생략 상속 여부
+  /** 자녀가 없을 때 생존 부모(직계존속) 수 — 배우자 법정상속분 계산용 (0~2) */
+  parentsAlive?: number;
+  /** 순금융재산 = 금융재산(예금·주식·보험 등) − 금융채무 (만원) — 금융재산상속공제(§22) */
+  netFinancialAssets?: number;
 }
 
 export interface InheritanceTaxResult {
@@ -59,6 +63,10 @@ export interface InheritanceTaxResult {
   lumpSumDeduction: number;     // 일괄공제 (5억)
   appliedDeduction: string;     // 적용된 공제 방식
   spouseDeduction: number;      // 배우자상속공제
+  spouseLegalShare: number;     // 배우자 법정상속분 비율 (예: 1.5/4.5 = 0.333)
+  spouseLegalLimit: number;     // 법정상속분 한도 (만원)
+  spouseDeductionBasis: string; // 공제액 결정 이유
+  financialDeduction: number;   // 금융재산상속공제 (만원)
   totalDeduction: number;       // 공제 합계
   taxableIncome: number;        // 과세표준
   taxRate: string;
@@ -82,6 +90,8 @@ export function calculateInheritanceTax(input: InheritanceTaxInput): Inheritance
     priorGiftsToHeir,
     priorGiftsToSpouse,
     generationSkip,
+    parentsAlive = 0,
+    netFinancialAssets = 0,
   } = input;
 
   // 1. 상속세 과세가액
@@ -108,22 +118,44 @@ export function calculateInheritanceTax(input: InheritanceTaxInput): Inheritance
     ? "기초공제 + 인적공제"
     : "일괄공제 (5억)";
 
-  // 배우자상속공제
+  // 배우자상속공제 (상증법 §19①)
+  //   공제액 = min(실제 상속받은 금액, 법정상속분 한도, 30억). 단, 5억 미만이면(미입력 포함) 5억
+  //   법정상속분 한도 = (상속재산가액 + 10년 내 상속인 사전증여 − 채무·공과금) × 배우자 법정상속분
+  //                     − 배우자 사전증여재산 과세표준(배우자 공제 6억 차감 후)
+  //   배우자 법정상속분 = 1.5 ÷ (1.5 + 자녀 수) · 자녀 없으면 1.5 ÷ (1.5 + 생존 부모 수) · 둘 다 없으면 단독(100%)
+  const coHeirs = children > 0 ? children : Math.max(0, Math.min(2, parentsAlive));
+  const spouseLegalShare = hasSpouse ? 1.5 / (1.5 + coHeirs) : 0;
+  const spousePriorTaxable = Math.max(0, priorGiftsToSpouse - 60000);
+  const spouseLegalLimit = hasSpouse ? Math.max(0, taxableBase * spouseLegalShare - spousePriorTaxable) : 0;
   let spouseDeduction = 0;
+  let spouseDeductionBasis = "";
   if (hasSpouse) {
-    if (spouseInheritance > 0) {
-      // 실제 상속액 기준, 최소 5억 ~ 최대 30억
-      spouseDeduction = Math.max(50000, Math.min(spouseInheritance, 300000));
-    } else {
-      // 입력 안 하면 최소 5억
+    if (spouseInheritance < 50000) {
       spouseDeduction = 50000;
+      spouseDeductionBasis = spouseInheritance > 0 ? "실제 상속액이 5억 미만 → 최소 5억" : "미입력 → 최소 5억";
+    } else {
+      const capped = Math.min(spouseInheritance, spouseLegalLimit, 300000);
+      spouseDeduction = Math.max(50000, capped);
+      spouseDeductionBasis =
+        spouseDeduction === 50000 && capped < 50000
+          ? "법정상속분 한도가 5억 미만 → 최소 5억"
+          : capped === spouseInheritance
+            ? "실제 상속받은 금액"
+            : capped === 300000
+              ? "최대 30억 한도"
+              : "법정상속분 한도";
     }
   }
+
+  // 금융재산상속공제 (상증법 §22) — 순금융재산 2천만 이하 전액 · 1억 이하 2천만 · 초과 20%(2억 한도)
+  const netFin = Math.max(0, Math.min(netFinancialAssets, totalAssets));
+  const financialDeduction =
+    netFin <= 2000 ? netFin : netFin <= 10000 ? 2000 : Math.min(Math.round(netFin * 0.2), 20000);
 
   // 총 공제
   // 상속공제 적용한도: 상속세 과세가액 - 사전증여 과세표준
   const deductionLimit = Math.max(0, taxableBase - priorGiftsToHeir - priorGiftsToSpouse);
-  const rawTotalDeduction = appliedBasicPersonal + spouseDeduction;
+  const rawTotalDeduction = appliedBasicPersonal + spouseDeduction + financialDeduction;
   const totalDeduction = Math.min(rawTotalDeduction, deductionLimit);
 
   // 3. 과세표준
@@ -156,7 +188,11 @@ export function calculateInheritanceTax(input: InheritanceTaxInput): Inheritance
     personalDeductionTotal,
     lumpSumDeduction,
     appliedDeduction,
-    spouseDeduction,
+    spouseDeduction: Math.round(spouseDeduction),
+    spouseLegalShare,
+    spouseLegalLimit: Math.round(spouseLegalLimit),
+    spouseDeductionBasis,
+    financialDeduction,
     totalDeduction: Math.round(totalDeduction),
     taxableIncome: Math.round(taxableIncome),
     taxRate: findRate(taxableIncome),

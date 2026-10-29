@@ -147,6 +147,8 @@ export default function InheritGiftCalculator() {
   const [inhElderly, setInhElderly] = useState(0);
   const [inhPriorGifts, setInhPriorGifts] = useState<number | string>("");
   const [inhGenSkip, setInhGenSkip] = useState(false);
+  const [inhParents, setInhParents] = useState(0); // 자녀가 없을 때 생존 부모 수 (배우자 법정상속분)
+  const [inhFinancial, setInhFinancial] = useState<number | string>(""); // 순금융재산 (금융재산상속공제)
 
   // 증여세 입력 — 원 단위 (차용증 페이지와 같음). 엔진은 만원 단위라 ÷10000 해서 넘김
   const [giftAmountWon, setGiftAmountWon] = useState<number | "">("");
@@ -174,7 +176,20 @@ export default function InheritGiftCalculator() {
     spouseInheritance: n(inhSpouseAmount), children: inhChildren, minorChildren: inhMinor,
     minorRemainingYears: n(inhMinorYears), elderlyCount: inhElderly,
     priorGiftsToHeir: n(inhPriorGifts), priorGiftsToSpouse: 0, generationSkip: inhGenSkip,
-  }), [inhAssets, inhDebts, inhSpouse, inhSpouseAmount, inhChildren, inhMinor, inhMinorYears, inhElderly, inhPriorGifts, inhGenSkip]);
+    parentsAlive: inhParents, netFinancialAssets: n(inhFinancial),
+  }), [inhAssets, inhDebts, inhSpouse, inhSpouseAmount, inhChildren, inhMinor, inhMinorYears, inhElderly, inhPriorGifts, inhGenSkip, inhParents, inhFinancial]);
+  // 만원 → "10억" / "1억 2,857만" — 상속 탭은 만원 단위 입력
+  const manKo = (m: number) => wonKo(m * 10000).replace(/ 원$/, "");
+  // 배우자 법정상속분 표시용 — "1.5 ÷ (1.5 + 자녀 3) = 33.3%"
+  const inhCoHeirs = inhChildren > 0 ? inhChildren : inhParents;
+  const inhShareText = inhCoHeirs > 0
+    ? `1.5 ÷ (1.5 + ${inhChildren > 0 ? `자녀 ${inhChildren}` : `부모 ${inhParents}`}) = ${(inhResult.spouseLegalShare * 100).toFixed(1)}%`
+    : "단독 상속 100%";
+  const inhDeductionParts = [
+    inhResult.appliedDeduction === "일괄공제 (5억)" ? "일괄 5억" : `기초+인적 ${manKo(inhResult.personalDeductionTotal)}`,
+    inhSpouse ? `배우자 ${manKo(inhResult.spouseDeduction)}` : "",
+    inhResult.financialDeduction > 0 ? `금융재산 ${manKo(inhResult.financialDeduction)}` : "",
+  ].filter(Boolean).join(" + ");
 
   const toChild = giftRelation === "linealAdult" || giftRelation === "linealMinor";
   // 같은 공제 그룹(직계존속·직계비속·기타친족)의 다른 분께 받아 이미 쓴 공제
@@ -312,6 +327,22 @@ export default function InheritGiftCalculator() {
                         <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                       </div>
                     </div>
+                    <div>
+                      <label className="block text-[14px] font-bold text-text-secondary mb-2">순금융재산 <span className="text-xs font-normal text-slate-400 ml-1 whitespace-nowrap">(예금·주식·보험 − 금융채무)</span></label>
+                      <div className="relative">
+                        <input type="text" inputMode="numeric" value={formatNumberInput(inhFinancial)} onChange={(e) => setInhFinancial(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px]" />
+                        <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
+                      </div>
+                      {n(inhFinancial) > 0 && (
+                        <p className="mt-1.5 text-[12px] text-brand-blue font-semibold text-right">
+                          금융재산상속공제 {manKo(inhResult.financialDeduction)} 원
+                        </p>
+                      )}
+                      <p className="mt-1 text-[11px] text-slate-400 leading-relaxed text-pretty">
+                        <Ph>총 상속재산에 포함된 금액.</Ph> <Ph>2천만 이하 전액 ·</Ph> <Ph>1억 이하 2천만 ·</Ph>{" "}
+                        <Ph>넘으면 20% (최대 2억)</Ph>
+                      </p>
+                    </div>
                     <div className="flex items-center justify-between p-4 bg-ui-surface rounded-xl">
                       <span className="text-[14px] font-bold text-text-secondary">배우자 유무</span>
                       <button onClick={() => setInhSpouse(!inhSpouse)} className={`relative inline-block w-12 h-6 rounded-full cursor-pointer transition-colors duration-200 ${inhSpouse ? "bg-brand-blue" : "bg-slate-200"}`}>
@@ -325,9 +356,23 @@ export default function InheritGiftCalculator() {
                           <input type="text" inputMode="numeric" value={formatNumberInput(inhSpouseAmount)} onChange={(e) => setInhSpouseAmount(parseNumberInput(e.target.value))} placeholder="미입력 시 최소 5억 적용" className="w-full pl-4 pr-12 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-bold text-text-primary text-[15px] placeholder-slate-400" />
                           <span className="absolute right-4 top-3.5 text-text-secondary text-sm font-medium">만원</span>
                         </div>
+                        {n(inhAssets) > 0 && (
+                          <div className="mt-2 rounded-lg bg-blue-50/60 border border-blue-100 px-3 py-2 text-[12px] text-text-secondary leading-relaxed">
+                            <div>
+                              <Ph>법정상속분 {inhShareText}</Ph> <Ph>→ 한도 {manKo(inhResult.spouseLegalLimit)} 원</Ph>
+                            </div>
+                            <div className="font-bold text-brand-blue">
+                              <Ph>배우자공제 {manKo(inhResult.spouseDeduction)} 원</Ph>{" "}
+                              <Ph className="font-medium text-text-secondary">({inhResult.spouseDeductionBasis})</Ph>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                     <Counter label="자녀 수" value={inhChildren} onChange={setInhChildren} />
+                    {inhSpouse && inhChildren === 0 && (
+                      <Counter label="생존 부모 수" sub="자녀가 없으면 배우자와 함께 상속 (최대 2)" value={inhParents} onChange={(v) => setInhParents(Math.min(2, v))} />
+                    )}
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">10년 내 사전증여 합산액</label>
                       <div className="relative">
@@ -406,7 +451,7 @@ export default function InheritGiftCalculator() {
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h4 className="text-lg font-bold text-text-primary">예상 납부 세액 결과</h4>
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-md border border-blue-100 text-xs font-bold">
-                      적용 공제: {inhResult.appliedDeduction}{inhSpouse ? " + 배우자공제" : ""}
+                      적용 공제: {inhDeductionParts}
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -787,7 +832,17 @@ export default function InheritGiftCalculator() {
             <ul className="space-y-2 text-[13px] text-text-secondary leading-relaxed pl-5 list-disc text-pretty">
               <li>본 계산기는 개략적인 예상 세액을 산출하기 위한 참고용 도구이며, 실제 부과되는 세액과 차이가 발생할 수 있습니다.</li>
               <li><strong className="text-text-primary font-bold">상속세의 경우 일괄공제(5억)와 기초공제+인적공제 합산액 중 큰 금액을 자동으로 적용</strong>하여 계산합니다.</li>
-              <li>가업상속공제, 영농상속공제, 동거주택 상속공제 등 특례 조항이나 금융재산상속공제, 감정평가 수수료 공제 등은 본 간편 계산기에 반영되어 있지 않습니다.</li>
+              <li>가업상속공제, 영농상속공제, 동거주택 상속공제 등 특례 조항이나 감정평가 수수료 공제 등은 본 간편 계산기에 반영되어 있지 않습니다.</li>
+              {tab === "inheritance" && (
+                <>
+                  <li>
+                    <strong className="text-text-primary font-bold">배우자상속공제</strong>는 실제 상속받은 금액만큼 공제하되 <strong className="text-text-primary font-bold">법정상속분 한도</strong>(상속재산 × 배우자 지분, 자녀와 함께면 1.5 ÷ (1.5 + 자녀 수))와 30억을 넘지 못합니다. 5억 미만이면 5억을 공제합니다(상증법 §19). 실제 상속액으로 인정받으려면 신고기한 다음 날부터 9개월 안에 분할·등기를 마쳐야 합니다.
+                  </li>
+                  <li>
+                    <strong className="text-text-primary font-bold">금융재산상속공제</strong>는 예금·주식·보험 등에서 금융채무를 뺀 순금융재산 기준입니다. 2천만 원 이하 전액, 1억 이하 2천만 원, 넘으면 20%(최대 2억)를 공제합니다(상증법 §22). 차명계좌 등 신고하지 않은 금융재산은 공제되지 않습니다.
+                  </li>
+                </>
+              )}
               <li>증여재산공제는 동일인으로부터 10년간 합산하여 적용되며, 이미 사전증여로 공제를 사용한 경우 잔여 공제만 적용됩니다.</li>
               {tab === "gift" && (
                 <>
