@@ -208,7 +208,8 @@ export default function InheritGiftCalculator() {
       debtAssumption: man(giftDebtWon),
       generationSkip: giftGenSkip,
       // 미성년 손자녀 · 증여재산가액(채무 차감 후) 20억 초과 → 할증 40% (자동)
-      isMinorOver20: giftRelation === "linealMinor" && giftGenSkip && man(giftAmountWon) - man(giftDebtWon) > 200000,
+      // §57① "증여재산가액이 20억원을 초과" — 인수채무를 빼기 전 금액으로 판단
+      isMinorOver20: giftRelation === "linealMinor" && giftGenSkip && man(giftAmountWon) > 200000,
       nonTaxable: man(giftNonTaxWon),
       appraisalFee: man(giftFeeWon),
       marriage: toChild && giftMarriage,
@@ -562,7 +563,7 @@ export default function InheritGiftCalculator() {
                         </button>
                       </div>
                       <p className="text-[11px] text-text-secondary mt-2 leading-relaxed">
-                        산출세액의 30%가 할증됩니다 (미성년 · 20억 초과 → 40%, 자동 판단). 자녀가 먼저 사망해 손자녀가 대습상속인이 되는 경우는 할증하지 않습니다.
+                        산출세액의 30%가 할증됩니다 (미성년 · 20억 초과 → 40%, 자동 판단). 20억은 넘긴 채무를 빼기 전 증여재산가액 기준이며, 채무 차감 후로 보는 견해도 있어 경계 금액이면 상담을 권합니다. 자녀가 먼저 사망해 손자녀가 대습상속인이 되는 경우는 할증하지 않습니다.
                       </p>
                     </div>
 
@@ -732,6 +733,7 @@ export default function InheritGiftCalculator() {
                         </div>
                       )}
                       <div className="text-[12px] text-slate-500">증여일이 속한 달 말일부터 3개월 (상증법 §68)</div>
+                      <div className="text-[12px] text-slate-400">주말·양력 공휴일만 반영 <Ph>(설·추석 연휴·대체공휴일 미반영)</Ph></div>
                     </div>
                   )}
                 </div>
@@ -766,7 +768,9 @@ export default function InheritGiftCalculator() {
                 <Link href="/calculator/acquisition-tax" className="group block rounded-2xl border border-ui-border bg-white p-5 hover:border-brand-blue transition-colors no-underline">
                   <div className="text-[14px] font-extrabold text-text-primary group-hover:text-brand-blue">부동산 증여라면 취득세도 →</div>
                   <p className="mt-1 text-[12px] text-text-secondary leading-relaxed">
-                    받는 사람이 취득세 3.5%를 냅니다. 조정대상지역 공시가 3억 이상 주택은 12%.
+                    받는 사람이 취득세 3.5%, <Ph>지방교육세·농특세까지 4.0%</Ph>{" "}
+                    <Ph>(85㎡ 이하 주택 3.8%)를 냅니다.</Ph> <Ph>조정대상지역 공시가 3억 이상 주택은 12%</Ph>{" "}
+                    <Ph>(1세대 1주택자가 배우자·자녀에게 주면 제외).</Ph>
                   </p>
                 </Link>
                 <Link
@@ -832,7 +836,7 @@ export default function InheritGiftCalculator() {
             <ul className="space-y-2 text-[13px] text-text-secondary leading-relaxed pl-5 list-disc text-pretty">
               <li>본 계산기는 개략적인 예상 세액을 산출하기 위한 참고용 도구이며, 실제 부과되는 세액과 차이가 발생할 수 있습니다.</li>
               <li><strong className="text-text-primary font-bold">상속세의 경우 일괄공제(5억)와 기초공제+인적공제 합산액 중 큰 금액을 자동으로 적용</strong>하여 계산합니다.</li>
-              <li>가업상속공제, 영농상속공제, 동거주택 상속공제 등 특례 조항이나 감정평가 수수료 공제 등은 본 간편 계산기에 반영되어 있지 않습니다.</li>
+              <li>(상속세) 가업상속공제, 영농상속공제, 동거주택 상속공제 등 특례 조항과 감정평가 수수료 공제는 본 간편 계산기에 반영되어 있지 않습니다.</li>
               {tab === "inheritance" && (
                 <>
                   <li>
@@ -843,7 +847,7 @@ export default function InheritGiftCalculator() {
                   </li>
                 </>
               )}
-              <li>증여재산공제는 동일인으로부터 10년간 합산하여 적용되며, 이미 사전증여로 공제를 사용한 경우 잔여 공제만 적용됩니다.</li>
+              <li>증여재산공제는 관계별로 10년간 한 번입니다(부모·조부모는 5,000만 원을 함께 씀). 같은 분께 받은 금액은 10년간 합산해 세율을 매깁니다.</li>
               {tab === "gift" && (
                 <>
                   <li>혼인·출산 공제는 2024년 1월 1일 이후 증여분부터 적용됩니다.</li>

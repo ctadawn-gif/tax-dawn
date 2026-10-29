@@ -245,7 +245,7 @@ export interface GiftTaxInput {
   otherExemptionUsed?: number;
   debtAssumption: number;      // 채무 인수액 (만원) — 부담부증여
   generationSkip: boolean;     // 세대생략 증여 여부
-  isMinorOver20: boolean;      // 미성년자이면서 증여재산 20억 초과 (할증 40%)
+  isMinorOver20: boolean;      // 미성년자이면서 증여재산가액(채무 차감 전) 20억 초과 (할증 40%, §57①)
   /** 비과세·과세가액 불산입액 (만원) */
   nonTaxable?: number;
   /** 감정평가수수료 (만원) — 500만원 한도 (상증령 §20의3③, 증여 준용) */
