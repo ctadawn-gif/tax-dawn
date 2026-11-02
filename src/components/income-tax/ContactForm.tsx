@@ -1,6 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
+import {
+  CALC_SUMMARY_KEY,
+  calcSummaryText,
+  parseCalcSummary,
+  saveCalcSummary,
+  type CalcSummary,
+} from "@/lib/calcSummary";
 
 type FormState = {
   name: string;
@@ -36,6 +43,7 @@ const GENERAL_TOPICS = [
   "상속세",
   "증여세",
   "양도소득세",
+  "취득세·보유세",
   "기타 (자금조달계획서 등)",
 ];
 
@@ -68,6 +76,39 @@ const VARIANT_CONFIG: Record<
   },
 };
 
+// 계산기에서 넘어온 요약은 sessionStorage에서 읽는다 (서버 렌더 때는 없음)
+const noSubscribe = () => () => {};
+const readCalcRaw = () => {
+  try {
+    return sessionStorage.getItem(CALC_SUMMARY_KEY);
+  } catch {
+    return null;
+  }
+};
+
+/** 계산기에서 넘어온 결과 — 상담 신청 시 함께 전달 */
+function CalcSummaryCard({ calc, onRemove }: { calc: CalcSummary; onRemove: () => void }) {
+  return (
+    <div className="rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3.5 text-left">
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <p className="text-[13px] font-bold text-brand-blue">함께 보낼 계산 결과 · {calc.source}</p>
+        <button
+          type="button"
+          onClick={onRemove}
+          className="shrink-0 text-[12px] text-slate-500 underline underline-offset-2 bg-transparent border-none p-1"
+        >
+          빼고 보내기
+        </button>
+      </div>
+      <ul className="space-y-0.5 text-[13px] text-slate-700 leading-relaxed">
+        {calc.lines.map((l, i) => (
+          <li key={i}>{l}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function formatPhone(raw: string) {
   const digits = raw.replace(/\D/g, "").slice(0, 11);
   if (digits.length < 4) return digits;
@@ -83,11 +124,34 @@ export default function ContactForm({
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [topicTouched, setTopicTouched] = useState(false);
+  const [calcDismissed, setCalcDismissed] = useState(false);
 
   const config = VARIANT_CONFIG[variant];
 
+  const calcRaw = useSyncExternalStore(noSubscribe, readCalcRaw, () => null);
+  const calc = useMemo(() => parseCalcSummary(calcRaw), [calcRaw]);
+  const activeCalc = calcDismissed ? null : calc;
+  // 계산기에서 넘어왔으면 상담 주제를 미리 골라 둔다 (직접 바꾸면 그 값을 따름)
+  const taxTypeValue =
+    topicTouched || !activeCalc || !config.topics.includes(activeCalc.topic)
+      ? form.taxType
+      : activeCalc.topic;
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const clearCalc = () => {
+    saveCalcSummary(null);
+    setCalcDismissed(true);
+  };
+  // 결과만 빼고, 미리 골라 둔 상담 주제는 남긴다
+  const removeCalc = () => {
+    if (!topicTouched) {
+      update("taxType", taxTypeValue);
+      setTopicTouched(true);
+    }
+    clearCalc();
   };
 
   const validate = (): string | null => {
@@ -117,7 +181,9 @@ export default function ContactForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          taxType: taxTypeValue,
           phone: form.phone.replace(/\D/g, ""),
+          calcSummary: activeCalc ? calcSummaryText(activeCalc) : "",
         }),
       });
 
@@ -128,6 +194,8 @@ export default function ContactForm({
 
       setStatus("success");
       setForm(INITIAL);
+      setTopicTouched(false);
+      clearCalc();
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.");
       setStatus("error");
@@ -185,6 +253,8 @@ export default function ContactForm({
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
+              {activeCalc && <CalcSummaryCard calc={activeCalc} onRemove={removeCalc} />}
+
               {/* 이름 */}
               <div className="flex flex-col">
                 <label htmlFor="name-m" className="text-[14px] font-bold text-slate-700 mb-2">
@@ -230,8 +300,11 @@ export default function ContactForm({
                 <div className="relative">
                   <select
                     id="taxType-m"
-                    value={form.taxType}
-                    onChange={(e) => update("taxType", e.target.value)}
+                    value={taxTypeValue}
+                    onChange={(e) => {
+                      setTopicTouched(true);
+                      update("taxType", e.target.value);
+                    }}
                     className="w-full h-12 pl-4 pr-10 rounded-[12px] border border-slate-200 bg-white text-[15px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all appearance-none cursor-pointer"
                   >
                     <option value="">{config.topicPlaceholder}</option>
@@ -319,7 +392,7 @@ export default function ContactForm({
                 </button>
 
                 <p className="text-[12px] text-slate-500 text-center leading-relaxed">
-                  제출 시 개인정보 수집 동의로 간주합니다.
+                  제출 시 개인정보{activeCalc ? "·계산 결과" : ""} 수집 동의로 간주합니다.
                   <br />
                   상담 완료 후 즉시 파기됩니다.
                 </p>
@@ -374,6 +447,8 @@ export default function ContactForm({
                 onSubmit={handleSubmit}
                 className="bg-white rounded-[24px] border border-ui-border shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] p-6 md:p-10 space-y-5"
               >
+                {activeCalc && <CalcSummaryCard calc={activeCalc} onRemove={removeCalc} />}
+
                 {/* 이름 */}
                 <div>
                   <label htmlFor="name" className="block text-[14px] font-bold text-text-primary mb-2">
@@ -414,8 +489,11 @@ export default function ContactForm({
                   </label>
                   <select
                     id="taxType"
-                    value={form.taxType}
-                    onChange={(e) => update("taxType", e.target.value)}
+                    value={taxTypeValue}
+                    onChange={(e) => {
+                      setTopicTouched(true);
+                      update("taxType", e.target.value);
+                    }}
                     className="w-full px-4 py-3 rounded-xl border border-ui-border bg-white text-[15px] text-text-primary focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-blue-100 transition-all appearance-none bg-no-repeat bg-[right_1rem_center] bg-[length:1rem] bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke=%22%2364748b%22><path stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%222%22 d=%22M19 9l-7 7-7-7%22/></svg>')] pr-10"
                   >
                     <option value="">{config.topicPlaceholder}</option>
@@ -470,7 +548,7 @@ export default function ContactForm({
                 </button>
 
                 <p className="text-[12.5px] text-text-secondary text-center leading-relaxed">
-                  제출 시 <strong>세무회계 새벽</strong>의 개인정보 수집(이름·연락처·메모)에 동의하는 것으로 간주됩니다.
+                  제출 시 <strong>세무회계 새벽</strong>의 개인정보 수집(이름·연락처·메모{activeCalc ? "·계산 결과" : ""})에 동의하는 것으로 간주됩니다.
                   <br />
                   수집된 정보는 상담 목적 외 사용되지 않으며, 상담 완료 후 파기됩니다.
                 </p>

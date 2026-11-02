@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
+import { manKo } from "@/lib/calcSummary";
 import {
   calculateAcquisitionTax,
   type PropertyType,
@@ -68,6 +70,14 @@ export default function AcquisitionTaxCalculator() {
 
   const showHouseOptions = propertyType === "house" && acqType === "purchase";
   const showHouseNonPurchase = propertyType === "house" && acqType !== "purchase";
+
+  // 상담 신청 시 함께 보낼 계산 요약
+  const consultLines = n(price) > 0 ? [
+    `대상: ${propertyTypes.find((t) => t.k === propertyType)?.l} · ${acqTypes.find((t) => t.k === acqType)?.l}`,
+    showHouseOptions && `주택 수: ${houseCounts.find((h) => h.k === houseCount)?.l}${isAdjusted ? " · 조정대상지역" : ""}`,
+    `취득가액: ${manKo(n(price))}`,
+    `예상 취득세(교육세·농특세 포함): ${manKo(result.totalTax)}`,
+  ] : [];
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -402,7 +412,7 @@ export default function AcquisitionTaxCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">취득세 관련 궁금한 점이 있으시면 편하게 연락주세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
+              <ConsultButton source="취득세 계산기" topic="취득세·보유세" lines={consultLines} className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</ConsultButton>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 사례 보기</a>
             </div>
           </div>

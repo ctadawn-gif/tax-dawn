@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
+import { manKo } from "@/lib/calcSummary";
 import {
   calculateHoldingTaxAll,
   type HoldingTaxInput,
@@ -65,6 +67,14 @@ export default function HoldingTaxCalculator() {
   const Suffix = ({ t }: { t: string }) => (
     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary text-sm font-bold">{t}</span>
   );
+
+  // 상담 신청 시 함께 보낼 계산 요약
+  const consultLines = n(price) > 0 ? [
+    `구분: ${household === "single" ? "1세대 1주택" : `다주택 (${houseCount}주택${isAdjusted ? " · 조정대상지역" : ""})`}`,
+    `공시가격: ${manKo(n(price))}`,
+    `예상 보유세 ${MODE_LABEL["2026"]}: ${manKo(results["2026"].holdingTaxTotal)}`,
+    `예상 보유세 ${MODE_LABEL["2028"]}: ${manKo(results["2028"].holdingTaxTotal)}`,
+  ] : [];
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -423,7 +433,7 @@ export default function HoldingTaxCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">종부세·보유세 절세, 공동명의·세액공제 판단이 궁금하시면 편하게 연락주세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
+              <ConsultButton source="보유세 계산기" topic="취득세·보유세" lines={consultLines} className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</ConsultButton>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 보기</a>
             </div>
           </div>

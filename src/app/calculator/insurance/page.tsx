@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
+import { wonKo } from "@/lib/calcSummary";
 import {
   calculateSocialInsurance,
   COMPANY_SIZE_LABELS,
@@ -71,6 +73,13 @@ export default function InsuranceCalculator() {
     }),
     [salary, taxFreeMeal, taxFreeCar, taxFreeChildcare, taxFreeOther, companySize, industryType, dependents, childrenCount]
   );
+
+  // 상담 신청 시 함께 보낼 계산 요약
+  const consultLines = n(salary) > 0 ? [
+    `월 급여: ${wonKo(n(salary))}`,
+    `4대보험 근로자 부담: ${wonKo(result.totalEmployee)} · 사업주 부담: ${wonKo(result.totalEmployer)}`,
+    `예상 실수령액: ${wonKo(result.netPay)}`,
+  ] : [];
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -405,7 +414,7 @@ export default function InsuranceCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">4대보험 관련 궁금한 점이 있으시면 편하게 연락주세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
+              <ConsultButton source="4대보험료 계산기" topic="기장대행" lines={consultLines} className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</ConsultButton>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 사례 보기</a>
             </div>
           </div>

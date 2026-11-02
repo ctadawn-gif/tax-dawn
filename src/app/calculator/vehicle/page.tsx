@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
+import { manKo } from "@/lib/calcSummary";
 import PrintButton, { PrintHeader } from "@/components/PrintButton";
 import CalculatorShareBar from "@/components/CalculatorShareBar";
 import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
@@ -233,6 +235,15 @@ export default function VehicleCalculator() {
   const noLogWarning = !log && anyResult && (buyRes?.d1! > 0 || leaseRes?.d1! > 0 || rentRes?.d1! > 0);
   const noLogSafe = !log && anyResult && !noLogWarning && ((buyRes && buyRes.d1 === 0) || (leaseRes && leaseRes.d1 === 0) || (rentRes && rentRes.d1 === 0));
 
+  // 상담 신청 시 함께 보낼 계산 요약
+  const consultLines = num(buyPrice) + num(leaseMo) + num(rentMo) > 0 ? [
+    `사업자 구분: ${ent === "corp" ? "법인" : "개인"}`,
+    num(buyPrice) > 0 && `구매 검토: 차량가 ${manKo(num(buyPrice))}`,
+    num(leaseMo) > 0 && `리스 검토: 월 ${manKo(num(leaseMo))}`,
+    num(rentMo) > 0 && `렌트 검토: 월 ${manKo(num(rentMo))}`,
+    `운행기록부: ${log ? `작성 (업무 사용 ${num(pct)}%)` : "미작성"}`,
+  ] : [];
+
   return (
     <div className="min-h-screen bg-white relative">
       <div className="bg-grid hidden md:block" />
@@ -441,12 +452,14 @@ export default function VehicleCalculator() {
             계산기로 간단하게 확인해보셨다면, 정확한 비용 처리는 세무사와 상담하세요.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-            <Link
-              href="/contact"
+            <ConsultButton
+              source="업무용승용차 비용 계산기"
+              topic="기장대행"
+              lines={consultLines}
               className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline"
             >
               상담 신청하기
-            </Link>
+            </ConsultButton>
             <a
               href="https://blog.naver.com/tax_dawn"
               target="_blank"

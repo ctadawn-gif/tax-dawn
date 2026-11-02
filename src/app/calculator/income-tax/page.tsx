@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
+import { manKo, wonKo } from "@/lib/calcSummary";
 import {
   calculateIncomeTax,
   type IncomeType,
@@ -238,6 +240,16 @@ export default function IncomeTaxCalculator() {
         ? `${industryRate.standardRate}%`
         : "장부작성"
     : null;
+
+  // 상담 신청 시 함께 보낼 계산 요약
+  const hasBusiness = incomeType !== "salary" && n(businessRevenue) > 0;
+  const hasSalary = incomeType !== "business" && n(salaryRevenue) > 0;
+  const consultLines = hasBusiness || hasSalary ? [
+    `소득 유형: ${incomeTypes.find((t) => t.k === incomeType)?.l}`,
+    hasBusiness && `사업 수입: ${wonKo(n(businessRevenue))}`,
+    hasSalary && `근로 총급여: ${wonKo(n(salaryRevenue))}`,
+    `예상 ${result.finalTax < 0 ? "환급" : "납부"}액(지방소득세 포함): ${manKo(Math.abs(result.finalTax))}`,
+  ] : [];
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -709,7 +721,7 @@ export default function IncomeTaxCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">계산기로 간단하게 확인해보셨다면, 정확한 절세 방법은 세무사와 상담하세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/income-tax#inquiry-form" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
+              <ConsultButton source="종합소득세 계산기" topic="종합소득세" href="/income-tax#inquiry-form" lines={consultLines} className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</ConsultButton>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 사례 보기</a>
             </div>
           </div>

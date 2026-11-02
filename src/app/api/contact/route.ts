@@ -18,6 +18,8 @@ type ContactPayload = {
   phone?: string;
   taxType?: string;
   memo?: string;
+  /** 계산기에서 넘어온 결과 요약 (선택) */
+  calcSummary?: string;
 };
 
 function escapeHtml(text: string) {
@@ -125,6 +127,7 @@ export async function POST(req: Request) {
   const phoneDigits = (payload.phone || "").replace(/\D/g, "");
   const taxType = (payload.taxType || "").trim().slice(0, 50);
   const memo = (payload.memo || "").trim().slice(0, 500);
+  const calcSummary = (payload.calcSummary || "").trim().slice(0, 1000);
 
   // 기본 검증
   if (!name) return NextResponse.json({ error: "이름을 입력해주세요." }, { status: 400 });
@@ -151,6 +154,10 @@ export async function POST(req: Request) {
     `연락처: ${phone}`,
     taxType ? `유형: ${taxType}` : null,
     memo ? `메모: ${memo}` : null,
+    // LMS 2,000바이트 안에 들도록 문자에는 앞부분만 (전체는 이메일)
+    calcSummary
+      ? `계산 결과\n${calcSummary.length > 300 ? `${calcSummary.slice(0, 300)}…` : calcSummary}`
+      : null,
     ``,
     `접수: ${nowKst}`,
   ]
@@ -179,6 +186,11 @@ export async function POST(req: Request) {
           ${
             memo
               ? `<tr><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #64748b; font-weight: 600; vertical-align: top;">메모</td><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; white-space: pre-wrap; line-height: 1.6;">${escapeHtml(memo)}</td></tr>`
+              : ""
+          }
+          ${
+            calcSummary
+              ? `<tr><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #64748b; font-weight: 600; vertical-align: top;">계산 결과</td><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; white-space: pre-wrap; line-height: 1.6;">${escapeHtml(calcSummary)}</td></tr>`
               : ""
           }
           <tr>

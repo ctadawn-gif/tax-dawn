@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
 import {
   calculateInheritanceTax,
   calculateGiftTax,
@@ -239,6 +240,24 @@ export default function InheritGiftCalculator() {
     { k: "otherRelative", l: "기타 친족 (1천만)", sub: "4촌 혈족 · 3촌 인척" },
     { k: "other", l: "기타 (0)" },
   ];
+
+  // 상담 신청 시 함께 보낼 계산 요약 (금액 표시는 이 페이지의 wonKo와 같게)
+  const giftRel = relations.find((r) => r.k === giftRelation);
+  const consultLines = tab === "inheritance"
+    ? n(inhAssets) > 0 ? [
+        `상속재산: ${wonKo(n(inhAssets) * 10000)}${n(inhDebts) > 0 ? ` (채무·장례비 ${wonKo(n(inhDebts) * 10000)})` : ""}`,
+        `상속인: ${inhSpouse ? "배우자, " : ""}자녀 ${inhChildren}명`,
+        `공제: ${inhDeductionParts}`,
+        `예상 상속세: ${wonKo(inhResult.finalTax * 10000)}`,
+      ] : []
+    : giftAmountWon !== "" && giftAmountWon > 0 ? [
+        `관계: ${giftRel?.l}${giftRel?.sub ? ` ${giftRel.sub}` : ""}`,
+        `증여 금액: ${wonKo(giftAmountWon)}`,
+        giftPriorWon !== "" && giftPriorWon > 0 && `10년 안에 같은 분께 받은 증여: ${wonKo(giftPriorWon)}`,
+        giftDebtWon !== "" && giftDebtWon > 0 && `넘겨받는 채무(부담부증여): ${wonKo(giftDebtWon)}`,
+        giftResult.marriageBirthExemption > 0 && `${giftResult.marriageBirthLabel} 공제 적용`,
+        `예상 증여세: ${wonKo(giftResult.finalTaxWon)}`,
+      ] : [];
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -864,7 +883,7 @@ export default function InheritGiftCalculator() {
           <div className="bg-white rounded-2xl p-8 border border-ui-border shadow-sm text-center">
             <p className="text-[15px] text-text-secondary mb-6">계산기로 간단하게 확인해보셨다면, 정확한 절세 방법은 세무사와 상담하세요.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[480px] mx-auto">
-              <Link href="/contact" className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</Link>
+              <ConsultButton source={tab === "inheritance" ? "상속세 계산기" : "증여세 계산기"} topic={tab === "inheritance" ? "상속세" : "증여세"} lines={consultLines} className="flex-1 px-6 py-3.5 bg-brand-blue text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-colors text-center no-underline">상담 신청하기</ConsultButton>
               <a href="https://blog.naver.com/tax_dawn" target="_blank" rel="noopener noreferrer" className="flex-1 px-6 py-3.5 bg-white text-text-primary border-2 border-ui-border rounded-xl text-[14px] font-bold hover:border-brand-blue hover:text-brand-blue transition-colors text-center">블로그에서 사례 보기</a>
             </div>
           </div>

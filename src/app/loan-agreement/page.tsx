@@ -3,6 +3,8 @@
 import { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import ConsultButton from "@/components/ConsultButton";
+import { wonKo } from "@/lib/calcSummary";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PrintButton from "@/components/PrintButton";
@@ -199,6 +201,15 @@ export default function LoanAgreementPage() {
   }, [amt, r, mAmt, loanDate, dueDate, repayType, repayDay, intDay]);
   // 스케줄표 탭 활성 조건: 금액·기간 + (이자 또는 분할상환)
   const scheduleReady = calc.schedule.rows.length > 0 && (r > 0 || (repayType === "installment" && mAmt > 0));
+
+  // 상담 신청 시 함께 보낼 요약 — 이름·주민번호·주소·계좌는 넣지 않는다
+  const consultLines = amt > 0 ? [
+    `빌리는 금액: ${wonKo(amt)}`,
+    `연 이자율: ${rate || 0}%`,
+    loanDate && dueDate && `기간: ${loanDate} ~ ${dueDate}`,
+    `상환 방식: ${repayType === "installment" ? `분할상환${mAmt > 0 ? ` (월 ${wonKo(mAmt)})` : ""}` : "만기 일시상환"}`,
+    `적정이자 대비 이자 차액(연): ${wonKo(calc.benefit)}`,
+  ] : [];
 
   return (
     <div className="min-h-screen bg-white relative" data-print={tab}>
@@ -1048,8 +1059,10 @@ export default function LoanAgreementPage() {
             ))}
           </div>
 
-          <Link
-            href="/contact"
+          <ConsultButton
+            source="차용증 자동작성"
+            topic="증여세"
+            lines={consultLines}
             className="mt-5 block rounded-2xl border border-ui-border bg-ui-surface p-5 hover:border-brand-blue transition-colors group no-underline"
           >
             <div className="text-[15px] font-extrabold text-text-primary mb-1 group-hover:text-brand-blue">
@@ -1059,7 +1072,7 @@ export default function LoanAgreementPage() {
               자금출처 소명, 큰 금액 차용, 무이자 한도 초과 등은 세무사 상담이 안전합니다. 상담 문의를 남겨주시면
               세무사가 직접 연락드립니다.
             </p>
-          </Link>
+          </ConsultButton>
         </section>
 
         <p className="no-print mt-6 text-[12px] text-slate-400 leading-relaxed">
