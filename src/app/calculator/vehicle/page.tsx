@@ -110,11 +110,8 @@ function ResultCard({
 }) {
   if (!res)
     return (
-      <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] flex flex-col opacity-50">
+      <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col opacity-50">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-            {icon}
-          </div>
           <h3 className="text-xl font-bold text-text-primary">{title}</h3>
         </div>
         <div className="text-sm text-text-secondary text-center py-8">
@@ -126,11 +123,8 @@ function ResultCard({
   const saved = cmpD1 != null ? cmpD1 - res.d1 : 0;
 
   return (
-    <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,82,255,0.15)] transition-all duration-300 flex flex-col">
+    <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-          {icon}
-        </div>
         <h3 className="text-xl font-bold text-text-primary">{title}</h3>
       </div>
 
@@ -173,7 +167,7 @@ function ResultCard({
 
       <div className="mt-6 bg-brand-navy rounded-xl p-5 text-center">
         <div className="text-[12px] text-white/60 mb-1">세법상 인정 경비</div>
-        <div className="text-[28px] font-extrabold text-white tracking-tight">
+        <div className="text-[28px] font-semibold text-white tracking-tight">
           {fmt(res.ok)}<span className="text-sm font-medium ml-0.5">만원</span>
         </div>
         <div className="text-[11px] text-white/40 mt-1">
@@ -257,12 +251,9 @@ export default function VehicleCalculator() {
       </header>
 
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
-          <span>🧮</span>
-          <span className="pt-[1px]">무료 세금 계산기</span>
-        </div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
           업무용승용차
           <br />
           비용 계산기
@@ -279,24 +270,16 @@ export default function VehicleCalculator() {
         <Link href="/" className="no-underline">
           <img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" />
         </Link>
-        <a
-          href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"
-        >
-          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>
-          톡톡 문의하기
-        </a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       <div className="max-w-[1200px] w-full mx-auto px-6 pt-12 pb-20 relative z-10">
         {/* 타이틀 */}
         <div className="hidden md:block text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">
+          <p className="text-[14px] font-medium text-text-secondary mb-3">
             무료 세금 계산기
-          </span>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">
+          </p>
+          <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">
             업무용승용차 비용 계산기
           </h1>
           <p className="text-lg text-text-secondary font-medium">
@@ -364,9 +347,8 @@ export default function VehicleCalculator() {
 
         {/* 입력 카드 3열 */}
         <div className="no-print grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+          <div className="bg-white rounded-2xl p-8 border border-ui-border">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center"><BuyIcon /></div>
               <h3 className="text-xl font-bold text-text-primary">차량 매입</h3>
             </div>
             <div className="space-y-5">
@@ -375,9 +357,8 @@ export default function VehicleCalculator() {
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+          <div className="bg-white rounded-2xl p-8 border border-ui-border">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center"><LeaseIcon /></div>
               <h3 className="text-xl font-bold text-text-primary">리스</h3>
             </div>
             <div className="space-y-5">
@@ -386,9 +367,8 @@ export default function VehicleCalculator() {
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+          <div className="bg-white rounded-2xl p-8 border border-ui-border">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center"><RentIcon /></div>
               <h3 className="text-xl font-bold text-text-primary">렌트</h3>
             </div>
             <div className="space-y-5">

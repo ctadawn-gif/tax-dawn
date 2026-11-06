@@ -271,16 +271,13 @@ export default function IncomeTaxCalculator() {
       {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
       <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
-        <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
-          <span>🧮</span>
-          <span className="pt-[1px]">무료 세금 계산기</span>
-        </div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
           종합소득세
           <br />
           예상세액 계산기
@@ -311,8 +308,8 @@ export default function IncomeTaxCalculator() {
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1200px] w-full mx-auto relative z-10">
           <div className="hidden md:block text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">종합소득세 예상세액 계산기</h1>
+            <p className="text-[14px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+            <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">종합소득세 예상세액 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">소득 유형과 공제 항목을 입력하면 예상 세액을 바로 확인할 수 있습니다</p>
           </div>
 
@@ -337,11 +334,8 @@ export default function IncomeTaxCalculator() {
           <div className="no-print grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* 사업/프리랜서 소득 */}
             {showBusiness && (
-              <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">
+              <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" /><path d="M12 12h.01" /><path d="M17 12h.01" /><path d="M7 12h.01" /></svg>
-                  </div>
                   <h3 className="text-xl font-bold text-text-primary">사업/프리랜서 소득</h3>
                 </div>
 
@@ -434,11 +428,8 @@ export default function IncomeTaxCalculator() {
 
             {/* 근로소득 (단독일 때만) */}
             {incomeType === "salary" && (
-              <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">
+              <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-                  </div>
                   <h3 className="text-xl font-bold text-text-primary">근로소득</h3>
                 </div>
                 <div>
@@ -455,11 +446,8 @@ export default function IncomeTaxCalculator() {
             )}
 
             {/* 인적공제 */}
-            <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">
+            <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-                </div>
                 <h3 className="text-xl font-bold text-text-primary">공제 항목</h3>
               </div>
 
@@ -514,8 +502,7 @@ export default function IncomeTaxCalculator() {
           </div>
 
           {/* 결과 섹션 */}
-          <div id="result-section" className="bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden mt-12 mb-12 relative scroll-mt-16">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+          <div id="result-section" className="bg-white rounded-2xl border border-ui-border overflow-hidden mt-12 mb-12 relative scroll-mt-16">
             <PrintHeader title="종합소득세 예상세액 계산 결과" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -599,7 +586,7 @@ export default function IncomeTaxCalculator() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <div className="bg-ui-surface rounded-2xl p-6 border border-ui-border">
                   <span className="text-sm font-bold text-text-secondary mb-2 block">소득세 (결정세액)</span>
-                  <div className="text-xl md:text-2xl font-extrabold text-text-primary tracking-tight break-keep">{formatKoreanMoney(result.determinedTax * TO_MAN)}</div>
+                  <div className="text-xl md:text-2xl font-semibold text-text-primary tracking-tight break-keep">{formatKoreanMoney(result.determinedTax * TO_MAN)}</div>
                   <div className="text-[11px] text-text-secondary mt-1">{fmt(result.determinedTax * TO_MAN)} 원</div>
                 </div>
                 <div className="bg-ui-surface rounded-2xl p-6 border border-ui-border">
@@ -607,13 +594,13 @@ export default function IncomeTaxCalculator() {
                     <span className="text-sm font-bold text-text-secondary">지방소득세</span>
                     <span className="text-[11px] font-medium bg-slate-200 text-slate-600 px-2 py-0.5 rounded">소득세의 10%</span>
                   </div>
-                  <div className="text-xl md:text-2xl font-extrabold text-text-primary tracking-tight break-keep">{formatKoreanMoney(result.localTax * TO_MAN)}</div>
+                  <div className="text-xl md:text-2xl font-semibold text-text-primary tracking-tight break-keep">{formatKoreanMoney(result.localTax * TO_MAN)}</div>
                   <div className="text-[11px] text-text-secondary mt-1">{fmt(result.localTax * TO_MAN)} 원</div>
                 </div>
-                <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative shadow-lg overflow-hidden print-flatten-bg">
+                <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden print-flatten-bg">
                   <div className="relative z-10">
                     <span className="text-blue-200 text-[15px] font-bold mb-2 block">총 납부세액 (소득세 + 지방소득세)</span>
-                    <div className="text-3xl md:text-4xl font-extrabold tracking-tight break-keep">{formatKoreanMoney(result.totalTax * TO_MAN)}</div>
+                    <div className="text-3xl md:text-4xl font-semibold tracking-tight break-keep">{formatKoreanMoney(result.totalTax * TO_MAN)}</div>
                     <div className="text-[13px] text-blue-200 mt-1.5">{fmt(result.totalTax * TO_MAN)} 원</div>
                   </div>
                 </div>
@@ -631,7 +618,7 @@ export default function IncomeTaxCalculator() {
                     <span className="text-sm font-bold text-text-secondary">
                       예상 <span className={result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}>{result.finalTax < 0 ? "환급액" : "추가납부액"}</span>
                     </span>
-                    <span className={`text-xl font-extrabold tracking-tight ${result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}`}>{formatKoreanMoney(Math.abs(result.finalTax) * TO_MAN)}</span>
+                    <span className={`text-xl font-semibold tracking-tight ${result.finalTax < 0 ? "text-brand-blue" : "text-red-500"}`}>{formatKoreanMoney(Math.abs(result.finalTax) * TO_MAN)}</span>
                   </div>
                 </div>
               )}
@@ -674,7 +661,7 @@ export default function IncomeTaxCalculator() {
                 ✅ 세무사 2인 크로스체크
               </div>
               <div className="flex-1">
-                <h3 className="text-[20px] md:text-[24px] font-extrabold text-white leading-tight mb-1.5">
+                <h3 className="text-[20px] md:text-[24px] font-semibold text-white leading-tight mb-1.5">
                   결과가 복잡하신가요?
                 </h3>
                 <p className="text-[14px] md:text-[15px] text-blue-100 leading-relaxed">

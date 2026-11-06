@@ -128,10 +128,8 @@ export default function Problem() {
       {/* ── Mobile ─────────────────────────── */}
       <section className="md:hidden bg-slate-50 py-16 px-5 w-full">
         <div className="flex flex-col mb-8 w-full">
-          <div className="inline-flex items-center justify-center px-3 py-1.5 bg-red-50 text-red-600 rounded-full text-[13px] font-semibold tracking-tight mb-4 w-fit">
-            놓치면 손해입니다
-          </div>
-          <h2 className="text-[26px] font-extrabold text-slate-900 leading-[1.35] tracking-tight">
+          <p className="text-[13px] font-medium text-text-secondary mb-3">놓치면 손해입니다</p>
+          <h2 className="text-[26px] font-semibold text-slate-900 leading-[1.35] tracking-tight">
             세금, 이렇게
             <br />
             손해 보고 계십니다.
@@ -142,20 +140,12 @@ export default function Problem() {
           {MOBILE_CARDS.map((card, idx) => (
             <article
               key={idx}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col w-full"
+              className="bg-white rounded-2xl border border-ui-border p-5 flex flex-col w-full"
             >
-              <div className="flex items-center justify-between mb-4 w-full">
-                <div
-                  className={`w-[32px] h-[32px] rounded-full ${card.iconBg} flex items-center justify-center ${card.iconColor} shrink-0`}
-                >
-                  {card.icon}
-                </div>
-                <span className="text-[12px] font-medium text-slate-400 tracking-wider">
-                  {card.num}
-                </span>
-              </div>
+              {/* 아이콘 원은 뺌 — 번호와 숫자가 주인공 */}
+              <span className="text-[12px] text-text-secondary tabular-nums mb-3 block">{card.num}</span>
 
-              <h3 className="text-[18px] font-extrabold text-slate-900 mb-2 leading-[1.4] tracking-tight">
+              <h3 className="text-[18px] font-semibold text-slate-900 mb-2 leading-[1.4] tracking-tight">
                 {card.title}
               </h3>
 
@@ -194,7 +184,7 @@ export default function Problem() {
               >
                 <span className="text-[15px] font-semibold text-red-600 tracking-tight">
                   {card.highlightBig && (
-                    <span className="text-[17px] font-extrabold">{card.highlightBig}</span>
+                    <span className="text-[17px] font-semibold">{card.highlightBig}</span>
                   )}
                   {card.highlightBig && " "}
                   {card.highlight}

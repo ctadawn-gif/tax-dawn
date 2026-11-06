@@ -92,12 +92,9 @@ export default function AcquisitionTaxCalculator() {
       </header>
 
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
-          <span>🧮</span>
-          <span className="pt-[1px]">무료 세금 계산기</span>
-        </div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">취득세 계산기</h1>
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">취득세 계산기</h1>
         <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">
           부동산 취득 시 납부할
           <br />
@@ -108,14 +105,14 @@ export default function AcquisitionTaxCalculator() {
       {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
       <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
-        <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1000px] w-full mx-auto relative z-10">
           <div className="hidden md:block text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">취득세 계산기</h1>
+            <p className="text-[14px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+            <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">취득세 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">부동산 취득 시 납부할 취득세·농특세·지방교육세를 간편하게 확인하세요</p>
           </div>
 
@@ -127,11 +124,8 @@ export default function AcquisitionTaxCalculator() {
 
           {/* 입력 */}
           <div className="no-print max-w-[700px] mx-auto mb-12">
-            <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+            <div className="bg-white rounded-2xl p-8 border border-ui-border">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
-                </div>
                 <h3 className="text-xl font-bold text-text-primary">취득 정보 입력</h3>
               </div>
 
@@ -164,7 +158,7 @@ export default function AcquisitionTaxCalculator() {
                 <div>
                   <label className="block text-[14px] font-bold text-text-secondary mb-2">취득가액</label>
                   <div className="relative">
-                    <input type="text" inputMode="numeric" value={formatNumberInput(price)} onChange={(e) => setPrice(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                    <input type="text" inputMode="numeric" value={formatNumberInput(price)} onChange={(e) => setPrice(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                     <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                   </div>
                 </div>
@@ -295,8 +289,7 @@ export default function AcquisitionTaxCalculator() {
           </div>
 
           {/* 결과 */}
-          <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+          <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden relative">
             <PrintHeader title="취득세 예상 계산 결과" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -330,7 +323,7 @@ export default function AcquisitionTaxCalculator() {
                     <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{result.acquisitionTaxRate}%</span>
                   </div>
                   <div className="flex items-baseline gap-1.5 text-text-primary">
-                    <span className="text-2xl font-extrabold tracking-tight">{fmtWon(result.acquisitionTax)}</span>
+                    <span className="text-2xl font-semibold tracking-tight">{fmtWon(result.acquisitionTax)}</span>
                     <span className="text-sm font-bold">원</span>
                   </div>
                 </div>
@@ -341,7 +334,7 @@ export default function AcquisitionTaxCalculator() {
                     <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{result.localEduTaxRate}%</span>
                   </div>
                   <div className="flex items-baseline gap-1.5 text-text-primary">
-                    <span className="text-2xl font-extrabold tracking-tight">{fmtWon(result.localEduTax)}</span>
+                    <span className="text-2xl font-semibold tracking-tight">{fmtWon(result.localEduTax)}</span>
                     <span className="text-sm font-bold">원</span>
                   </div>
                 </div>
@@ -356,17 +349,17 @@ export default function AcquisitionTaxCalculator() {
                     )}
                   </div>
                   <div className={`flex items-baseline gap-1.5 ${result.ruralSpecialTax === 0 ? "text-slate-300" : "text-text-primary"}`}>
-                    <span className="text-2xl font-extrabold tracking-tight">{fmtWon(result.ruralSpecialTax)}</span>
+                    <span className="text-2xl font-semibold tracking-tight">{fmtWon(result.ruralSpecialTax)}</span>
                     <span className="text-sm font-bold">원</span>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 text-white relative shadow-lg overflow-hidden flex flex-col justify-between">
+                <div className="bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 text-white relative overflow-hidden flex flex-col justify-between">
                   <div className="relative z-10 mb-2">
                     <span className="text-blue-200 text-sm font-bold">총 납부 예상액</span>
                   </div>
                   <div className="flex items-baseline gap-1.5 relative z-10">
-                    <span className="text-3xl lg:text-4xl font-extrabold tracking-tight">{fmtWon(result.totalTax)}</span>
+                    <span className="text-3xl lg:text-4xl font-semibold tracking-tight">{fmtWon(result.totalTax)}</span>
                     <span className="text-base text-blue-100 font-bold">원</span>
                   </div>
                 </div>
@@ -379,7 +372,7 @@ export default function AcquisitionTaxCalculator() {
                     <svg className="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span className="text-[14px] font-bold text-brand-blue">생애최초 주택 구입 감면 적용</span>
                   </div>
-                  <div className="text-brand-blue font-extrabold text-[16px]">
+                  <div className="text-brand-blue font-semibold text-[16px]">
                     - {fmtWon(result.firstHomeDiscount)}원
                   </div>
                 </div>

@@ -18,8 +18,6 @@ import RelatedPosts from "@/components/blog/RelatedPosts";
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
 const fmtW = (v: number) => (v * 10000).toLocaleString("ko-KR");
 
-const TALK_URL = "https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen";
-
 const simplifiedIndustries: { k: SimplifiedIndustry; l: string; rate: string }[] = [
   { k: "retail", l: "소매업", rate: "15%" },
   { k: "restaurant", l: "음식점업", rate: "25%" },
@@ -84,12 +82,9 @@ export default function VatCalculator() {
       </header>
 
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
-          <span>🧮</span>
-          <span className="pt-[1px]">무료 세금 계산기</span>
-        </div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">부가가치세 계산기</h1>
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">부가가치세 계산기</h1>
         <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">
           일반·간이과세자
           <br />
@@ -100,14 +95,14 @@ export default function VatCalculator() {
       {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
       <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
-        <a href={TALK_URL} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1000px] w-full mx-auto relative z-10">
           <div className="hidden md:block text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">부가가치세 계산기</h1>
+            <p className="text-[14px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+            <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">부가가치세 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">일반과세자·간이과세자 부가세 납부세액을 간편하게 확인하세요</p>
           </div>
 
@@ -131,32 +126,29 @@ export default function VatCalculator() {
           {/* ========== 일반과세자 ========== */}
           {taxpayerType === "general" && (
             <>
-              <div className="no-print bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 mb-12">
+              <div className="no-print bg-white rounded-2xl p-8 border border-ui-border mb-12">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
-                  </div>
                   <h3 className="text-xl font-bold text-text-primary">매출/매입 정보 입력</h3>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                   {/* 매출 */}
                   <div className="space-y-6">
-                    <h4 className="text-[16px] font-extrabold text-brand-blue flex items-center gap-2 mb-4">
+                    <h4 className="text-[16px] font-semibold text-brand-blue flex items-center gap-2 mb-4">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                       매출 내역
                     </h4>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">과세 매출액 (공급가액)</label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(sales)} onChange={(e) => setSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sales)} onChange={(e) => setSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">그 중 신용카드/현금영수증 매출액</label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(cardSales)} onChange={(e) => setCardSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(cardSales)} onChange={(e) => setCardSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-2 ml-1">* 발행세액공제 산출용 (공급대가 기준 입력)</p>
@@ -175,21 +167,21 @@ export default function VatCalculator() {
 
                   {/* 매입 */}
                   <div className="space-y-6">
-                    <h4 className="text-[16px] font-extrabold text-slate-600 flex items-center gap-2 mb-4">
+                    <h4 className="text-[16px] font-semibold text-slate-600 flex items-center gap-2 mb-4">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" /></svg>
                       매입 내역
                     </h4>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">매입액 - 세금계산서 수취분 (공급가액)</label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(purchase)} onChange={(e) => setPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(purchase)} onChange={(e) => setPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">매입액 - 신용카드/현금영수증 수취분</label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(cardPurchase)} onChange={(e) => setCardPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(cardPurchase)} onChange={(e) => setCardPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-2 ml-1">* 공제 대상에 한함 (공급가액 기준 입력)</p>
@@ -199,8 +191,7 @@ export default function VatCalculator() {
               </div>
 
               {/* 일반 결과 */}
-              <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+              <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden relative">
                 <PrintHeader title="부가가치세 (일반과세자) 계산 결과" />
                 <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
                   <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -215,7 +206,7 @@ export default function VatCalculator() {
                         <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">10%</span>
                       </div>
                       <div className="flex items-baseline gap-1.5 text-text-primary">
-                        <span className="text-2xl font-extrabold tracking-tight">{fmtW(result.salesTax)}</span>
+                        <span className="text-2xl font-semibold tracking-tight">{fmtW(result.salesTax)}</span>
                         <span className="text-sm font-bold">원</span>
                       </div>
                     </div>
@@ -225,7 +216,7 @@ export default function VatCalculator() {
                         <span className="text-sm font-bold text-text-secondary">매입세액 합계</span>
                       </div>
                       <div className="flex items-baseline gap-1.5 text-slate-600">
-                        <span className="text-2xl font-extrabold tracking-tight">- {fmtW(result.totalPurchaseTax)}</span>
+                        <span className="text-2xl font-semibold tracking-tight">- {fmtW(result.totalPurchaseTax)}</span>
                         <span className="text-sm font-bold">원</span>
                       </div>
                     </div>
@@ -236,15 +227,15 @@ export default function VatCalculator() {
                         {result.cardSalesCredit > 0 && <span className="text-[11px] font-bold text-brand-blue bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">카드 1.3%</span>}
                       </div>
                       <div className="flex items-baseline gap-1.5 text-brand-blue">
-                        <span className="text-2xl font-extrabold tracking-tight">- {fmtW(result.totalCredit)}</span>
+                        <span className="text-2xl font-semibold tracking-tight">- {fmtW(result.totalCredit)}</span>
                         <span className="text-sm font-bold">원</span>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 text-white relative shadow-lg overflow-hidden flex flex-col justify-between">
+                    <div className="bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 text-white relative overflow-hidden flex flex-col justify-between">
                       <div className="relative z-10 mb-2"><span className="text-blue-200 text-sm font-bold">최종 납부세액</span></div>
                       <div className="flex items-baseline gap-1.5 relative z-10">
-                        <span className="text-3xl lg:text-4xl font-extrabold tracking-tight">{fmtW(result.vatPayable)}</span>
+                        <span className="text-3xl lg:text-4xl font-semibold tracking-tight">{fmtW(result.vatPayable)}</span>
                         <span className="text-base text-blue-100 font-bold">원</span>
                       </div>
                     </div>
@@ -257,11 +248,8 @@ export default function VatCalculator() {
           {/* ========== 간이과세자 ========== */}
           {taxpayerType === "simplified" && (
             <>
-              <div className="no-print bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 mb-12">
+              <div className="no-print bg-white rounded-2xl p-8 border border-ui-border mb-12">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
-                  </div>
                   <h3 className="text-xl font-bold text-text-primary">업종 및 매출/매입 정보</h3>
                 </div>
 
@@ -284,21 +272,21 @@ export default function VatCalculator() {
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">해당 과세기간 매출액 <span className="text-xs font-normal text-slate-400">(공급대가)</span></label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(sSales)} onChange={(e) => setSSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sSales)} onChange={(e) => setSSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">매입액 - 세금계산서 등 수취분</label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(sPurchase)} onChange={(e) => setSPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sPurchase)} onChange={(e) => setSPurchase(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[14px] font-bold text-text-secondary mb-2">그 중 신용카드/현금영수증 매출액</label>
                       <div className="relative">
-                        <input type="text" inputMode="numeric" value={formatNumberInput(sCardSales)} onChange={(e) => setSCardSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                        <input type="text" inputMode="numeric" value={formatNumberInput(sCardSales)} onChange={(e) => setSCardSales(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-16 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                         <span className="absolute right-4 top-4 text-text-secondary text-base font-bold mt-0.5">만원</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-2 ml-1">* 신용카드 발행세액공제 1.3% 적용 (반기 500만원 한도)</p>
@@ -324,8 +312,7 @@ export default function VatCalculator() {
               </div>
 
               {/* 간이 결과 */}
-              <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+              <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden relative">
                 <PrintHeader title="부가가치세 (간이과세자) 계산 결과" />
                 <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
                   <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -339,7 +326,7 @@ export default function VatCalculator() {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
                       </div>
                       <div className="text-center md:text-left">
-                        <p className="text-brand-blue font-extrabold text-[16px]">연 매출 4,800만원 미만 — 납부면제 대상입니다.</p>
+                        <p className="text-brand-blue font-semibold text-[16px]">연 매출 4,800만원 미만 — 납부면제 대상입니다.</p>
                         <p className="text-[13px] text-blue-600/80 font-medium mt-0.5">부가가치세 납부의무가 면제됩니다. (단, 신고의무는 있습니다)</p>
                       </div>
                     </div>
@@ -349,7 +336,7 @@ export default function VatCalculator() {
                     <div className={`bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm ${result.isExempt ? "opacity-60" : ""}`}>
                       <div className="flex justify-between items-start mb-4"><span className="text-sm font-bold text-text-secondary">납부세액 (차감전)</span></div>
                       <div className={`flex items-baseline gap-1.5 text-text-primary ${result.isExempt ? "line-through text-slate-500" : ""}`}>
-                        <span className="text-2xl font-extrabold tracking-tight">{fmtW(result.simplifiedSalesTax)}</span>
+                        <span className="text-2xl font-semibold tracking-tight">{fmtW(result.simplifiedSalesTax)}</span>
                         <span className="text-sm font-bold">원</span>
                       </div>
                     </div>
@@ -360,7 +347,7 @@ export default function VatCalculator() {
                         <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">0.5%</span>
                       </div>
                       <div className={`flex items-baseline gap-1.5 text-slate-600 ${result.isExempt ? "line-through text-slate-500" : ""}`}>
-                        <span className="text-2xl font-extrabold tracking-tight">- {fmtW(result.simplifiedPurchaseCredit)}</span>
+                        <span className="text-2xl font-semibold tracking-tight">- {fmtW(result.simplifiedPurchaseCredit)}</span>
                         <span className="text-sm font-bold">원</span>
                       </div>
                     </div>
@@ -371,15 +358,15 @@ export default function VatCalculator() {
                         <span className="text-xs font-bold text-brand-blue bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">1.3%</span>
                       </div>
                       <div className={`flex items-baseline gap-1.5 text-brand-blue ${result.isExempt ? "line-through text-slate-500" : ""}`}>
-                        <span className="text-2xl font-extrabold tracking-tight">- {fmtW(result.simplifiedCardCredit)}</span>
+                        <span className="text-2xl font-semibold tracking-tight">- {fmtW(result.simplifiedCardCredit)}</span>
                         <span className="text-sm font-bold">원</span>
                       </div>
                     </div>
 
-                    <div className={`rounded-2xl p-6 text-white relative shadow-lg overflow-hidden flex flex-col justify-between ${result.isExempt ? "bg-gradient-to-br from-brand-blue to-blue-700" : "bg-gradient-to-br from-brand-navy to-[#0f172a]"} lg:col-span-1`}>
+                    <div className={`rounded-2xl p-6 text-white relative overflow-hidden flex flex-col justify-between ${result.isExempt ? "bg-gradient-to-br from-brand-blue to-blue-700" : "bg-gradient-to-br from-brand-navy to-[#0f172a]"} lg:col-span-1`}>
                       <div className="relative z-10 mb-2"><span className="text-blue-200 text-sm font-bold">최종 납부세액</span></div>
                       <div className="flex items-baseline gap-1.5 relative z-10">
-                        <span className="text-3xl lg:text-4xl font-extrabold tracking-tight">{fmtW(result.simplifiedPayable)}</span>
+                        <span className="text-3xl lg:text-4xl font-semibold tracking-tight">{fmtW(result.simplifiedPayable)}</span>
                         <span className="text-base text-blue-100 font-bold">원</span>
                       </div>
                     </div>

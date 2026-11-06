@@ -120,7 +120,7 @@ function ResultCard({ label, value, minus, muted }: { label: string; value: stri
   return (
     <div className="bg-ui-surface rounded-2xl p-5 border border-ui-border">
       <span className="text-xs md:text-sm font-bold text-text-secondary mb-1 block">{label}</span>
-      <div className={`text-xl md:text-2xl font-extrabold tracking-tight ${minus ? "text-red-500" : muted ? "text-slate-500" : "text-text-primary"}`}>{value}</div>
+      <div className={`text-xl md:text-2xl font-semibold tracking-tight ${minus ? "text-red-500" : muted ? "text-slate-500" : "text-text-primary"}`}>{value}</div>
     </div>
   );
 }
@@ -272,12 +272,9 @@ export default function InheritGiftCalculator() {
       </header>
 
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
-          <span>🧮</span>
-          <span className="pt-[1px]">무료 세금 계산기</span>
-        </div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">
           상속·증여세
           <br />
           간편 계산기
@@ -292,14 +289,14 @@ export default function InheritGiftCalculator() {
       {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
       <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
-        <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1200px] w-full mx-auto relative z-10">
           <div className="hidden md:block text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">상속·증여세 간편 계산기</h1>
+            <p className="text-[14px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+            <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">상속·증여세 간편 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">상속세와 증여세 예상 세액을 간편하게 확인해보세요</p>
           </div>
 
@@ -325,11 +322,8 @@ export default function InheritGiftCalculator() {
             <>
               <div className="no-print grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* 상속재산 카드 */}
-                <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">
+                <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col">
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>
-                    </div>
                     <h3 className="text-xl font-bold text-text-primary">상속재산</h3>
                   </div>
                   <div className="space-y-6">
@@ -404,11 +398,8 @@ export default function InheritGiftCalculator() {
                 </div>
 
                 {/* 추가 공제 카드 */}
-                <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300 flex flex-col">
+                <div className="bg-white rounded-2xl p-8 border border-ui-border flex flex-col">
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-                    </div>
                     <h3 className="text-xl font-bold text-text-primary">추가 공제</h3>
                   </div>
                   <div className="space-y-6">
@@ -443,8 +434,7 @@ export default function InheritGiftCalculator() {
               </div>
 
               {/* 상속세 결과 */}
-              <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden mt-12 mb-12 relative">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+              <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden mt-12 mb-12 relative">
                 <PrintHeader title="상속세 예상 계산 결과" />
                 <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
                   <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -477,16 +467,16 @@ export default function InheritGiftCalculator() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                     <div className="bg-ui-surface rounded-2xl p-6 border border-ui-border">
                       <span className="text-sm font-bold text-text-secondary mb-2 block">산출세액</span>
-                      <div className="flex items-baseline gap-1"><span className="text-2xl font-extrabold text-text-primary tracking-tight">{fmt(inhResult.computedTax)}</span><span className="text-base text-text-secondary font-medium">만원</span></div>
+                      <div className="flex items-baseline gap-1"><span className="text-2xl font-semibold text-text-primary tracking-tight">{fmt(inhResult.computedTax)}</span><span className="text-base text-text-secondary font-medium">만원</span></div>
                     </div>
                     <div className="bg-ui-surface rounded-2xl p-6 border border-ui-border">
                       <div className="flex items-center justify-between mb-2"><span className="text-sm font-bold text-text-secondary">신고세액공제</span><span className="text-[11px] font-medium bg-slate-200 text-slate-600 px-2 py-0.5 rounded">3% 적용</span></div>
-                      <div className="flex items-baseline gap-1 text-red-500"><span className="text-lg font-bold">-</span><span className="text-2xl font-extrabold tracking-tight">{fmt(inhResult.reportDiscount)}</span><span className="text-base font-medium">만원</span></div>
+                      <div className="flex items-baseline gap-1 text-red-500"><span className="text-lg font-bold">-</span><span className="text-2xl font-semibold tracking-tight">{fmt(inhResult.reportDiscount)}</span><span className="text-base font-medium">만원</span></div>
                     </div>
-                    <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative shadow-lg overflow-hidden">
+                    <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
                       <div className="relative z-10">
                         <span className="text-blue-200 text-[15px] font-bold mb-2 block">최종 납부세액</span>
-                        <div className="flex items-baseline gap-2"><span className="text-4xl md:text-5xl font-extrabold tracking-tight">{fmt(inhResult.finalTax)}</span><span className="text-xl text-blue-100 font-medium">만원</span></div>
+                        <div className="flex items-baseline gap-2"><span className="text-4xl md:text-5xl font-semibold tracking-tight">{fmt(inhResult.finalTax)}</span><span className="text-xl text-blue-100 font-medium">만원</span></div>
                       </div>
                     </div>
                   </div>
@@ -504,11 +494,8 @@ export default function InheritGiftCalculator() {
           {tab === "gift" && (
             <>
               <div className="no-print max-w-4xl mx-auto mb-8">
-                <div className="bg-white rounded-3xl p-6 md:p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+                <div className="bg-white rounded-2xl p-6 md:p-8 border border-ui-border">
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12" /><rect x="2" y="7" width="20" height="5" /><line x1="12" y1="22" x2="12" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></svg>
-                    </div>
                     <h3 className="text-xl font-bold text-text-primary">증여 정보</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -604,8 +591,7 @@ export default function InheritGiftCalculator() {
               </div>
 
               {/* 증여세 결과 */}
-              <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden mt-8 mb-8 relative">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+              <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden mt-8 mb-8 relative">
                 <PrintHeader title="증여세 예상 계산 결과" />
                 <div className="mx-6 md:mx-8 mt-5 mb-3 flex flex-wrap items-center justify-between gap-3">
                   <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -662,10 +648,10 @@ export default function InheritGiftCalculator() {
                     <ResultCard label="산출세액" value={wonKo(giftResult.computedTax * 10000)} />
                     <ResultCard label="기납부세액공제" value={`- ${wonKo(giftResult.priorGiftTax * 10000)}`} muted />
                     <ResultCard label="신고세액공제 (3%)" value={`- ${wonKo(giftResult.reportDiscount * 10000)}`} minus />
-                    <div className="md:col-span-3 lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative shadow-lg overflow-hidden">
+                    <div className="md:col-span-3 lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
                       <div className="relative z-10">
                         <span className="text-blue-200 text-[15px] font-bold mb-2 block">최종 납부세액</span>
-                        <div className="text-4xl md:text-5xl font-extrabold tracking-tight">{wonKo(giftResult.finalTaxWon)}</div>
+                        <div className="text-4xl md:text-5xl font-semibold tracking-tight">{wonKo(giftResult.finalTaxWon)}</div>
                         <div className="mt-1 text-[13px] text-blue-200 tabular-nums">{giftResult.finalTaxWon.toLocaleString("ko-KR")}원</div>
                       </div>
                     </div>
@@ -716,7 +702,7 @@ export default function InheritGiftCalculator() {
                               </span>
                               <span className="block md:hidden text-[11px] text-slate-400 font-normal mt-0.5 text-pretty">{l.note}</span>
                             </td>
-                            <td className={`px-2 py-2.5 text-right align-top whitespace-nowrap ${l.key === "final" ? "text-brand-blue font-extrabold" : l.sign === "-" ? "text-red-500" : "text-text-primary"}`}>
+                            <td className={`px-2 py-2.5 text-right align-top whitespace-nowrap ${l.key === "final" ? "text-brand-blue font-semibold" : l.sign === "-" ? "text-red-500" : "text-text-primary"}`}>
                               {l.won.toLocaleString("ko-KR")}원
                             </td>
                             <td className="hidden md:table-cell pl-4 pr-4 py-2.5 text-[12px] text-slate-500 align-top">{l.note}</td>
@@ -730,7 +716,7 @@ export default function InheritGiftCalculator() {
 
               {/* 신고·납부 기한 · 분납 */}
               <div className="no-print bg-white rounded-2xl p-6 md:p-8 border border-ui-border mb-6">
-                <h4 className="text-[16px] font-extrabold text-text-primary mb-4">신고·납부 기한</h4>
+                <h4 className="text-[16px] font-semibold text-text-primary mb-4">신고·납부 기한</h4>
                 <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8">
                   <label className="block">
                     <span className="block text-[13px] font-bold text-text-secondary mb-2">증여일</span>
@@ -785,7 +771,7 @@ export default function InheritGiftCalculator() {
               {/* 함께 볼 것 — 증여 취득세 · 차용증 */}
               <div className="no-print grid md:grid-cols-2 gap-4 mb-6">
                 <Link href="/calculator/acquisition-tax" className="group block rounded-2xl border border-ui-border bg-white p-5 hover:border-brand-blue transition-colors no-underline">
-                  <div className="text-[14px] font-extrabold text-text-primary group-hover:text-brand-blue">부동산 증여라면 취득세도 →</div>
+                  <div className="text-[14px] font-semibold text-text-primary group-hover:text-brand-blue">부동산 증여라면 취득세도 →</div>
                   <p className="mt-1 text-[12px] text-text-secondary leading-relaxed">
                     받는 사람이 취득세 3.5%, <Ph>지방교육세·농특세까지 4.0%</Ph>{" "}
                     <Ph>(85㎡ 이하 주택 3.8%)를 냅니다.</Ph> <Ph>조정대상지역 공시가 3억 이상 주택은 12%</Ph>{" "}
@@ -796,7 +782,7 @@ export default function InheritGiftCalculator() {
                   href={giftAmountWon !== "" && giftAmountWon > 0 ? `/loan-agreement?amount=${giftAmountWon}` : "/loan-agreement"}
                   className="group block rounded-2xl border border-ui-border bg-white p-5 hover:border-brand-blue transition-colors no-underline"
                 >
-                  <div className="text-[14px] font-extrabold text-text-primary group-hover:text-brand-blue">이 금액을 빌려주는 걸로 하면? →</div>
+                  <div className="text-[14px] font-semibold text-text-primary group-hover:text-brand-blue">이 금액을 빌려주는 걸로 하면? →</div>
                   <p className="mt-1 text-[12px] text-text-secondary leading-relaxed">
                     차용증 자동작성{giftAmountWon !== "" && giftAmountWon > 0 ? ` — ${wonKo(giftAmountWon)}이 미리 채워집니다` : ""}. 적정이자율 4.6%, 무이자 한도 2.17억.
                   </p>
@@ -805,7 +791,7 @@ export default function InheritGiftCalculator() {
 
               {/* 세금 없이 줄 수 있는 돈 */}
               <details className="no-print group bg-white rounded-2xl border border-ui-border mb-8 overflow-hidden">
-                <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between text-[15px] font-extrabold text-text-primary">
+                <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between text-[15px] font-semibold text-text-primary">
                   세금 없이 줄 수 있는 돈 (10년 공제)
                   <span className="text-[13px] font-bold text-brand-blue group-open:hidden">펼치기</span>
                 </summary>

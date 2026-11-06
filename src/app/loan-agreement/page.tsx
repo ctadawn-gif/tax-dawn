@@ -222,7 +222,7 @@ export default function LoanAgreementPage() {
       {!agreed && (
         <div className="no-print fixed inset-0 z-[60] flex items-center justify-center p-5 bg-slate-900/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <h2 className="text-[18px] font-extrabold text-text-primary mb-3">안내 및 면책 고지</h2>
+            <h2 className="text-[18px] font-semibold text-text-primary mb-3">안내 및 면책 고지</h2>
             <div className="text-[13px] text-text-secondary leading-relaxed space-y-2">
               <p>
                 본 차용증 서식은{" "}
@@ -252,10 +252,8 @@ export default function LoanAgreementPage() {
       <main className="print-a4-root max-w-[1280px] mx-auto px-5 lg:px-10 py-8 lg:py-12">
         {/* 헤더 */}
         <header className="no-print mb-8">
-          <div className="inline-flex items-center gap-2 bg-blue-50 text-brand-blue rounded-full px-3 py-1.5 text-[13px] font-semibold mb-3">
-            무료 서식 · 로그인 없음
-          </div>
-          <h1 className="text-[28px] lg:text-[36px] font-extrabold text-text-primary tracking-tight leading-tight">
+          <p className="text-[13px] font-medium text-text-secondary mb-3">무료 서식 · 로그인 없음</p>
+          <h1 className="text-[28px] lg:text-[36px] font-semibold text-text-primary tracking-tight leading-tight">
             차용증 자동작성
             <span className="text-text-secondary font-bold text-[18px] lg:text-[22px]">
               {" "}
@@ -288,7 +286,7 @@ export default function LoanAgreementPage() {
               {l}
               {k === "schedule" && (
                 <span
-                  className={`text-[11px] font-extrabold rounded-full px-2 py-0.5 ${
+                  className={`text-[11px] font-semibold rounded-full px-2 py-0.5 ${
                     scheduleReady ? "bg-brand-blue text-white" : "bg-slate-200 text-slate-500"
                   }`}
                 >
@@ -305,7 +303,7 @@ export default function LoanAgreementPage() {
           <section className="no-print space-y-6">
             {/* 1. 거래조건 */}
             <div className="bg-white rounded-2xl border border-ui-border p-5 lg:p-6 shadow-sm">
-              <h2 className="text-[15px] font-extrabold text-text-primary mb-4 flex items-center gap-2">
+              <h2 className="text-[15px] font-semibold text-text-primary mb-4 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-brand-blue text-white text-[12px] font-bold flex items-center justify-center">
                   1
                 </span>
@@ -389,7 +387,7 @@ export default function LoanAgreementPage() {
 
             {/* 2. 이자 + 시뮬레이터 */}
             <div className="bg-white rounded-2xl border border-ui-border p-5 lg:p-6 shadow-sm">
-              <h2 className="text-[15px] font-extrabold text-text-primary mb-4 flex items-center gap-2">
+              <h2 className="text-[15px] font-semibold text-text-primary mb-4 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-brand-blue text-white text-[12px] font-bold flex items-center justify-center">
                   2
                 </span>
@@ -422,7 +420,7 @@ export default function LoanAgreementPage() {
               {/* 이자율 시뮬레이터 */}
               {amt > 0 && (
                 <div className="mt-4 rounded-xl bg-ui-surface border border-ui-border p-4 space-y-3">
-                  <div className="flex items-center gap-2 text-[13px] font-extrabold text-text-primary">
+                  <div className="flex items-center gap-2 text-[13px] font-semibold text-text-primary">
                     💡 이자율 시뮬레이터 <span className="text-slate-400 font-medium">(증여세 안전 체크)</span>
                   </div>
 
@@ -434,7 +432,7 @@ export default function LoanAgreementPage() {
                   <div className="flex items-center justify-between gap-2 text-[13px]">
                     <span className="text-text-secondary">이 원금의 최소 안전 이자율</span>
                     <div className="flex items-center gap-2">
-                      <span className="font-extrabold text-brand-blue">
+                      <span className="font-semibold text-brand-blue">
                         {calc.minR > 0 ? `연 ${ratePct(calc.minR)}%` : "0% (무이자 가능)"}
                       </span>
                       {calc.minR > 0 && (
@@ -485,7 +483,7 @@ export default function LoanAgreementPage() {
                   {installmentActive &&
                     (calc.gift.firstYear ? (
                       <div className="rounded-lg border border-blue-100 bg-white p-3 space-y-2">
-                        <div className="text-[12px] font-extrabold text-text-primary">
+                        <div className="text-[12px] font-semibold text-text-primary">
                           매월 분할상환 첫해 기준
                           <span className="block font-medium text-slate-400">원금을 갚을수록 실제 이자가 줄어듭니다</span>
                         </div>
@@ -509,7 +507,7 @@ export default function LoanAgreementPage() {
                         <div className="flex items-center justify-between gap-2 text-[12px]">
                           <span className="text-text-secondary">분할상환 최소 안전 이자율</span>
                           <div className="flex items-center gap-2">
-                            <span className="font-extrabold text-brand-blue">
+                            <span className="font-semibold text-brand-blue">
                               {calc.gift.firstYearMinSafeRate > 0
                                 ? `연 ${(calc.gift.firstYearMinSafeRate * 100).toFixed(2)}%`
                                 : "0% (무이자 가능)"}
@@ -581,7 +579,7 @@ export default function LoanAgreementPage() {
 
             {/* 3. 변제 + 상환 정합성 */}
             <div className="bg-white rounded-2xl border border-ui-border p-5 lg:p-6 shadow-sm">
-              <h2 className="text-[15px] font-extrabold text-text-primary mb-4 flex items-center gap-2">
+              <h2 className="text-[15px] font-semibold text-text-primary mb-4 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-brand-blue text-white text-[12px] font-bold flex items-center justify-center">
                   3
                 </span>
@@ -642,7 +640,7 @@ export default function LoanAgreementPage() {
                     {/* 상환계획 점검 — 스케줄표 엔진과 같은 계산 (만기 회차에 잔액 일시 상환) */}
                     {amt > 0 && (
                       <div className="rounded-xl bg-ui-surface border border-ui-border p-4 space-y-2.5">
-                        <div className="text-[13px] font-extrabold text-text-primary">
+                        <div className="text-[13px] font-semibold text-text-primary">
                           📋 상환계획 점검
                         </div>
                         {calc.months <= 0 || calc.schedule.installmentSlots === 0 ? (
@@ -726,7 +724,7 @@ export default function LoanAgreementPage() {
 
             {/* 4. 특약 */}
             <div className="bg-white rounded-2xl border border-ui-border p-5 lg:p-6 shadow-sm">
-              <h2 className="text-[15px] font-extrabold text-text-primary mb-4 flex items-center gap-2">
+              <h2 className="text-[15px] font-semibold text-text-primary mb-4 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-brand-blue text-white text-[12px] font-bold flex items-center justify-center">
                   4
                 </span>
@@ -743,7 +741,7 @@ export default function LoanAgreementPage() {
 
             {/* 5. 인적사항 (선택) */}
             <div className="bg-white rounded-2xl border border-ui-border p-5 lg:p-6 shadow-sm">
-              <h2 className="text-[15px] font-extrabold text-text-primary mb-1 flex items-center gap-2">
+              <h2 className="text-[15px] font-semibold text-text-primary mb-1 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-slate-400 text-white text-[12px] font-bold flex items-center justify-center">
                   5
                 </span>
@@ -843,7 +841,7 @@ export default function LoanAgreementPage() {
                 data-dense={r > 0 || repayType === "installment" || extra ? "" : undefined}
                 className="print-a4 bg-white p-7 lg:p-9 text-[13px] leading-relaxed text-slate-900 print-keep"
               >
-                <h2 className="text-center text-[20px] font-extrabold tracking-tight mb-5">
+                <h2 className="text-center text-[20px] font-semibold tracking-tight mb-5">
                   금전소비대차 계약서
                 </h2>
                 <p className="mb-5 text-slate-700">
@@ -1028,7 +1026,7 @@ export default function LoanAgreementPage() {
             />
           ) : (
             <div className="no-print rounded-2xl border border-dashed border-ui-border bg-ui-surface/60 p-8 md:p-12 text-center">
-              <div className="text-[18px] md:text-[20px] font-extrabold text-text-primary mb-2">조건을 먼저 입력해 주세요</div>
+              <div className="text-[18px] md:text-[20px] font-semibold text-text-primary mb-2">조건을 먼저 입력해 주세요</div>
               <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
                 차용 금액 · 차용일 · 변제기일을 넣고,
                 <br />
@@ -1047,7 +1045,7 @@ export default function LoanAgreementPage() {
 
         {/* ───────────── 관련 블로그(썸네일 카드) + 상담 ───────────── */}
         <section className="no-print mt-12">
-          <h2 className="text-[20px] lg:text-[22px] font-extrabold text-text-primary mb-1">
+          <h2 className="text-[20px] lg:text-[22px] font-semibold text-text-primary mb-1">
             차용증, 더 알아보기
           </h2>
           <p className="text-[14px] text-text-secondary mb-5">
@@ -1065,7 +1063,7 @@ export default function LoanAgreementPage() {
             lines={consultLines}
             className="mt-5 block rounded-2xl border border-ui-border bg-ui-surface p-5 hover:border-brand-blue transition-colors group no-underline"
           >
-            <div className="text-[15px] font-extrabold text-text-primary mb-1 group-hover:text-brand-blue">
+            <div className="text-[15px] font-semibold text-text-primary mb-1 group-hover:text-brand-blue">
               내 상황은 좀 복잡한데? · 1:1 상담 문의 →
             </div>
             <p className="text-[13px] text-text-secondary leading-relaxed">
@@ -1112,7 +1110,7 @@ function RecommendRow({ value, onApply }: { value: number; onApply: () => void }
     <div className="flex items-center justify-between text-[13px]">
       <span className="text-text-secondary">기간 내 완납 권장 월상환액</span>
       <div className="flex items-center gap-2">
-        <span className="font-extrabold text-brand-blue">{won(value)}원</span>
+        <span className="font-semibold text-brand-blue">{won(value)}원</span>
         <button
           type="button"
           onClick={onApply}

@@ -103,24 +103,23 @@ export default function Navbar() {
               {promo.label}
             </Link>
           )}
+          {/* 색 버튼은 하나만: 시즌 버튼이 있으면 상담 문의는 테두리, 톡톡은 글자 링크 */}
           <Link
             href="/#contact"
             onClick={() => setMenuOpen(false)}
-            className="px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-2 no-underline"
+            className={`px-5 py-3 rounded-lg text-sm font-semibold text-center no-underline ${
+              promo ? "border border-ui-border text-text-primary" : "bg-brand-blue text-white"
+            }`}
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-            </svg>
             상담 문의
           </Link>
           <a
             href={TALK_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-3 rounded-lg text-sm font-bold bg-[#03C75A] text-white text-center flex items-center justify-center gap-2"
+            className="text-sm font-medium text-text-secondary text-center py-2"
           >
-            <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>
-            톡톡 문의하기
+            네이버 톡톡으로 문의하기
           </a>
         </div>
       )}

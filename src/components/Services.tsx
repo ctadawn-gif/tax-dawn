@@ -76,10 +76,8 @@ export default function Services() {
         className="md:hidden bg-white px-5 py-14 w-full"
       >
         <div className="mb-8">
-          <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-brand-blue text-[12px] font-bold tracking-wide mb-3">
-            무료 세금 계산기
-          </span>
-          <h2 className="text-[24px] font-extrabold text-slate-900 leading-[1.35] tracking-tight">
+          <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기 7종</p>
+          <h2 className="text-[24px] font-semibold text-slate-900 leading-[1.35] tracking-tight">
             검색 10번 하는 시간에,
             <br />
             계산 1번이면 끝납니다.
@@ -91,13 +89,13 @@ export default function Services() {
             <Link
               key={i}
               href={s.href}
-              className="no-underline group bg-white rounded-2xl p-5 border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] active:scale-[0.99] transition-all flex items-center gap-4"
+              className="no-underline group bg-white rounded-2xl p-5 border border-ui-border active:bg-slate-50 transition-colors flex items-center gap-4"
             >
               <div className="flex flex-col flex-1 min-w-0">
-                <span className="text-brand-blue font-bold text-[12px] tracking-wide mb-1">
+                <span className="text-text-secondary text-[12px] tabular-nums mb-1">
                   {s.label}
                 </span>
-                <h3 className="text-[16px] font-extrabold text-slate-900 leading-snug mb-1">
+                <h3 className="text-[16px] font-semibold text-slate-900 leading-snug mb-1">
                   {s.title}
                 </h3>
                 <p className="text-[13px] font-medium text-slate-500 leading-[1.45] tracking-tight">
