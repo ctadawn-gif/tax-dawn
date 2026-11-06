@@ -149,7 +149,7 @@ export default function Testimonials() {
       {/* ── Mobile + Tablet (xl 미만) ─────────────────────────── */}
       <section className="xl:hidden py-16 bg-white w-full relative overflow-hidden">
         <div className="flex flex-col items-center justify-center px-5 mb-10 w-full text-center">
-          <h2 className="text-[24px] font-extrabold text-slate-900 leading-[1.35] tracking-tight">
+          <h2 className="text-[24px] font-semibold text-slate-900 leading-[1.35] tracking-tight">
             실제 상담을 받으신
             <br />
             분들의 이야기
@@ -197,7 +197,7 @@ export default function Testimonials() {
           >
             {MOBILE_REVIEWS.map((r, idx) => (
               <div key={idx} className="w-full shrink-0 px-5">
-                <article className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100/80 p-6 min-h-[260px] flex flex-col w-full">
+                <article className="bg-white rounded-2xl border border-ui-border p-6 min-h-[260px] flex flex-col w-full">
                   <div className="flex items-center gap-1.5 mb-2">
                     <div className="flex text-amber-400">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -230,19 +230,11 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* Dot 인디케이터 */}
-        <div className="flex justify-center items-center gap-2 mt-8">
-          {MOBILE_REVIEWS.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setMobileIdx(idx)}
-              aria-label={`${idx + 1}번 리뷰 보기`}
-              className={`rounded-full transition-all duration-300 ${
-                idx === mobileIdx ? "w-6 h-2 bg-brand-blue" : "w-2 h-2 bg-slate-300"
-              }`}
-            />
-          ))}
+        {/* 점 15개 대신 "n / 15" 숫자와 좌우 버튼 */}
+        <div className="flex justify-center items-center gap-6 mt-8">
+          <button type="button" onClick={mobilePrev} aria-label="이전 리뷰" className="text-text-secondary px-2 py-1">←</button>
+          <p className="text-[13px] text-text-secondary tabular-nums">{mobileIdx + 1} / {MOBILE_REVIEWS.length}</p>
+          <button type="button" onClick={mobileNext} aria-label="다음 리뷰" className="text-text-secondary px-2 py-1">→</button>
         </div>
       </section>
 

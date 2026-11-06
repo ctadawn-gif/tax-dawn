@@ -94,12 +94,9 @@ export default function InsuranceCalculator() {
       </header>
 
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5">
-          <span>🧮</span>
-          <span className="pt-[1px]">무료 세금 계산기</span>
-        </div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">4대보험료 계산기</h1>
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">4대보험료 계산기</h1>
         <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">
           월 급여를 입력하면
           <br />
@@ -110,14 +107,14 @@ export default function InsuranceCalculator() {
       {/* ── Desktop Nav (기존 유지) ─────────────────────────── */}
       <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
-        <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       <section className="relative pt-12 pb-32 px-6 overflow-hidden">
         <div className="max-w-[1000px] w-full mx-auto relative z-10">
           <div className="hidden md:block text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">4대보험료 계산기</h1>
+            <p className="text-[14px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+            <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">4대보험료 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">월 급여를 입력하면 근로자·사업주 부담분을 바로 확인할 수 있습니다</p>
           </div>
 
@@ -130,13 +127,8 @@ export default function InsuranceCalculator() {
           {/* 입력 */}
           <div className="no-print grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
             {/* 급여 정보 */}
-            <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+            <div className="bg-white rounded-2xl p-8 border border-ui-border">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="6" width="20" height="12" rx="2" /><path d="M12 12h.01" /><path d="M17 12h.01" /><path d="M7 12h.01" />
-                  </svg>
-                </div>
                 <h3 className="text-xl font-bold text-text-primary">급여 정보</h3>
               </div>
 
@@ -144,7 +136,7 @@ export default function InsuranceCalculator() {
                 <div>
                   <label className="block text-[14px] font-bold text-text-secondary mb-2">월 총 급여 <span className="text-xs font-normal text-slate-400">(세전)</span></label>
                   <div className="relative">
-                    <input type="text" inputMode="numeric" value={formatNumberInput(salary)} onChange={(e) => setSalary(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-xl" />
+                    <input type="text" inputMode="numeric" value={formatNumberInput(salary)} onChange={(e) => setSalary(parseNumberInput(e.target.value))} placeholder="0" className="w-full pl-4 pr-12 py-4 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-xl" />
                     <span className="absolute right-4 top-4 text-text-secondary text-base font-medium mt-0.5">원</span>
                   </div>
                 </div>
@@ -229,15 +221,8 @@ export default function InsuranceCalculator() {
             </div>
 
             {/* 사업장 정보 */}
-            <div className="bg-white rounded-3xl p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:border-brand-blue/30 transition-all duration-300">
+            <div className="bg-white rounded-2xl p-8 border border-ui-border">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                    <rect x="9" y="9" width="6" height="6" />
-                    <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
-                  </svg>
-                </div>
                 <h3 className="text-xl font-bold text-text-primary">사업장 정보</h3>
               </div>
 
@@ -269,8 +254,7 @@ export default function InsuranceCalculator() {
           </div>
 
           {/* 결과 */}
-          <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+          <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden relative">
             <PrintHeader title="4대보험료 계산 결과" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">계산 결과</h4>
@@ -316,10 +300,10 @@ export default function InsuranceCalculator() {
                       </tr>
                     ))}
                     <tr className="bg-blue-50/30">
-                      <td className="py-4 px-6 border-b border-ui-border"><div className="font-extrabold text-text-primary text-[15px]">4대보험 소계</div></td>
-                      <td className="py-4 px-6 border-b border-ui-border text-right font-extrabold text-text-primary text-[17px]">{fmt(result.grandTotal)}원</td>
-                      <td className="py-4 px-6 border-b border-ui-border text-right font-extrabold text-brand-blue text-[17px]">{fmt(result.totalEmployee)}원</td>
-                      <td className="py-4 px-6 border-b border-ui-border text-right font-extrabold text-text-primary text-[17px]">{fmt(result.totalEmployer)}원</td>
+                      <td className="py-4 px-6 border-b border-ui-border"><div className="font-semibold text-text-primary text-[15px]">4대보험 소계</div></td>
+                      <td className="py-4 px-6 border-b border-ui-border text-right font-semibold text-text-primary text-[17px]">{fmt(result.grandTotal)}원</td>
+                      <td className="py-4 px-6 border-b border-ui-border text-right font-semibold text-brand-blue text-[17px]">{fmt(result.totalEmployee)}원</td>
+                      <td className="py-4 px-6 border-b border-ui-border text-right font-semibold text-text-primary text-[17px]">{fmt(result.totalEmployer)}원</td>
                     </tr>
                     <tr className="hover:bg-slate-50/50 transition-colors">
                       <td className="py-4 px-6 border-b border-ui-border">
@@ -340,10 +324,10 @@ export default function InsuranceCalculator() {
                       <td className="py-4 px-6 border-b border-slate-300 text-right font-bold text-text-primary text-[16px]">-</td>
                     </tr>
                     <tr className="bg-brand-navy/5">
-                      <td className="py-5 px-6"><div className="font-extrabold text-text-primary text-[16px]">근로자 총 공제액</div></td>
-                      <td className="py-5 px-6 text-right font-extrabold text-text-primary text-[18px]">{fmt(result.totalWithholding)}원</td>
-                      <td className="py-5 px-6 text-right font-extrabold text-brand-blue text-[18px]">{fmt(result.totalWithholding)}원</td>
-                      <td className="py-5 px-6 text-right font-extrabold text-text-primary text-[18px]">-</td>
+                      <td className="py-5 px-6"><div className="font-semibold text-text-primary text-[16px]">근로자 총 공제액</div></td>
+                      <td className="py-5 px-6 text-right font-semibold text-text-primary text-[18px]">{fmt(result.totalWithholding)}원</td>
+                      <td className="py-5 px-6 text-right font-semibold text-brand-blue text-[18px]">{fmt(result.totalWithholding)}원</td>
+                      <td className="py-5 px-6 text-right font-semibold text-text-primary text-[18px]">-</td>
                     </tr>
                   </tbody>
                 </table>
@@ -353,7 +337,7 @@ export default function InsuranceCalculator() {
                 <div className="bg-blue-50 rounded-2xl p-6 md:p-8 border border-blue-100 flex flex-col justify-center text-center shadow-sm">
                   <span className="text-sm font-bold text-brand-blue mb-2">근로자 부담 합계</span>
                   <div className="flex items-baseline justify-center gap-1.5 text-brand-blue">
-                    <span className="text-4xl md:text-5xl font-extrabold tracking-tight">{fmt(result.totalEmployee)}</span>
+                    <span className="text-4xl md:text-5xl font-semibold tracking-tight">{fmt(result.totalEmployee)}</span>
                     <span className="text-lg md:text-xl font-bold">원</span>
                   </div>
                   <div className="text-[12px] font-medium text-blue-400 mt-2">월 급여에서 공제되는 금액</div>
@@ -362,18 +346,18 @@ export default function InsuranceCalculator() {
                 <div className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-200 flex flex-col justify-center text-center shadow-sm">
                   <span className="text-sm font-bold text-text-secondary mb-2">사업주 부담 합계</span>
                   <div className="flex items-baseline justify-center gap-1.5 text-text-primary">
-                    <span className="text-4xl md:text-5xl font-extrabold tracking-tight">{fmt(result.totalEmployer)}</span>
+                    <span className="text-4xl md:text-5xl font-semibold tracking-tight">{fmt(result.totalEmployer)}</span>
                     <span className="text-lg md:text-xl font-bold">원</span>
                   </div>
                   <div className="text-[12px] font-medium text-slate-400 mt-2">사업주가 납부해야 할 금액 (산재보험 포함)</div>
                 </div>
 
-                <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative shadow-lg overflow-hidden">
+                <div className="lg:col-span-2 bg-gradient-to-br from-brand-navy to-[#0f172a] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
                   <div className="relative z-10 w-full flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="text-center md:text-left">
                       <span className="text-blue-300 text-[13px] font-bold block mb-1">근로자 총 공제액 (4대보험+소득세+지방소득세)</span>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-3xl md:text-4xl font-extrabold tracking-tight">{fmt(result.totalWithholding)}</span>
+                        <span className="text-3xl md:text-4xl font-semibold tracking-tight">{fmt(result.totalWithholding)}</span>
                         <span className="text-lg text-blue-100 font-bold">원</span>
                       </div>
                     </div>
@@ -381,7 +365,7 @@ export default function InsuranceCalculator() {
                     <div className="text-center md:text-right">
                       <span className="text-green-300 text-[13px] font-bold block mb-1">예상 실수령액</span>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-green-300">{fmt(result.netPay)}</span>
+                        <span className="text-3xl md:text-4xl font-semibold tracking-tight text-green-300">{fmt(result.netPay)}</span>
                         <span className="text-lg text-green-200 font-bold">원</span>
                       </div>
                     </div>

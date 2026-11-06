@@ -43,14 +43,12 @@ export default function Hero() {
   return (
     <>
       {/* ── Mobile Hero ─────────────────────────── */}
-      <section className="md:hidden relative w-full px-5 pt-12 pb-16 bg-gradient-to-b from-[#EFF4FF] via-white to-white">
+      <section className="md:hidden relative w-full px-5 pt-12 pb-16 bg-white">
         <div className="flex flex-col items-center text-center z-10 w-full">
-          <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-blue-50/80 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-6 ring-1 ring-blue-100/50">
-            세무회계 새벽 · 무료 세금 계산기
-          </div>
+          <p className="text-[13px] font-medium text-text-secondary mb-5">세무회계 새벽 · 무료 세금 계산기</p>
 
-          <h1 className="text-[30px] font-extrabold text-slate-900 leading-[1.35] tracking-tight mb-5 w-full">
-            내 세금, <span className="text-brand-blue">얼마나 나올지</span>
+          <h1 className="text-[30px] font-semibold text-slate-900 leading-[1.35] tracking-tight mb-5 w-full">
+            내 세금, 얼마나 나올지
             <br />
             미리 확인해보세요.
           </h1>
@@ -69,7 +67,7 @@ export default function Hero() {
 
           <a
             href="#calculators"
-            className="no-underline group relative w-full h-[56px] bg-brand-blue text-white text-[16px] font-bold rounded-[14px] flex items-center justify-center gap-2 shadow-sm shadow-blue-600/20 active:scale-[0.98] transition-all duration-200"
+            className="no-underline group relative w-full h-[56px] bg-brand-blue text-white text-[16px] font-semibold rounded-xl flex items-center justify-center gap-2 active:bg-blue-700 transition-colors"
           >
             <span className="flex items-center gap-1.5 tracking-tight">
               내 세금 무료로 계산해보기

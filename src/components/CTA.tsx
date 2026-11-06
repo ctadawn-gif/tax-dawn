@@ -14,10 +14,8 @@ export default function CTA() {
       {/* ── Mobile ─────────────────────────── */}
       <section className="md:hidden bg-slate-50 py-16 px-5 w-full">
         <div className="mb-10">
-          <div className="inline-flex items-center justify-center bg-blue-50 text-brand-blue rounded-full px-3 py-1.5 text-[13px] font-semibold mb-4 tracking-tight">
-            상담 안내
-          </div>
-          <h2 className="text-[26px] font-extrabold text-slate-900 leading-[1.35] mb-4 tracking-tight">
+          <p className="text-[13px] font-medium text-text-secondary mb-3">상담 안내</p>
+          <h2 className="text-[26px] font-semibold text-slate-900 leading-[1.35] mb-4 tracking-tight">
             더 구체적인 상담이
             <br />
             필요하신가요?
@@ -33,9 +31,9 @@ export default function CTA() {
 
         <div className="flex flex-col gap-4">
           {/* 김근량 */}
-          <article className="bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 p-5 flex flex-col w-full">
+          <article className="bg-white rounded-2xl border border-ui-border p-5 flex flex-col w-full">
             <div className="flex items-start gap-4 mb-4">
-              <div className="relative w-[88px] h-[88px] rounded-full overflow-hidden border-4 border-blue-50 shrink-0 bg-slate-100 shadow-sm">
+              <div className="relative w-[88px] h-[88px] rounded-full overflow-hidden shrink-0 bg-slate-100">
                 <Image
                   src="/kim.jpg"
                   alt="김근량 대표세무사"
@@ -72,14 +70,14 @@ export default function CTA() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-5">
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+            <div className="flex flex-wrap gap-x-2 gap-y-1 mb-5 text-[13px] text-text-secondary">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 종합소득세
               </span>
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 부가가치세
               </span>
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 기장대행
               </span>
             </div>
@@ -95,9 +93,9 @@ export default function CTA() {
           </article>
 
           {/* 고유빈 */}
-          <article className="bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 p-5 flex flex-col w-full">
+          <article className="bg-white rounded-2xl border border-ui-border p-5 flex flex-col w-full">
             <div className="flex items-start gap-4 mb-4">
-              <div className="relative w-[88px] h-[88px] rounded-full overflow-hidden border-4 border-blue-50 shrink-0 bg-slate-100 shadow-sm">
+              <div className="relative w-[88px] h-[88px] rounded-full overflow-hidden shrink-0 bg-slate-100">
                 <Image
                   src="/ko.jpg"
                   alt="고유빈 대표세무사"
@@ -135,17 +133,17 @@ export default function CTA() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-5">
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+            <div className="flex flex-wrap gap-x-2 gap-y-1 mb-5 text-[13px] text-text-secondary">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 상속세
               </span>
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 증여세
               </span>
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 자금조달·출처소명
               </span>
-              <span className="bg-slate-50 border border-slate-100 text-slate-600 rounded-full px-3 py-1 text-[13px] font-medium tracking-tight">
+              <span className="after:content-['·'] after:ml-2 last:after:content-none">
                 양도세
               </span>
             </div>
@@ -185,7 +183,7 @@ export default function CTA() {
         {/* 메인 CTA */}
         <Link
           href="/contact"
-          className="no-underline mt-8 flex items-center justify-center w-full h-14 bg-brand-blue text-white rounded-[14px] text-[16px] font-bold shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-transform tracking-tight"
+          className="no-underline mt-8 flex items-center justify-center w-full h-14 bg-brand-blue text-white rounded-[14px] text-[16px] font-semibold active:bg-blue-700 transition-colors tracking-tight"
         >
           상담 신청하기
           <svg
@@ -221,17 +219,12 @@ export default function CTA() {
 
       {/* ── Desktop (기존 유지) ─────────────────────────── */}
       <section className="hidden md:block relative py-14 md:py-20 px-5 md:px-6">
-        <div className="bg-grid" />
+        <div className="max-w-[1000px] w-full bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-16 border border-ui-border relative z-10 flex flex-col items-center text-center mx-auto">
+          <p className="text-[14px] font-medium text-text-secondary mb-5 md:mb-6">상담 안내</p>
 
-        <div className="max-w-[1000px] w-full bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-16 border border-ui-border shadow-[0_4px_20px_-6px_rgba(0,0,0,0.05)] md:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] relative z-10 flex flex-col items-center text-center mx-auto">
-          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-5 md:mb-8">
-            상담 안내
-          </span>
-
-          <h2 className="text-[24px] md:text-[42px] font-extrabold text-text-primary tracking-tight leading-[1.3] md:leading-[1.25] mb-4 md:mb-6">
-            더 구체적인 상담이
+          <h2 className="text-[24px] md:text-[42px] font-semibold text-text-primary tracking-tight leading-[1.3] md:leading-[1.25] mb-4 md:mb-6">
+            더 구체적인 상담이{" "}
             <br className="md:hidden" />
-            <span className="md:hidden"> </span>
             필요하신가요?
           </h2>
 
@@ -262,7 +255,7 @@ export default function CTA() {
               <span className="text-text-primary font-bold text-[17px] group-hover:text-brand-blue transition-colors">
                 김근량 세무사
               </span>
-              <span className="text-brand-blue font-extrabold text-[20px] tracking-tight">
+              <span className="text-brand-blue font-semibold text-[20px] tabular-nums">
                 010-3262-3295
               </span>
               <span className="text-text-secondary text-[13px] leading-snug text-center">
@@ -287,7 +280,7 @@ export default function CTA() {
               <span className="text-text-primary font-bold text-[17px] group-hover:text-brand-blue transition-colors">
                 고유빈 세무사
               </span>
-              <span className="text-brand-blue font-extrabold text-[20px] tracking-tight">
+              <span className="text-brand-blue font-semibold text-[20px] tabular-nums">
                 010-9374-4916
               </span>
               <span className="text-text-secondary text-[13px] leading-snug text-center">
@@ -299,7 +292,7 @@ export default function CTA() {
           {/* 상담 신청 CTA */}
           <a
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-brand-blue text-white rounded-xl font-bold text-[16px] hover:bg-blue-700 hover:-translate-y-0.5 transition-all shadow-md hover:shadow-lg no-underline mb-3"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-brand-blue text-white rounded-xl font-bold text-[16px] hover:bg-blue-700 transition-colors no-underline mb-3"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -322,7 +315,7 @@ export default function CTA() {
               href={BLOG_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-ui-border rounded-xl font-semibold text-[15px] text-text-primary hover:border-brand-blue hover:text-brand-blue transition-all group"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-ui-border rounded-xl font-semibold text-[15px] text-text-primary hover:border-brand-blue hover:text-brand-blue transition-all group"
             >
               블로그에서 절세 사례 보기
               <svg
@@ -341,7 +334,7 @@ export default function CTA() {
             </a>
             <a
               href="#location"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-ui-border rounded-xl font-semibold text-[15px] text-text-primary hover:border-brand-blue hover:text-brand-blue transition-all group"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-ui-border rounded-xl font-semibold text-[15px] text-text-primary hover:border-brand-blue hover:text-brand-blue transition-all group"
             >
               오시는 길
               <svg

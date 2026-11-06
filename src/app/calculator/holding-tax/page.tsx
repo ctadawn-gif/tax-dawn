@@ -63,7 +63,7 @@ export default function HoldingTaxCalculator() {
   const hasInput = n(price) > 0;
 
   const inputCls =
-    "w-full pl-4 pr-14 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-extrabold text-text-primary text-lg";
+    "w-full pl-4 pr-14 py-3.5 bg-ui-surface border border-ui-border rounded-xl focus:bg-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all text-right font-semibold text-text-primary text-lg";
   const Suffix = ({ t }: { t: string }) => (
     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary text-sm font-bold">{t}</span>
   );
@@ -85,22 +85,22 @@ export default function HoldingTaxCalculator() {
         <Link href="/contact" className="no-underline px-3 py-1.5 rounded-lg bg-brand-blue text-white text-[12px] font-bold tracking-tight">상담하기 →</Link>
       </header>
 
-      <section className="md:hidden bg-gradient-to-b from-blue-50/60 to-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
-        <div className="inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 text-brand-blue rounded-full text-[13px] font-semibold tracking-tight mb-5"><span>🏠</span><span className="pt-[1px]">보유세 계산기</span></div>
-        <h1 className="text-[28px] font-extrabold text-slate-900 leading-[1.25] tracking-tight mb-3.5">보유세 계산기</h1>
+      <section className="md:hidden bg-white pt-8 pb-10 px-5 flex flex-col items-center text-center">
+        <p className="text-[13px] font-medium text-text-secondary mb-3">보유세 계산기</p>
+        <h1 className="text-[28px] font-semibold text-slate-900 leading-[1.25] tracking-tight mb-3.5">보유세 계산기</h1>
         <p className="text-[15px] font-medium text-slate-500 leading-[1.5] tracking-tight">재산세·종합부동산세를 합산해<br />현행과 2026 개편안(정부안)을 비교합니다.</p>
       </section>
 
       <nav className="hidden md:flex justify-between items-center px-6 lg:px-20 py-5 max-w-[1440px] mx-auto bg-white relative z-20">
         <Link href="/" className="no-underline"><img src="/logo.png" alt="세무회계 새벽" className="h-10 md:h-12 w-auto" /></Link>
-        <a href="https://talk.naver.com/ct/wbwmjv1?frm=mnmb&frm=nmb_detail#nafullscreen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-colors shadow-sm flex items-center gap-1.5"><svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>톡톡 문의하기</a>
+        <Link href="/contact" className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline">상담 문의</Link>
       </nav>
 
       <section className="relative pt-10 pb-32 px-5 md:px-6 overflow-hidden">
         <div className="max-w-[1000px] w-full mx-auto relative z-10">
           <div className="hidden md:block text-center mb-10">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-brand-blue text-[13px] font-bold tracking-wide border border-blue-100 mb-4">무료 세금 계산기</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-tight mb-4">보유세 계산기</h1>
+            <p className="text-[14px] font-medium text-text-secondary mb-3">무료 세금 계산기</p>
+            <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight leading-tight mb-4">보유세 계산기</h1>
             <p className="text-lg text-text-secondary font-medium">재산세·종합부동산세를 합산해, 현행과 2026 개편안(정부안)을 연도별로 비교합니다.</p>
           </div>
 
@@ -118,7 +118,7 @@ export default function HoldingTaxCalculator() {
 
           {/* 입력 */}
           <div className="no-print max-w-[700px] mx-auto mb-10">
-            <div className="bg-white rounded-3xl p-6 md:p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)]">
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-ui-border">
               <div className="space-y-7">
                 {/* 세대 구분 */}
                 <div>
@@ -243,8 +243,7 @@ export default function HoldingTaxCalculator() {
           </div>
 
           {/* 결과 */}
-          <div className="print-area bg-white rounded-3xl border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-blue no-print" />
+          <div className="print-area bg-white rounded-2xl border border-ui-border overflow-hidden relative">
             <PrintHeader title="보유세 예상 계산 결과 (2026 개편안·정부안)" />
             <div className="mx-6 md:mx-8 mt-5 mb-3 flex items-center justify-between gap-3">
               <h4 className="text-base md:text-lg font-bold text-text-primary">연도별 보유세 비교</h4>
@@ -261,7 +260,7 @@ export default function HoldingTaxCalculator() {
                   return (
                     <button key={m} onClick={() => setDetailMode(m)} className={`text-left rounded-2xl p-5 border transition-all ${active ? "border-brand-blue bg-blue-50/50 ring-1 ring-brand-blue" : "border-slate-200 bg-white hover:border-brand-blue/40"}`}>
                       <div className="flex items-center justify-between mb-2"><span className="text-[13px] font-bold text-text-secondary">{MODE_LABEL[m]} 보유세</span>{active && <span className="text-[10px] font-bold text-brand-blue">상세 ▼</span>}</div>
-                      <div className="flex items-baseline gap-1 text-text-primary"><span className="text-[24px] font-extrabold tracking-tight">{fmtWon(r.holdingTaxTotal)}</span><span className="text-[13px] font-bold">원</span></div>
+                      <div className="flex items-baseline gap-1 text-text-primary"><span className="text-[24px] font-semibold tracking-tight">{fmtWon(r.holdingTaxTotal)}</span><span className="text-[13px] font-bold">원</span></div>
                       <div className="mt-2 text-[12px] text-text-secondary">종부세 {fmtWon(r.jongbuTotal)}원 · 재산세 {fmtWon(r.propertyTaxTotal)}원</div>
                     </button>
                   );
@@ -271,7 +270,7 @@ export default function HoldingTaxCalculator() {
               {/* 선택 모드 상세 */}
               <div className="rounded-2xl border border-slate-200 overflow-hidden">
                 <div className="bg-slate-50 px-5 py-3 flex items-center justify-between border-b border-slate-200">
-                  <span className="text-[14px] font-extrabold text-text-primary">{MODE_LABEL[detailMode]} 상세</span>
+                  <span className="text-[14px] font-semibold text-text-primary">{MODE_LABEL[detailMode]} 상세</span>
                   <span className="text-[12px] text-text-secondary">공시 {hasInput ? fmtWon(n(price)) + "원" : "-"}</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
@@ -304,7 +303,7 @@ export default function HoldingTaxCalculator() {
                 </div>
                 <div className="bg-gradient-to-br from-brand-navy to-[#0f172a] px-6 py-5 flex items-center justify-between text-white">
                   <span className="text-blue-200 text-[14px] font-bold">{MODE_LABEL[detailMode]} 보유세 합계</span>
-                  <div className="flex items-baseline gap-1.5"><span className="text-[28px] lg:text-[32px] font-extrabold tracking-tight">{fmtWon(detail.holdingTaxTotal)}</span><span className="text-blue-100 font-bold">원</span></div>
+                  <div className="flex items-baseline gap-1.5"><span className="text-[28px] lg:text-[32px] font-semibold tracking-tight">{fmtWon(detail.holdingTaxTotal)}</span><span className="text-blue-100 font-bold">원</span></div>
                 </div>
               </div>
             </div>
@@ -312,7 +311,7 @@ export default function HoldingTaxCalculator() {
 
           {/* 사용 가이드 + 예시 */}
           <div className="no-print mt-10">
-            <h3 className="text-[20px] md:text-[24px] font-extrabold text-text-primary text-center mb-2">
+            <h3 className="text-[20px] md:text-[24px] font-semibold text-text-primary text-center mb-2">
               이렇게 사용하세요
             </h3>
             <p className="text-[14px] text-text-secondary text-center mb-6">
@@ -326,13 +325,13 @@ export default function HoldingTaxCalculator() {
               ].map((s) => (
                 <div key={s.n} className="rounded-2xl border border-ui-border bg-white p-5">
                   <div className="w-8 h-8 rounded-lg bg-brand-blue text-white text-[14px] font-bold flex items-center justify-center mb-3">{s.n}</div>
-                  <div className="text-[15px] font-extrabold text-text-primary mb-1.5">{s.t}</div>
+                  <div className="text-[15px] font-semibold text-text-primary mb-1.5">{s.t}</div>
                   <p className="text-[13px] text-text-secondary leading-relaxed">{s.d}</p>
                 </div>
               ))}
             </div>
 
-            <h3 className="text-[20px] md:text-[24px] font-extrabold text-text-primary text-center mb-2">
+            <h3 className="text-[20px] md:text-[24px] font-semibold text-text-primary text-center mb-2">
               개편안, 누가 유리하고 누가 불리해질까요?
             </h3>
             <p className="text-[14px] text-text-secondary text-center mb-6">
@@ -360,10 +359,10 @@ export default function HoldingTaxCalculator() {
                 },
               ].map((c) => (
                 <div key={c.t} className="rounded-2xl border border-ui-border bg-white p-5 flex flex-col">
-                  <span className={`self-start text-[11px] font-extrabold rounded-full px-2.5 py-1 mb-3 ${
+                  <span className={`self-start text-[11px] font-semibold rounded-full px-2.5 py-1 mb-3 ${
                     c.tone === "emerald" ? "bg-emerald-50 text-emerald-600" : c.tone === "red" ? "bg-red-50 text-red-600" : "bg-slate-100 text-slate-500"
                   }`}>{c.tag}</span>
-                  <div className="text-[14px] font-extrabold text-text-primary mb-3 leading-snug">{c.t}</div>
+                  <div className="text-[14px] font-semibold text-text-primary mb-3 leading-snug">{c.t}</div>
                   <div className="space-y-1 mb-3">
                     {c.rows.map(([k, v]) => (
                       <div key={k} className="flex items-center justify-between text-[13px]">
@@ -392,10 +391,10 @@ export default function HoldingTaxCalculator() {
                 },
               ].map((c) => (
                 <div key={c.t} className="rounded-2xl border border-ui-border bg-white p-5 flex flex-col">
-                  <span className={`self-start text-[11px] font-extrabold rounded-full px-2.5 py-1 mb-3 ${
+                  <span className={`self-start text-[11px] font-semibold rounded-full px-2.5 py-1 mb-3 ${
                     c.tone === "amber" ? "bg-amber-50 text-amber-600" : "bg-red-50 text-red-600"
                   }`}>{c.tag}</span>
-                  <div className="text-[14px] font-extrabold text-text-primary mb-3 leading-snug">{c.t}</div>
+                  <div className="text-[14px] font-semibold text-text-primary mb-3 leading-snug">{c.t}</div>
                   <div className="space-y-1 mb-3">
                     {c.rows.map(([k, v]) => (
                       <div key={k} className="flex items-center justify-between text-[13px]">
@@ -447,7 +446,7 @@ function Row({ l, v, bold }: { l: string; v: number; bold?: boolean }) {
   return (
     <div className="flex items-center justify-between py-1">
       <span className={`text-[13px] ${bold ? "font-bold text-text-primary" : "text-text-secondary"}`}>{l}</span>
-      <span className={`text-[13px] ${bold ? "font-extrabold text-text-primary" : "font-semibold text-text-primary"}`}>
+      <span className={`text-[13px] ${bold ? "font-semibold text-text-primary" : "font-semibold text-text-primary"}`}>
         {Math.round(v * 10000).toLocaleString("ko-KR")}원
       </span>
     </div>
