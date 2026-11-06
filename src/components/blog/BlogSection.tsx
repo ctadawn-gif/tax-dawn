@@ -13,8 +13,8 @@ export default async function BlogSection() {
       <div className="max-w-[1100px] mx-auto">
         <div className="flex items-end justify-between gap-4 mb-8 lg:mb-10">
           <div>
-            <p className="text-[13px] font-bold text-brand-blue mb-2">세무회계 새벽 블로그</p>
-            <h2 className="text-[28px] lg:text-[40px] font-extrabold text-text-primary tracking-tight leading-tight">
+            <p className="text-[14px] font-medium text-text-secondary mb-3">세무회계 새벽 블로그</p>
+            <h2 className="text-[28px] lg:text-[44px] font-semibold text-text-primary tracking-tight leading-tight">
               세무사가 직접 씁니다.
             </h2>
             <p className="mt-2 text-[15px] lg:text-[17px] text-text-secondary font-medium">
@@ -37,10 +37,10 @@ export default async function BlogSection() {
             rel="noopener noreferrer"
             className="group col-span-5 flex flex-col no-underline"
           >
-            <Thumb post={featured} className="aspect-square rounded-3xl border border-ui-border" />
+            <Thumb post={featured} className="aspect-square rounded-2xl border border-ui-border" />
             <div className="pt-5 flex flex-col gap-2">
-              <CategoryChip post={featured} />
-              <h3 className="text-[22px] font-extrabold text-text-primary leading-snug tracking-tight group-hover:text-brand-blue transition-colors">
+              <CategoryChip post={featured} showNew />
+              <h3 className="text-[22px] font-semibold text-text-primary leading-snug tracking-tight group-hover:text-brand-blue transition-colors">
                 {featured.title}
               </h3>
               <p className="text-[14px] text-text-secondary leading-relaxed line-clamp-2">{featured.excerpt}</p>
@@ -55,7 +55,7 @@ export default async function BlogSection() {
             </div>
             <Link
               href="/blog"
-              className="mt-4 block text-center rounded-xl border border-ui-border py-3.5 text-[14px] font-bold text-text-primary hover:border-brand-blue hover:text-brand-blue transition-colors no-underline"
+              className="mt-4 block text-center rounded-xl border border-ui-border py-3.5 text-[14px] font-medium text-text-primary hover:border-brand-blue hover:text-brand-blue transition-colors no-underline"
             >
               블로그 글 {posts.length}개 전체 보기
             </Link>

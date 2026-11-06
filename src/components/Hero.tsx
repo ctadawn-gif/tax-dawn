@@ -1,3 +1,44 @@
+import Link from "next/link";
+
+// PC 히어로 오른쪽 — 상속·증여세 계산기 결과 미리보기.
+// 예시: 성인 자녀에게 2억 원 증여 (증여재산공제 5,000만 → 과세표준 1억 5,000만 → 20% − 누진공제 1,000만 = 2,000만, 신고세액공제 3%)
+const PREVIEW_ROWS: [string, string][] = [
+  ["증여재산", "2억 원"],
+  ["증여재산공제 (성인 자녀)", "− 5,000만 원"],
+  ["과세표준", "1억 5,000만 원"],
+  ["산출세액", "2,000만 원"],
+  ["신고세액공제 3%", "− 60만 원"],
+];
+
+function HeroPreview() {
+  return (
+    <Link
+      href="/calculator/inherit-gift"
+      className="block bg-white border border-ui-border rounded-2xl shadow-[0_24px_60px_-30px_rgba(15,23,42,0.25)] hover:border-slate-300 transition-colors no-underline"
+    >
+      <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-ui-border text-[13px] text-text-secondary">
+        <span className="font-medium">상속·증여세 계산기</span>
+        <span>예시 · 성인 자녀에게 2억 원 증여</span>
+      </div>
+      <dl className="px-6 pt-3 pb-1">
+        {PREVIEW_ROWS.map(([label, value]) => (
+          <div key={label} className="flex items-center justify-between py-2 text-[14px]">
+            <dt className="text-text-secondary">{label}</dt>
+            <dd className="text-text-primary tabular-nums">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="mx-6 mb-4 mt-2 rounded-lg bg-ui-surface px-5 py-4 flex items-end justify-between gap-4">
+        <span className="text-[14px] text-text-secondary">예상 납부세액</span>
+        <span className="text-[28px] font-semibold text-text-primary tabular-nums leading-none">
+          <span className="hl">1,940만 원</span>
+        </span>
+      </div>
+      <p className="px-6 pb-5 text-[13px] font-medium text-brand-blue">내 숫자로 계산해보기 →</p>
+    </Link>
+  );
+}
+
 export default function Hero() {
   return (
     <>
@@ -51,36 +92,42 @@ export default function Hero() {
         </div>
       </section>
 
-      {/* ── Desktop Hero (기존 유지) ─────────────────────────── */}
-      <section className="hidden md:block relative pt-16 md:pt-24 pb-10 md:pb-16 px-6 text-center max-w-[800px] mx-auto">
-        <div className="bg-grid" />
+      {/* ── Desktop Hero: 왼쪽 글, 오른쪽 계산 결과 미리보기 ─────────────────────────── */}
+      <section className="hidden md:block pt-16 lg:pt-20 pb-16 lg:pb-24 px-6 max-w-[1200px] mx-auto">
+        <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] gap-12 lg:gap-16 items-center">
+          <div className="text-center lg:text-left">
+            <h1 className="text-4xl lg:text-[52px] font-semibold leading-[1.2] tracking-tight text-text-primary mb-6">
+              내 세금, 얼마나 나올지
+              <br />
+              미리 확인해보세요
+            </h1>
 
-        <span className="relative z-10 inline-block bg-ui-surface border border-ui-border px-4 py-1.5 rounded-full text-[13px] font-semibold text-brand-blue mb-6">
-          세무회계 새벽 · 무료 세금 계산기
-        </span>
+            <p className="text-lg lg:text-xl text-text-primary font-medium mb-4">
+              종합소득세 · 부가세 · 상속증여세 · 취득세 · 4대보험까지, 3분이면 대략적인 범위가 나옵니다
+            </p>
 
-        <h1 className="relative z-10 text-4xl md:text-6xl font-extrabold leading-[1.15] tracking-tight text-text-primary mb-6">
-          내 세금, 얼마나 나올지
-          <br />
-          미리 확인해보세요
-        </h1>
+            <p className="text-base lg:text-lg leading-relaxed text-text-secondary mb-10 max-w-[560px] mx-auto lg:mx-0">
+              정확한 세액은 아니더라도, 대략적인 범위를 알고 있으면 절세 방향을 잡기가 훨씬 수월합니다.
+              세무사 상담 전에 내 상황을 먼저 파악해보세요.
+            </p>
 
-        <p className="relative z-10 text-lg md:text-xl text-brand-blue font-bold mb-5 opacity-90">
-          종합소득세 · 부가세 · 상속증여세 · 취득세 · 4대보험까지, 3분이면 대략적인 범위가 나옵니다.
-        </p>
+            <div className="flex justify-center lg:justify-start items-center gap-6">
+              <a
+                href="#calculators"
+                className="inline-block px-8 py-4 bg-brand-blue text-white text-base lg:text-lg font-semibold rounded-xl hover:bg-blue-700 transition-colors no-underline"
+              >
+                내 세금 무료로 계산해보기 →
+              </a>
+              <Link
+                href="/#contact"
+                className="text-base font-medium text-text-secondary hover:text-text-primary transition-colors no-underline"
+              >
+                상담 문의
+              </Link>
+            </div>
+          </div>
 
-        <p className="relative z-10 text-base md:text-lg leading-relaxed text-text-secondary mb-10 max-w-[600px] mx-auto">
-          정확한 세액은 아니더라도, 대략적인 범위를 알고 있으면 절세 방향을 잡기가 훨씬 수월합니다.
-          세무사 상담 전에 내 상황을 먼저 파악해보세요.
-        </p>
-
-        <div className="relative z-10 flex justify-center">
-          <a
-            href="#calculators"
-            className="inline-block px-8 py-4 md:px-9 md:py-[18px] bg-brand-blue text-white text-base md:text-lg font-bold rounded-xl shadow-[0_10px_25px_-5px_rgba(0,82,255,0.3)] hover:translate-y-[-2px] hover:shadow-[0_15px_30px_-5px_rgba(0,82,255,0.4)] transition-all"
-          >
-            내 세금 무료로 계산해보기 →
-          </a>
+          <HeroPreview />
         </div>
       </section>
     </>
