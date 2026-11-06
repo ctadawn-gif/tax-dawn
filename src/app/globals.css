@@ -21,41 +21,20 @@ body {
   word-break: keep-all;
 }
 
+/* 섹션 배경 격자 — 2026-11 정리에서 뺌 (무지 배경). 클래스는 각 페이지에 남아 있어 비워 둔다 */
 .bg-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  background-image:
-    linear-gradient(to right, #f1f5f9 1px, transparent 1px),
-    linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
-  opacity: 0.7;
+  display: none;
 }
 
 .highlight-box {
-  background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
+  background: #f8fafc;
   border: 1px solid #f1f5f9;
 }
 
-/* 시즌 CTA 버튼 — 은은한 쉐도우 펄스 (너무 튀지 않게) */
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 4px 12px -2px rgba(0, 82, 255, 0.3), 0 0 0 0 rgba(0, 82, 255, 0.4);
-  }
-  50% {
-    box-shadow: 0 6px 20px -2px rgba(0, 82, 255, 0.5), 0 0 0 6px rgba(0, 82, 255, 0);
-  }
-}
-.animate-glow-pulse {
-  animation: glow-pulse 2.4s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .animate-glow-pulse { animation: none; }
+/* 형광펜 한 줄 — 화면마다 핵심 숫자 하나에만 쓴다 (유튜브 썸네일·슬라이드의 형광 표시와 같은 것) */
+.hl {
+  background: linear-gradient(transparent 58%, #fff176 58%);
+  padding: 0 2px;
 }
 
 /* ────────────────────────────────────────────────────────

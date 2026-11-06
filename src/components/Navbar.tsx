@@ -47,41 +47,23 @@ export default function Navbar() {
         ))}
       </ul>
 
-      <div className="hidden lg:flex items-center gap-2 shrink-0 whitespace-nowrap">
+      {/* PC: 색 버튼은 하나만. 시즌 버튼이 있으면 그것이 주 버튼이고 상담 문의는 글자 링크,
+          없으면 상담 문의가 주 버튼. 톡톡은 오른쪽 아래 떠 있는 버튼(FloatingTalk)과 겹쳐 머리글에서 뺌 */}
+      <div className="hidden lg:flex items-center gap-6 shrink-0 whitespace-nowrap">
         {promo && (
           <Link
-            href={promo.href}
-            className="relative px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 hover:-translate-y-0.5 transition-transform flex items-center gap-1.5 no-underline animate-glow-pulse"
+            href="/#contact"
+            className="text-sm font-medium text-text-primary hover:text-brand-blue transition-colors no-underline"
           >
-            {/* 알림 핑 닷 */}
-            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5" aria-hidden="true">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-            </span>
-            <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
-              {promo.badge}
-            </span>
-            {promo.label}
+            상담 문의
           </Link>
         )}
         <Link
-          href="/#contact"
-          className="px-4 py-2.5 rounded-lg text-sm font-bold bg-brand-blue text-white hover:bg-blue-700 hover:-translate-y-0.5 transition-all shadow-md hover:shadow-lg flex items-center gap-2 no-underline"
+          href={promo ? promo.href : "/#contact"}
+          className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-colors no-underline"
         >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-          </svg>
-          상담 문의
+          {promo ? promo.label : "상담 문의"}
         </Link>
-        <a
-          href={TALK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-5 py-2.5 rounded-lg text-sm font-bold bg-[#03C75A] text-white hover:bg-[#02b351] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 hidden xl:flex items-center gap-2"
-        >
-          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C4.477 0 0 3.582 0 8c0 2.867 1.89 5.39 4.726 6.836-.152.554-.55 2.013-.63 2.326-.098.382.14.377.295.274.122-.08 1.94-1.31 2.736-1.846A11.81 11.81 0 0010 16c5.523 0 10-3.582 10-8S15.523 0 10 0z"/></svg>
-          톡톡 문의하기
-        </a>
       </div>
 
       <button
@@ -116,15 +98,8 @@ export default function Navbar() {
             <Link
               href={promo.href}
               onClick={() => setMenuOpen(false)}
-              className="relative px-5 py-3 rounded-lg text-sm font-bold bg-brand-blue text-white text-center flex items-center justify-center gap-1.5 no-underline"
+              className="px-5 py-3 rounded-lg text-sm font-semibold bg-brand-blue text-white text-center flex items-center justify-center no-underline"
             >
-              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5" aria-hidden="true">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-              </span>
-              <span className="text-[11px] font-extrabold bg-white/20 text-white px-1.5 py-0.5 rounded">
-                {promo.badge}
-              </span>
               {promo.label}
             </Link>
           )}

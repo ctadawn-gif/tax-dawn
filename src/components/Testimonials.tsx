@@ -247,23 +247,17 @@ export default function Testimonials() {
       </section>
 
       {/* ── Desktop (xl 이상) ─────────────────────────── */}
-      <section className="hidden xl:block relative pt-24 pb-32 px-6 overflow-hidden">
-      <div className="bg-grid" />
+      <section className="hidden xl:block pt-24 pb-32 px-6 overflow-hidden">
 
-      <div className="max-w-[1200px] w-full mx-auto relative z-10">
-        <div className="text-center mb-5 md:mb-6">
-          <span className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-blue-50 text-brand-blue text-[12px] md:text-[13px] font-bold tracking-wide border border-blue-100 mb-3 md:mb-4">
-            고객 후기
-          </span>
-          <h2 className="text-[24px] md:text-3xl lg:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
-            실제 상담을 받으신
-            <br className="md:hidden" />
-            <span className="md:hidden"> </span>
-            분들의 이야기
+      <div className="max-w-[1200px] w-full mx-auto">
+        <div className="text-center mb-6">
+          <p className="text-[14px] font-medium text-text-secondary mb-3">고객 후기</p>
+          <h2 className="text-3xl md:text-[44px] font-semibold text-text-primary tracking-tight leading-tight">
+            실제 상담을 받으신 분들의 이야기
           </h2>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 mb-8 md:mb-12">
+        <div className="flex items-center justify-center gap-6 mb-12">
           <div className="flex items-center gap-2">
             <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
@@ -272,11 +266,11 @@ export default function Testimonials() {
                 </svg>
               ))}
             </div>
-            <span className="text-xl font-extrabold text-text-primary">5.0</span>
+            <span className="text-xl font-semibold text-text-primary tabular-nums">5.0</span>
           </div>
           <div className="w-px h-6 bg-ui-border" />
-          <div className="text-text-secondary text-[15px] font-medium">
-            숨고 · 택슬리 · 엑스퍼트 등 세무 플랫폼 <span className="text-brand-blue font-bold">500건+</span> 리뷰
+          <div className="text-text-secondary text-[15px]">
+            숨고 · 택슬리 · 엑스퍼트 리뷰 500건 기준
           </div>
         </div>
 
@@ -297,27 +291,18 @@ export default function Testimonials() {
             {testimonials.map((t, i) => (
               <div
                 key={i}
-                className="shrink-0 w-[340px] md:w-[380px] bg-white rounded-3xl p-7 md:p-8 border border-ui-border shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] flex flex-col"
+                className="shrink-0 w-[380px] bg-white rounded-2xl p-8 border border-ui-border flex flex-col"
               >
                 <div className="flex items-center justify-between mb-4">
                   <StarRating />
-                  <span className="text-[11px] font-bold text-text-secondary bg-slate-100 px-2 py-1 rounded">
-                    {t.source}
-                  </span>
+                  <span className="text-[12px] text-text-secondary">{t.source}</span>
                 </div>
-                <p className="text-[15px] leading-[1.7] text-text-primary font-medium flex-grow mb-6">
+                <p className="text-[15px] leading-[1.7] text-text-primary flex-grow mb-6">
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="flex items-center gap-3 mt-auto pt-5 border-t border-slate-100">
-                  <div className="w-10 h-10 shrink-0 rounded-full bg-blue-50 text-brand-blue flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="font-bold text-text-primary text-[14px]">{t.name}</div>
-                    {t.info && <div className="text-text-secondary text-[12px]">{t.info}</div>}
-                  </div>
+                <div className="mt-auto pt-5 border-t border-slate-100">
+                  <div className="font-medium text-text-primary text-[14px]">{t.name}</div>
+                  {t.info && <div className="text-text-secondary text-[12px]">{t.info}</div>}
                 </div>
               </div>
             ))}
@@ -338,16 +323,10 @@ export default function Testimonials() {
           </button>
         </div>
 
-        {/* 인디케이터 */}
-        <div className="flex justify-center gap-1.5 mt-8">
-          {testimonials.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => { setCurrent(i); startAutoPlay(); }}
-              className={`h-2 rounded-full transition-all duration-300 ${current === i ? "w-6 bg-brand-blue" : "w-2 bg-slate-300"}`}
-            />
-          ))}
-        </div>
+        {/* 위치 표시 — 점 15개 대신 숫자 */}
+        <p className="text-center text-[13px] text-text-secondary tabular-nums mt-8">
+          {current + 1} / {testimonials.length}
+        </p>
       </div>
     </section>
     </>

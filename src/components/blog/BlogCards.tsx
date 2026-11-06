@@ -23,12 +23,13 @@ export function Thumb({ post, className = "" }: { post: BlogPost; className?: st
   );
 }
 
-export function CategoryChip({ post }: { post: BlogPost }) {
+// NEW 표시는 showNew를 준 곳(홈 대표 글)에만. 매주 글이 올라와 모든 글에 붙으면 아무 뜻이 없다
+export function CategoryChip({ post, showNew = false }: { post: BlogPost; showNew?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-brand-blue">
+    <span className="inline-flex items-center gap-2 text-[12px] font-medium text-brand-blue">
       {post.category}
-      {isNew(post.publishedAt) && (
-        <span className="text-[10px] font-extrabold text-white bg-red-500 rounded px-1.5 py-[1px]">NEW</span>
+      {showNew && isNew(post.publishedAt) && (
+        <span className="text-[11px] font-medium text-red-600">새 글</span>
       )}
     </span>
   );
@@ -76,10 +77,13 @@ export function PostRow({ post }: { post: BlogPost }) {
     >
       <div className="flex-1 min-w-0 flex flex-col gap-1">
         <CategoryChip post={post} />
-        <h3 className="text-[15px] md:text-[16px] font-extrabold text-text-primary leading-snug tracking-tight line-clamp-2 md:line-clamp-1 group-hover:text-brand-blue transition-colors">
+        <h3 className="text-[15px] md:text-[16px] font-semibold text-text-primary leading-snug tracking-tight line-clamp-2 md:line-clamp-1 group-hover:text-brand-blue transition-colors">
           {post.title}
         </h3>
-        <p className="hidden md:block text-[13px] text-text-secondary leading-relaxed line-clamp-1">{post.excerpt}</p>
+        {/* md:block 이 line-clamp 의 display:-webkit-box 를 덮어써서 한 줄로 안 잘리던 것 → 감싸는 div 에서 숨김 처리 */}
+        <div className="hidden md:block">
+          <p className="text-[13px] text-text-secondary leading-relaxed line-clamp-1">{post.excerpt}</p>
+        </div>
         <Meta post={post} />
       </div>
       <Thumb post={post} className="w-[76px] h-[76px] md:w-[92px] md:h-[92px] shrink-0 rounded-xl border border-ui-border" />
