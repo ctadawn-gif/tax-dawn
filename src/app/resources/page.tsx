@@ -8,6 +8,7 @@ type Resource = {
   href?: string;
   icon: string;
   badge?: string;
+  cta?: string;
   ready: boolean;
 };
 
@@ -21,16 +22,22 @@ const RESOURCES: Resource[] = [
     ready: true,
   },
   {
-    title: "준비 중",
-    desc: "실무에 바로 쓰는 세무 서식·자료를 계속 추가하고 있습니다.",
-    icon: "⏳",
-    ready: false,
+    title: "증여·차용 혼합 계산기",
+    desc: "받는 돈을 증여와 차용으로 나눴을 때의 증여세, 이자에서 떼는 세금, 건강보험료를 5년·10년·15년으로 견주어 봅니다. 참고용 어림입니다.",
+    href: "/office/gift-loan-mix",
+    icon: "🧮",
+    badge: "참고용",
+    cta: "계산해 보기 →",
+    ready: true,
   },
   {
-    title: "준비 중",
-    desc: "필요하신 자료가 있으면 상담·블로그로 알려주세요.",
-    icon: "⏳",
-    ready: false,
+    title: "대출 계산기",
+    desc: "달마다 갚을 돈, 빌릴 수 있는 금액의 어림, DSR·DTI·LTV 비율을 계산합니다. 참고용 어림이며 대출 승인이나 한도를 보장하지 않습니다.",
+    href: "/office/loan",
+    icon: "🏦",
+    badge: "참고용",
+    cta: "계산해 보기 →",
+    ready: true,
   },
 ];
 
@@ -74,7 +81,7 @@ export default function ResourcesPage() {
                   {r.title}
                 </h2>
                 <p className="text-[13px] text-text-secondary leading-relaxed mb-3">{r.desc}</p>
-                <span className="text-[13px] font-bold text-brand-blue">바로 작성하기 →</span>
+                <span className="text-[13px] font-bold text-brand-blue">{r.cta ?? "바로 작성하기 →"}</span>
               </Link>
             ) : (
               <div
