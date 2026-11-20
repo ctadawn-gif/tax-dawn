@@ -358,7 +358,7 @@ export default function GiftLoanMixPage() {
               ["증여 금액", `${won(result.gift)}원`],
               ["빌리는 돈", `${won(result.loan)}원`],
               ["낼 증여세", `${won(result.giftTax)}원`],
-              ["권장 최저 이자율", result.loan > 0 ? `${recommendedRatePct(result.loan, settings).toFixed(2)}%` : "해당 없음"],
+              ["차액이 기준 미만인 최저 이자율", result.loan > 0 ? `${recommendedRatePct(result.loan, settings).toFixed(2)}%` : "해당 없음"],
               ["첫 달 이자", `${won(result.firstMonthInterest)}원`],
               ["빌린 사람의 첫 달 부담", `${won(result.firstMonthBurden)}원`],
             ].map(([k, v]) => (
@@ -457,9 +457,9 @@ export default function GiftLoanMixPage() {
           })()}
         </section>
 
-        {/* 추천 설정 */}
+        {/* 합계가 가장 작은 조합 */}
         <section className={card}>
-          <h2 className={h2}>추천 설정</h2>
+          <h2 className={h2}>합계가 가장 작은 조합</h2>
           <p className="text-[13px] text-text-secondary mt-1 leading-relaxed">증여 금액을 {won(recs[0]?.step ?? 10_000_000)}원 단위로 바꿔 가며 세금·보험료 합계가 가장 작은 조합을 찾았습니다. 이자율은 차액이 기준 미만이 되는 가장 낮은 이자율로 두고, 매달 갚는 원금 등 나머지는 넣은 값 그대로입니다.</p>
           <div className="mt-3 flex gap-2">
             {recs.map((x, k) => (
@@ -468,7 +468,8 @@ export default function GiftLoanMixPage() {
               </button>
             ))}
           </div>
-          {recs[recIdx] && (() => {
+          {total <= 0 && <p className="text-[14px] font-bold text-text-secondary mt-3">받는 돈 전체를 넣으면 여기에 조합이 나옵니다.</p>}
+          {total > 0 && recs[recIdx] && (() => {
             const x = recs[recIdx];
             return (
               <div className="mt-4">
