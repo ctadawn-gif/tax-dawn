@@ -390,7 +390,7 @@ export default function AcquisitionTaxCalculator() {
               <li>본 계산기는 입력된 정보를 바탕으로 산출된 <strong className="text-text-primary">개략적인 예상 세액</strong>이며, 실제 부과되는 금액과 차이가 발생할 수 있습니다.</li>
               <li><strong className="text-text-primary font-bold">다주택자 중과세율:</strong> 조정대상지역 2주택 8%, 3주택 이상 12%. 비조정지역 3주택 8%, 4주택 이상 12%. 법인은 주택 수와 무관하게 12%가 적용됩니다.</li>
               <li><strong className="text-text-primary font-bold">조정대상지역:</strong> 조정대상지역은 수시로 변경될 수 있으므로, 취득 시점의 지정 현황을 반드시 확인하시기 바랍니다. (일시적 2주택 예외 규정 있음)</li>
-              <li><strong className="text-text-primary font-bold">생애최초 감면:</strong> 취득가액 12억원 이하 주택을 생애최초로 구입하는 경우 최대 200만원 한도 내에서 취득세가 감면됩니다. 3개월 내 전입 및 3년 거주 요건이 있습니다.</li>
+              <li><strong className="text-text-primary font-bold">생애최초 감면:</strong> 본인과 배우자 모두 주택을 가진 적이 없고, 본인이 살 목적으로 취득가액 12억원 이하 주택을 사는 경우 취득세가 최대 200만원 감면됩니다. 아파트가 아닌 전용 60㎡ 이하 소형 주택 등과 인구감소지역 주택은 한도가 300만원이며, 이 계산기는 200만원으로 계산합니다. 산 날부터 3년 안에 팔거나 증여·임대 등 다른 용도로 쓰면 감면받은 세액을 다시 냅니다(지방세특례제한법 제36조의3).</li>
               <li><strong className="text-text-primary font-bold">농지 세율:</strong> 농지는 매매 3%, 상속 2.3%로 일반 토지(매매 4%, 상속 2.8%)보다 낮은 세율이 적용됩니다. 자경농민 감면(50%) 등 추가 감면은 본 계산기에 반영되어 있지 않습니다.</li>
               <li><strong className="text-text-primary font-bold">증여 취득세:</strong> 3.5%. 조정대상지역의 공시가격 3억 원 이상 주택은 12% 중과되며, 1세대 1주택자가 배우자·직계존비속에게 증여하는 경우는 제외됩니다(지방세법 §13의2②). 과세표준은 시가인정액(매매사례가액 등)이 원칙입니다.</li>
               <li><strong className="text-text-primary font-bold">지방교육세:</strong> (취득세 표준세율 − 2%) × 20%. 주택 유상거래(1~3%)는 세율의 10%, 중과(8·12%)는 0.4%. 예) 증여 0.3%, 상속 0.16%.</li>
