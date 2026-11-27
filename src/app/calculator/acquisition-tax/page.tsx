@@ -358,8 +358,8 @@ export default function AcquisitionTaxCalculator() {
                   <div className="relative z-10 mb-2">
                     <span className="text-blue-200 text-sm font-bold">총 납부 예상액</span>
                   </div>
-                  <div className="flex items-baseline gap-1.5 relative z-10">
-                    <span className="text-3xl lg:text-4xl font-semibold tracking-tight">{fmtWon(result.totalTax)}</span>
+                  <div className="flex flex-wrap items-baseline gap-x-1.5 relative z-10">
+                    <span className="text-3xl font-semibold tracking-tight">{fmtWon(result.totalTax)}</span>
                     <span className="text-base text-blue-100 font-bold">원</span>
                   </div>
                 </div>
