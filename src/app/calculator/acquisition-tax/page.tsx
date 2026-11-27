@@ -16,7 +16,7 @@ import { formatNumberInput, parseNumberInput } from "@/lib/formatInput";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const fmt = (v: number) => Math.round(v).toLocaleString("ko-KR");
-const fmtWon = (v: number) => (v * 10000).toLocaleString("ko-KR");
+const fmtWon = (v: number) => Math.round(v * 10000).toLocaleString("ko-KR");
 
 const propertyTypes: { k: PropertyType; l: string }[] = [
   { k: "house", l: "주택" },

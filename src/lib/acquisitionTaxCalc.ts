@@ -48,15 +48,22 @@ export interface AcquisitionTaxResult {
   rateDescription: string;
 }
 
-// 1주택 매매 - 취득가액 구간별 세율
+// 1주택 매매 - 취득가액 구간별 세율 (%)
+// 6억 초과 9억 이하: (취득가액 × 2/3억 − 3) × 1/100, 소수점 이하 다섯째 자리에서 반올림해 넷째 자리까지 (지방세법 §11①8나)
+//   → 소수 세율을 넷째 자리까지 = 퍼센트로 둘째 자리까지. 예) 7억 → 0.0167 = 1.67%
+//   price 는 만원. 소수 세율 × 10000 = (2 × price − 90000) ÷ 300 → 정수로 반올림
 function calcHouseRate1(price: number): number {
   if (price <= 60000) return 1.0;
   if (price <= 90000) {
-    const priceEok = price / 10000;
-    return (priceEok * 2 / 3 - 3);
+    const q = 2 * price - 90000;
+    const r4 = Math.floor((2 * q + 300) / 600);
+    return r4 / 100;
   }
   return 3.0;
 }
+
+/** 퍼센트 세율 → 10만분의 1 단위 정수 (1% = 1,000) */
+const toUnit = (pct: number) => Math.round(pct * 1000);
 
 // 주택 취득세율
 function calcHouseAcquisitionRate(
@@ -74,10 +81,11 @@ function calcHouseAcquisitionRate(
 //   · 주택 유상거래 1~3% 특례: 해당 세율 × 50% × 20% = 세율 × 10%
 //   · 중과(8%·12%): 0.4%
 //   예) 증여 3.5% → 0.3%, 상속 2.8% → 0.16%, 농지 매매 3% → 0.2%, 농지 상속 2.3% → 0.06%, 비주택 매매 4% → 0.4%
+//   · 6~9억 구간은 세율의 10%를 반올림하지 않는다. 예) 1.67% → 0.167%
 function calcLocalEduRate(acquisitionRate: number, propertyType: PropertyType, acquisitionType: AcquisitionType): number {
   if (propertyType === "house" && acquisitionRate >= 8) return 0.4;
-  if (propertyType === "house" && acquisitionType === "purchase") return Math.round(acquisitionRate * 10) / 100;
-  return Math.round(Math.max(0, acquisitionRate - 2) * 0.2 * 100) / 100;
+  if (propertyType === "house" && acquisitionType === "purchase") return toUnit(acquisitionRate) / 10 / 1000;
+  return Math.max(0, toUnit(acquisitionRate) - 2000) / 5 / 1000;
 }
 
 // 농특세율
@@ -182,14 +190,20 @@ export function calculateAcquisitionTax(input: AcquisitionTaxInput): Acquisition
 
   const localEduTaxRate = calcLocalEduRate(acquisitionTaxRate, propertyType, acquisitionType);
   const ruralSpecialTaxRate = calcRuralSpecialRate(acquisitionTaxRate, propertyType, areaOver85);
-  const totalRate = Math.round((acquisitionTaxRate + localEduTaxRate + ruralSpecialTaxRate) * 100) / 100;
+  // 세액은 원 단위로 계산하고 원 미만을 버린 뒤, 화면과 맞추려고 만원 단위로 돌려준다 (예: 864.5 = 8,645,000원)
+  const acqUnit = toUnit(acquisitionTaxRate);
+  const eduUnit = toUnit(localEduTaxRate);
+  const ruralUnit = toUnit(ruralSpecialTaxRate);
+  const totalRate = (acqUnit + eduUnit + ruralUnit) / 1000;
 
-  const acquisitionTax = Math.round(price * acquisitionTaxRate / 100);
-  const localEduTax = Math.round(price * localEduTaxRate / 100);
-  const ruralSpecialTax = Math.round(price * ruralSpecialTaxRate / 100);
+  const priceWon = Math.max(0, Math.floor((price || 0) * 10000));
+  const taxWon = (unit: number) => Math.floor((priceWon * unit) / 100000);
+  const acqWon = taxWon(acqUnit);
+  const eduWon = taxWon(eduUnit);
+  const ruralWon = taxWon(ruralUnit);
 
   // 생애최초 감면: 1주택 매매만, 취득가액 12억 이하, 한도 200만원
-  let firstHomeDiscount = 0;
+  let discountWon = 0;
   if (
     isFirstHome &&
     propertyType === "house" &&
@@ -197,16 +211,21 @@ export function calculateAcquisitionTax(input: AcquisitionTaxInput): Acquisition
     houseCount === "1" &&
     price <= 120000
   ) {
-    firstHomeDiscount = Math.min(200, acquisitionTax);
+    discountWon = Math.min(2_000_000, acqWon);
   }
 
-  const totalTax = Math.max(0, acquisitionTax + localEduTax + ruralSpecialTax - firstHomeDiscount);
+  const totalWon = Math.max(0, acqWon + eduWon + ruralWon - discountWon);
+  const acquisitionTax = acqWon / 10000;
+  const localEduTax = eduWon / 10000;
+  const ruralSpecialTax = ruralWon / 10000;
+  const firstHomeDiscount = discountWon / 10000;
+  const totalTax = totalWon / 10000;
 
   return {
     price,
-    acquisitionTaxRate: Math.round(acquisitionTaxRate * 100) / 100,
-    localEduTaxRate: Math.round(localEduTaxRate * 100) / 100,
-    ruralSpecialTaxRate: Math.round(ruralSpecialTaxRate * 100) / 100,
+    acquisitionTaxRate: acqUnit / 1000,
+    localEduTaxRate: eduUnit / 1000,
+    ruralSpecialTaxRate: ruralUnit / 1000,
     totalRate,
     acquisitionTax,
     localEduTax,
